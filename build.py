@@ -82,7 +82,7 @@ def sidebar():
     nav = ''.join(f'<a href="/#{key}">{title}</a>' for key,(_,title,_) in GROUPS.items())
     return f'''<aside class="sidebar"><div class="sidebar-inner">
 <div class="monogram" aria-hidden="true">WJ</div><h2 class="name">Weiqi Ji<span class="chinese" lang="zh-Hans">季维奇</span></h2>
-<p class="affiliation">Associate Professor<br>PhD Supervisor<br>School of Engineering Science<br>University of Chinese Academy of Sciences</p>
+<p class="affiliation">PhD</p>
 <div class="profile-links"><a href="https://people.ucas.ac.cn/~0084227">UCAS</a><a href="https://scholar.google.com/citations?user=9b4iknkAAAAJ">Scholar</a><a href="https://orcid.org/0000-0002-7097-0219">ORCID</a><a href="https://github.com/jiweiqi">GitHub</a><a href="{LINKEDIN}">LinkedIn</a></div>
 <nav aria-label="Research topics">{nav}<a href="/#downloads">Research files</a></nav>
 <p class="sidebar-note">Research publications<br>and reproducible methods.</p></div></aside>'''
