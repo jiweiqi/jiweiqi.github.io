@@ -16,15 +16,13 @@ Combustion kinetic modeling is an integral part of combustion simulation, and ex
 
 Introduces differentiable combustion modeling in Julia for gradient-based sensitivity analysis, calibration, uncertainty quantification and model discovery.
 
-介绍 Julia 可微燃烧模拟工具，用于梯度计算、模型标定、不确定性量化与模型发现。
-
 Keywords: differentiable programming, Julia, Arrhenius.jl, UQ
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/arrhenius-jl/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/arrhenius-jl/fulltext.txt)
-- [Code](https://github.com/DENG-MIT/Arrhenius.jl)
+- [GitHub](https://github.com/DENG-MIT/Arrhenius.jl)
 - [BibTeX](https://jiweiqi.github.io/papers/arrhenius-jl/citation.bib)
 
 ## Sources

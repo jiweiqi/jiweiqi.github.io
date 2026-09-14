@@ -16,18 +16,18 @@ Forward propagation of kinetic uncertainty in combustion simulations usually ado
 
 Combines single-output active subspaces into a shared low-dimensional representation for propagating kinetic uncertainty to multiple quantities of interest.
 
-将单输出主动子空间组合为共享低维空间，用于多个燃烧目标的不确定性传播。
-
 Keywords: active subspaces, dimension reduction, multiple outputs, HCCI
 
 ## Resources
 
+- [Related GitHub code](https://github.com/DENG-MIT/ArrheniusActiveSubspace)
 - [BibTeX](https://jiweiqi.github.io/papers/shared-subspaces/citation.bib)
 
 ## Sources
 
 - https://doi.org/10.1016/j.combustflame.2017.11.021
 - https://uqgroup.mit.edu/publications/
+- https://github.com/DENG-MIT/ArrheniusActiveSubspace
 
 ## Citation
 

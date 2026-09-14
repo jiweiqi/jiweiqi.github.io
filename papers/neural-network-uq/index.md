@@ -16,15 +16,13 @@ The inputs of deep neural network (DNN) from real-world data usually come with u
 
 Builds response surfaces in gradient-based active subspaces to propagate uncertain neural-network inputs at reduced computational cost.
 
-在基于梯度的主动子空间内构建响应面，降低神经网络输入不确定性传播的计算成本。
-
 Keywords: active subspaces, neural networks, input uncertainty, surrogate models
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/neural-network-uq/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/neural-network-uq/fulltext.txt)
-- [Code](https://github.com/jiweiqi/nnsubspace)
+- [GitHub](https://github.com/jiweiqi/nnsubspace)
 - [BibTeX](https://jiweiqi.github.io/papers/neural-network-uq/citation.bib)
 
 ## Sources

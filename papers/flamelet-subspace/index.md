@@ -16,8 +16,6 @@ Propagating uncertainties in kinetic models through turbulent combustion simulat
 
 Uses a neural-network surrogate to identify multidimensional kinetic subspaces for uncertainty propagation across nonpremixed flamelet profiles.
 
-以神经网络代理计算梯度，识别覆盖非预混火焰片空间分布的多维动力学子空间。
-
 Keywords: active subspaces, neural surrogates, flamelets, uncertainty quantification
 
 ## Resources

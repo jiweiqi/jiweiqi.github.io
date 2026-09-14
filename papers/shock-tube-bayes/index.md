@@ -16,8 +16,6 @@ Species time-histories in shock tube experiments provide rich kinetic informatio
 
 Examines effective independent-data counts and target selection when using shock-tube species time histories for Bayesian kinetic parameter estimation.
 
-研究激波管组分时间序列用于贝叶斯参数估计时的有效独立数据量与目标选取。
-
 Keywords: Bayesian inference, parameter estimation, shock tubes, data correlation
 
 ## Resources

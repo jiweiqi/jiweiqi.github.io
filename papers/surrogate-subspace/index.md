@@ -10,8 +10,6 @@ Canonical page: https://jiweiqi.github.io/papers/surrogate-subspace/
 
 Explores a low-rank surrogate subspace for propagating kinetic uncertainty, using neural response surfaces and genetic optimization.
 
-结合神经网络响应面与遗传优化，探索用于动力学不确定性传播的低秩代理子空间。
-
 Keywords: surrogate subspaces, uncertainty propagation, dimension reduction
 
 ## Resources

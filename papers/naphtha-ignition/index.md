@@ -12,8 +12,6 @@ Canonical page: https://jiweiqi.github.io/papers/naphtha-ignition/
 
 Measures ignition delays of a fully blended low-octane light naphtha fuel.
 
-测量低辛烷值全调和轻石脑油的点火延迟。
-
 Keywords: ignition delay, naphtha, fuel kinetics
 
 ## Resources

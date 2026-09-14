@@ -30,15 +30,13 @@ engineering, and the life sciences.
 
 Studies stiff neural ODE training using scale-aware architectures, output and loss scaling, and stabilized gradient calculations.
 
-通过网络结构、输出与损失尺度处理及稳定梯度计算，学习刚性神经常微分方程。
-
 Keywords: neural ODEs, stiff systems, differentiable simulation
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/stiff-neural-ode/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/stiff-neural-ode/fulltext.txt)
-- [Code](https://github.com/DENG-MIT/StiffNeuralODE)
+- [GitHub](https://github.com/DENG-MIT/StiffNeuralODE)
 - [BibTeX](https://jiweiqi.github.io/papers/stiff-neural-ode/citation.bib)
 
 ## Sources

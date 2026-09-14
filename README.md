@@ -2,7 +2,11 @@
 
 Research homepage: **https://jiweiqi.github.io/**
 
-Publications on uncertainty quantification, active subspaces, sensitivity analysis, chemical reaction neural networks, stiff differential equations and differentiable physical modeling.
+I am an Associate Professor and PhD supervisor in the School of Engineering Science at the University of Chinese Academy of Sciences. Previously, I was a Senior Research Scientist at Bosch and Apple, following postdoctoral research at MIT. I received my PhD from Tsinghua University.
+
+My research focuses on scientific machine learning and uncertainty quantification, with an emphasis on learning physical dynamics, differentiable simulation and sensitivity analysis.
+
+[LinkedIn](https://www.linkedin.com/in/weiqiji) · [UCAS profile](https://people.ucas.ac.cn/~0084227) · [Google Scholar](https://scholar.google.com/citations?user=9b4iknkAAAAJ)
 
 - [Publication index](publications.md)
 - [Structured metadata and abstracts](publications.json)
@@ -10,7 +14,7 @@ Publications on uncertainty quantification, active subspaces, sensitivity analys
 - [Text entry point](llms.txt)
 - [Paper pages and available full text](papers/)
 
-Each paper has an independent HTML page, a Markdown record and a BibTeX citation. Available PDFs are accompanied by extracted text. Publication types and preprint records are identified in the metadata.
+Each paper has an independent HTML page, a Markdown record and a BibTeX citation. Available PDFs are accompanied by extracted text. Verified public GitHub implementations are linked alongside the papers; related implementations are labeled separately. Publication types and preprint records are identified in the metadata.
 
 ```sh
 git clone https://github.com/jiweiqi/jiweiqi.github.io.git

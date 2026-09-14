@@ -12,8 +12,6 @@ Canonical page: https://jiweiqi.github.io/papers/first-stage-ntc/
 
 Combines experiments and simulations to investigate negative-temperature-coefficient behavior in first-stage ignition delay.
 
-结合实验与模拟，研究第一阶段点火延迟的负温度系数行为。
-
 Keywords: two-stage ignition, NTC, RCM
 
 ## Resources

@@ -17,14 +17,13 @@ Canonical page: https://jiweiqi.github.io/papers/hychem/
 
 Applies stochastic gradient descent to calibrate lumped HyChem fuel models against ignition-delay measurements across temperature regimes.
 
-使用随机梯度下降，在多个温度区间根据点火延迟实验标定 HyChem 集总燃料模型。
-
 Keywords: SGD, HyChem, kinetic calibration, jet fuels
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/hychem/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/hychem/fulltext.txt)
+- [GitHub](https://github.com/DENG-MIT/Arrhenius.jl)
 - [BibTeX](https://jiweiqi.github.io/papers/hychem/citation.bib)
 
 ## Sources
@@ -32,6 +31,7 @@ Keywords: SGD, HyChem, kinetic calibration, jet fuels
 - https://doi.org/10.1115/icef2021-67925
 - https://arxiv.org/abs/2104.07875
 - https://hdl.handle.net/1721.1/150935
+- https://github.com/DENG-MIT/Arrhenius.jl
 
 ## Citation
 

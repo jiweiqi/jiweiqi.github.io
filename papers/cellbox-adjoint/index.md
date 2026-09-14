@@ -16,15 +16,13 @@ Data-driven dynamic models of cell biology can be used to predict cell response 
 
 Uses adjoint sensitivity and differentiable programming to infer cell-network dynamics from simulated perturbation-response data.
 
-结合伴随灵敏度与可微编程，从模拟扰动响应数据推断细胞网络动力学。
-
 Keywords: adjoint sensitivity, CellBox, network inference, systems biology
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/cellbox-adjoint/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/cellbox-adjoint/fulltext.txt)
-- [Code](https://github.com/jiweiqi/CellBox.jl)
+- [GitHub](https://github.com/jiweiqi/CellBox.jl)
 - [BibTeX](https://jiweiqi.github.io/papers/cellbox-adjoint/citation.bib)
 
 ## Sources

@@ -16,15 +16,13 @@ The recently developed physics-informed neural network (PINN) has achieved succe
 
 Examines PINN failure on stiff chemical kinetics and uses quasi-steady-state reduction to make the studied systems tractable.
 
-分析 PINN 在刚性化学动力学中的困难，并使用准稳态近似降低刚性。
-
 Keywords: PINNs, stiff systems, QSSA, chemical kinetics
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/stiff-pinn/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/stiff-pinn/fulltext.txt)
-- [Code](https://github.com/DENG-MIT/Stiff-PINN)
+- [GitHub](https://github.com/DENG-MIT/Stiff-PINN)
 - [BibTeX](https://jiweiqi.github.io/papers/stiff-pinn/citation.bib)
 
 ## Sources

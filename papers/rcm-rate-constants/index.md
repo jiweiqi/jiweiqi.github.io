@@ -12,8 +12,6 @@ Canonical page: https://jiweiqi.github.io/papers/rcm-rate-constants/
 
 Studies rapid-compression-machine measurement of a reaction rate using dimethyl carbonate decomposition as a case study.
 
-以碳酸二甲酯分解为例，研究利用快速压缩机测量反应速率常数。
-
 Keywords: reaction rates, RCM, dimethyl carbonate
 
 ## Resources

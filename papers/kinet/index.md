@@ -16,8 +16,6 @@ Deep learning is a potential approach to automatically develop kinetic models fr
 
 Represents time-stepping chemical kinetics with a residual neural network and multi-step training, with ignition-delay gradients for model refinement.
 
-使用残差网络与多步训练表示化学动力学演化，并利用点火延迟梯度改进模型。
-
 Keywords: KiNet, neural surrogates, BPTT, ignition delay
 
 ## Resources

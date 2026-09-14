@@ -16,14 +16,13 @@ Chemical kinetics mechanisms are essential for understanding, analyzing, and sim
 
 Treats kinetic parameter optimization as neural ODE training to calibrate hydrocarbon-fuel models against experimental targets.
 
-将动力学参数优化表述为神经 ODE 训练，利用实验目标标定碳氢燃料模型。
-
 Keywords: neural ODEs, parameter optimization, hydrocarbon fuels
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/kinetics-neural-ode/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/kinetics-neural-ode/fulltext.txt)
+- [Related GitHub code](https://github.com/DENG-MIT/ArrheniusOpt)
 - [BibTeX](https://jiweiqi.github.io/papers/kinetics-neural-ode/citation.bib)
 
 ## Sources
@@ -31,6 +30,7 @@ Keywords: neural ODEs, parameter optimization, hydrocarbon fuels
 - https://doi.org/10.1016/j.combustflame.2023.112732
 - https://arxiv.org/abs/2209.01862
 - https://hdl.handle.net/1721.1/156212
+- https://github.com/DENG-MIT/ArrheniusOpt
 
 ## Citation
 

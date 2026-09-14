@@ -16,15 +16,13 @@ Owing to the global lockdowns that resulted from the COVID-19 pandemic, fuel dem
 
 Combines pandemic scenarios, mobility data and machine learning to project US motor-gasoline demand during COVID-19.
 
-结合疫情情景、出行数据与机器学习，预测 COVID-19 期间美国车用汽油需求。
-
 Keywords: machine learning, energy demand, mobility, scenario analysis
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/mobility-demand/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/mobility-demand/fulltext.txt)
-- [Code](https://github.com/jiweiqi/covid19-mobility)
+- [GitHub](https://github.com/jiweiqi/covid19-mobility)
 - [BibTeX](https://jiweiqi.github.io/papers/mobility-demand/citation.bib)
 
 ## Sources

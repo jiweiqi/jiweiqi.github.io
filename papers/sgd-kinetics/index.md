@@ -16,15 +16,13 @@ Chemical kinetic modeling is an integral part of combustion simulation, and exte
 
 Uses differentiable simulation and stochastic gradient descent to optimize mechanistic and hybrid chemical kinetic models.
 
-结合可微模拟与随机梯度下降，优化机理型和混合型化学动力学模型。
-
 Keywords: SGD, differentiable programming, hybrid modeling
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/sgd-kinetics/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/sgd-kinetics/fulltext.txt)
-- [Code](https://github.com/DENG-MIT/Arrhenius.jl)
+- [GitHub](https://github.com/DENG-MIT/Arrhenius.jl)
 - [BibTeX](https://jiweiqi.github.io/papers/sgd-kinetics/citation.bib)
 
 ## Sources

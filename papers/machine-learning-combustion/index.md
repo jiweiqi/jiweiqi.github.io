@@ -16,8 +16,6 @@ Combustion science is an interdisciplinary study that involves nonlinear physica
 
 Reviews machine-learning approaches to combustion modeling, experiments and computational prediction.
 
-综述机器学习在燃烧建模、实验与计算预测中的应用。
-
 Keywords: review, machine learning, combustion
 
 ## Resources

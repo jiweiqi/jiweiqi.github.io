@@ -16,8 +16,6 @@ Using n-butane, n-heptane and iso-octane as representative fuels exhibiting NTC 
 
 Studies the kinetic mechanisms controlling the upper turnover states in the negative-temperature-coefficient regime.
 
-研究负温度系数区高温转折状态的控制机理。
-
 Keywords: NTC, autoignition, chemical kinetics
 
 ## Resources

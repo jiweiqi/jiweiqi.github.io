@@ -12,13 +12,11 @@ Canonical page: https://jiweiqi.github.io/papers/isobutanol-intermediates/
 
 Measures intermediate species during iso-butanol autoignition to examine the underlying oxidation pathways.
 
-测量异丁醇自燃过程中的中间组分，分析其氧化路径。
-
 Keywords: iso-butanol, species measurements, autoignition
 
 ## Resources
 
-- [Code](https://github.com/jiweiqi/Isobutanol_Mechanism)
+- [GitHub](https://github.com/jiweiqi/Isobutanol_Mechanism)
 - [BibTeX](https://jiweiqi.github.io/papers/isobutanol-intermediates/citation.bib)
 
 ## Sources

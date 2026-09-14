@@ -16,20 +16,20 @@ A systematic approach is formulated for the uncertainty analysis of kinetic para
 
 Combines active subspaces with an intermediate reduction state to separate uncertainty changes caused by parameter truncation and reaction coupling.
 
-结合主动子空间与机理简化中间状态，区分参数截断和反应耦合导致的不确定性变化。
-
 Keywords: active subspaces, mechanism reduction, uncertainty analysis
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/mechanism-reduction-uq/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/mechanism-reduction-uq/fulltext.txt)
+- [GitHub](https://github.com/SuXY15/CanteraUq)
 - [BibTeX](https://jiweiqi.github.io/papers/mechanism-reduction-uq/citation.bib)
 
 ## Sources
 
 - https://doi.org/10.1016/j.combustflame.2020.12.053
 - https://suxy15.github.io/assets/downloads/papers/X.Su_2021_CNF.pdf
+- https://github.com/SuXY15/CanteraUq
 
 ## Citation
 

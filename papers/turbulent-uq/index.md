@@ -16,20 +16,20 @@ Uncertainty quantification in expensive turbulent combustion simulations usually
 
 Uses active subspaces and response surfaces to propagate kinetic uncertainty to the liftoff height of a turbulent Cabra hydrogen jet flame.
 
-通过主动子空间与响应面，将化学动力学参数不确定性传播至 Cabra 湍流火焰的抬升高度。
-
 Keywords: active subspaces, turbulent combustion, uncertainty propagation
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/turbulent-uq/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/turbulent-uq/fulltext.txt)
+- [Related GitHub code](https://github.com/DENG-MIT/ArrheniusActiveSubspace)
 - [BibTeX](https://jiweiqi.github.io/papers/turbulent-uq/citation.bib)
 
 ## Sources
 
 - https://doi.org/10.1016/j.proci.2018.06.206
 - https://hdl.handle.net/1721.1/126335
+- https://github.com/DENG-MIT/ArrheniusActiveSubspace
 
 ## Citation
 

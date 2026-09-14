@@ -16,13 +16,11 @@ Sensitivity analysis of the ignition delay time and species profiles to kinetic 
 
 Relates the sensitivity directions of temperature, species and ignition delay, enabling efficient evaluation of ignition-delay sensitivities.
 
-研究温度、组分和点火延迟的灵敏度方向关系，支持高效计算点火延迟灵敏度。
-
 Keywords: sensitivity analysis, ignition delay, chemical kinetics
 
 ## Resources
 
-- [Code](https://github.com/jiweiqi/IgnSens)
+- [GitHub](https://github.com/jiweiqi/IgnSens)
 - [BibTeX](https://jiweiqi.github.io/papers/ignition-sensitivity/citation.bib)
 
 ## Sources

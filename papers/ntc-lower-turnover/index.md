@@ -12,8 +12,6 @@ Canonical page: https://jiweiqi.github.io/papers/ntc-lower-turnover/
 
 Investigates crossover temperature and the lower turnover state of negative-temperature-coefficient ignition behavior.
 
-研究负温度系数点火行为的交叉温度与低温转折状态。
-
 Keywords: NTC, autoignition, reaction pathways
 
 ## Resources

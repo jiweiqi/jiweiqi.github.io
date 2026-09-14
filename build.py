@@ -7,11 +7,14 @@ ROOT = Path(__file__).resolve().parent
 ORIGIN = 'https://jiweiqi.github.io'
 PAPERS = json.loads((ROOT / 'publications.json').read_text(encoding='utf-8'))
 GROUPS = {
-    'uq': ('01', 'Uncertainty & sensitivity', '不确定性量化 · 主动子空间 · 灵敏度分析'),
-    'sciml': ('02', 'Scientific machine learning', '可微模拟 · 刚性系统 · 反应网络发现'),
-    'applications': ('03', 'Reviews & applications', '研究综述 · 能源与出行'),
-    'kinetics': ('04', 'Combustion kinetics', '点火实验 · 反应动力学'),
+    'sciml': ('01', 'Scientific machine learning', 'Differentiable simulation · Stiff systems · Reaction network discovery'),
+    'uq': ('02', 'Uncertainty quantification', 'Active subspaces · Sensitivity analysis · Bayesian inference'),
+    'applications': ('03', 'Reviews & applications', 'Research reviews · Energy · Mobility'),
+    'kinetics': ('04', 'Combustion kinetics', 'Ignition experiments · Reaction kinetics'),
 }
+BIO = 'I am an Associate Professor and PhD supervisor in the School of Engineering Science at the University of Chinese Academy of Sciences. Previously, I was a Senior Research Scientist at Bosch and Apple, following postdoctoral research at MIT. I received my PhD from Tsinghua University.'
+RESEARCH = 'My research focuses on scientific machine learning and uncertainty quantification, with an emphasis on learning physical dynamics, differentiable simulation and sensitivity analysis.'
+LINKEDIN = 'https://www.linkedin.com/in/weiqiji'
 TYPES = {'journal-article': 'Journal article', 'conference-paper': 'Conference paper', 'preprint': 'Preprint', 'workshop-paper': 'Workshop paper'}
 RELATED = {
     'shared-subspaces': ['surrogate-subspace','turbulent-uq','flamelet-subspace'],
@@ -69,7 +72,8 @@ def resources(p, overview=False):
     elif p.get('external_pdf_url'): links.append((p['external_pdf_url'],'PDF ↗'))
     if p.get('fulltext_url'): links.append((base+'fulltext.txt','Full text'))
     if p.get('doi'): links.append(('https://doi.org/'+p['doi'],'DOI'))
-    if p.get('code_url'): links.append((p['code_url'],'Code'))
+    if p.get('code_url'): links.append((p['code_url'],'GitHub'))
+    if p.get('related_code_url'): links.append((p['related_code_url'],'Related GitHub code'))
     links.extend([(base+'citation.bib','BibTeX')])
     if not overview: links.append((base+'index.md','Markdown'))
     return '<div class="links">' + ''.join(f'<a href="{e(url)}">{e(label)}</a>' for url,label in links) + '</div>'
@@ -77,9 +81,9 @@ def resources(p, overview=False):
 def sidebar():
     nav = ''.join(f'<a href="/#{key}">{title}</a>' for key,(_,title,_) in GROUPS.items())
     return f'''<aside class="sidebar"><div class="sidebar-inner">
-<div class="monogram" aria-hidden="true">WJ</div><p class="name">Weiqi Ji<span class="chinese" lang="zh-Hans">季维奇</span></p>
-<p class="affiliation">Associate Professor<br>School of Engineering Science<br>University of Chinese Academy of Sciences</p>
-<div class="profile-links"><a href="https://people.ucas.ac.cn/~0084227">UCAS</a><a href="https://scholar.google.com/citations?user=9b4iknkAAAAJ">Scholar</a><a href="https://orcid.org/0000-0002-7097-0219">ORCID</a><a href="https://github.com/jiweiqi">GitHub</a></div>
+<div class="monogram" aria-hidden="true">WJ</div><h2 class="name">Weiqi Ji<span class="chinese" lang="zh-Hans">季维奇</span></h2>
+<p class="affiliation">Associate Professor<br>PhD Supervisor<br>School of Engineering Science<br>University of Chinese Academy of Sciences</p>
+<div class="profile-links"><a href="https://people.ucas.ac.cn/~0084227">UCAS</a><a href="https://scholar.google.com/citations?user=9b4iknkAAAAJ">Scholar</a><a href="https://orcid.org/0000-0002-7097-0219">ORCID</a><a href="https://github.com/jiweiqi">GitHub</a><a href="{LINKEDIN}">LinkedIn</a></div>
 <nav aria-label="Research topics">{nav}<a href="/#downloads">Research files</a></nav>
 <p class="sidebar-note">Research publications<br>and reproducible methods.</p></div></aside>'''
 
@@ -92,28 +96,28 @@ def page(title, description, body, path='/', extra='', paper=False, structured=N
 <link rel="stylesheet" href="/assets/site.css"><link rel="alternate" type="application/json" href="/publications.json" title="Publication metadata">
 {extra}<script type="application/ld+json">{schema}</script></head>
 <body class="{'paper' if paper else 'home'}"><a class="skip" href="#main">Skip to content</a><div class="shell">{sidebar()}<main class="main" id="main">{body}
-<footer class="footer"><span>Weiqi Ji · 季维奇</span><a href="https://github.com/jiweiqi/jiweiqi.github.io">Source on GitHub</a></footer></main></div>{'' if paper else '<script src="/assets/search.js" defer></script>'}</body></html>'''
+<footer class="footer"><span>Weiqi Ji</span><a href="https://github.com/jiweiqi/jiweiqi.github.io">Source on GitHub</a></footer></main></div>{'' if paper else '<script src="/assets/search.js" defer></script>'}</body></html>'''
 
 def article(p):
-    text=' '.join([p['title'],*p['authors'],p['summary'],p['summary_zh'],*p['keywords'],p.get('abstract',''),str(p['year']),p.get('doi') or '']).lower()
+    text=' '.join([p['title'],*p['authors'],p['summary'],*p['keywords'],p.get('abstract',''),str(p['year']),p.get('doi') or '']).lower()
     return f'''<article class="publication" data-topic="{p['topic']}" data-search="{e(text)}"><div class="year">{p['year']}</div><div>
 <h3><a href="/papers/{p['id']}/">{e(p['title'])}</a></h3><p class="authors">{authors(p)}</p><p class="venue">{venue(p)} <span class="badge">{TYPES[p['type']]}</span></p>
 <p class="summary">{e(p['summary'])}</p>{tags(p)}{resources(p,True)}</div></article>'''
 
 def main():
     local_pdfs = sum(bool(p.get('pdf')) for p in PAPERS)
-    body = f'''<header class="intro"><p class="eyebrow">Research / Publications</p><h1>Uncertainty. Dynamics.<br>Learning from data.</h1>
-<p class="topic-line">Methods for uncertainty quantification, sensitivity analysis and scientific machine learning.</p>
-<p>I study how to quantify uncertainty in physical models, learn interpretable dynamics from data, and compute reliable gradients for stiff systems. This collection brings together my work in combustion, chemical kinetics and related applications.</p>
+    body = f'''<header class="intro"><p class="eyebrow">Research / Publications</p><h1>Machine learning for<br>physical systems.</h1>
+<p class="topic-line">Scientific machine learning · Uncertainty quantification · Sensitivity analysis</p>
+<p class="bio">{BIO}</p><p>{RESEARCH}</p>
 <div class="stats"><span><strong>{len(PAPERS)}</strong> papers &amp; preprints</span><span><strong>{local_pdfs}</strong> archived PDFs</span><span><strong>4</strong> research themes</span></div></header>
-<div class="toolbox"><div class="search-field"><label for="paper-search">Search publications / 检索论文</label><input id="paper-search" type="search" placeholder="Title, method, author, DOI…" autocomplete="off"></div><div class="topic-field"><label for="topic-filter">Research area</label><select id="topic-filter"><option value="">All research areas</option>{''.join(f'<option value="{k}">{v[1]}</option>' for k,v in GROUPS.items())}</select></div></div>
+<div class="toolbox"><div class="search-field"><label for="paper-search">Search publications</label><input id="paper-search" type="search" placeholder="Title, method, author, DOI…" autocomplete="off"></div><div class="topic-field"><label for="topic-filter">Research area</label><select id="topic-filter"><option value="">All research areas</option>{''.join(f'<option value="{k}">{v[1]}</option>' for k,v in GROUPS.items())}</select></div></div>
 <p class="results-status" id="results-status" role="status" aria-live="polite">{len(PAPERS)} publications</p><noscript><p>All publications are listed below. Use your browser’s Find command to search this page.</p></noscript><p id="empty-state" class="empty" hidden>No publications match this search. Try a different method or clear the research-area filter.</p>'''
-    for group,(number,title,zh) in GROUPS.items():
+    for group,(number,title,subtitle) in GROUPS.items():
         ps=sorted([p for p in PAPERS if p['topic']==group],key=lambda p:(-p['year'],p['title']))
-        body += f'<section class="publication-section" id="{group}"><div class="section-head"><span class="section-number">{number}</span><h2>{title}<small lang="zh-Hans">{zh}</small></h2></div>' + ''.join(article(p) for p in ps) + '</section>'
+        body += f'<section class="publication-section" id="{group}"><div class="section-head"><span class="section-number">{number}</span><h2>{title}<small>{subtitle}</small></h2></div>' + ''.join(article(p) for p in ps) + '</section>'
     body += '''<section class="access" id="downloads"><p class="eyebrow">Research files</p><h2>Read, cite, and explore.</h2><p>Each paper has a permanent page with its citation, research summary and available full text. Download the complete metadata or browse the repository for research with Codex and other tools.</p><div class="links"><a href="/publications.bib">All citations · BibTeX</a><a href="/publications.json">Metadata · JSON</a><a href="/publications.md">Paper index · Markdown</a><a href="/llms.txt">Text entry point</a><a href="https://github.com/jiweiqi/jiweiqi.github.io">Browse repository</a></div></section>'''
-    person={'@context':'https://schema.org','@type':'ProfilePage','mainEntity':{'@type':'Person','name':'Weiqi Ji','alternateName':'季维奇','url':ORIGIN,'sameAs':['https://orcid.org/0000-0002-7097-0219','https://people.ucas.ac.cn/~0084227','https://github.com/jiweiqi'],'knowsAbout':['Uncertainty quantification','Active subspaces','Sensitivity analysis','Scientific machine learning','Chemical kinetics']}}
-    write('index.html',page('Weiqi Ji · 季维奇 | UQ & Scientific Machine Learning','Research publications by Weiqi Ji (季维奇): uncertainty quantification, active subspaces, sensitivity analysis, CRNN, Stiff-PINN and neural ODEs. PDFs, full text and citations.',body,structured=person))
+    person={'@context':'https://schema.org','@type':'ProfilePage','mainEntity':{'@type':'Person','name':'Weiqi Ji','url':ORIGIN,'description':BIO+' '+RESEARCH,'jobTitle':'Associate Professor and PhD Supervisor','worksFor':{'@type':'CollegeOrUniversity','name':'University of Chinese Academy of Sciences'},'alumniOf':{'@type':'CollegeOrUniversity','name':'Tsinghua University'},'sameAs':['https://orcid.org/0000-0002-7097-0219','https://people.ucas.ac.cn/~0084227','https://github.com/jiweiqi',LINKEDIN],'knowsAbout':['Scientific machine learning','Uncertainty quantification','Active subspaces','Sensitivity analysis','Chemical kinetics']}}
+    write('index.html',page('Weiqi Ji · 季维奇 | Scientific Machine Learning & UQ','Weiqi Ji: scientific machine learning, uncertainty quantification, CRNN, Stiff-PINN and neural ODEs. Research profile, publications, PDFs and code.',body,structured=person))
     for p in PAPERS:
         base='papers/'+p['id']+'/'
         bib=bibtex(p);write(base+'citation.bib',bib)
@@ -128,7 +132,7 @@ def main():
             if value:meta+=f'<meta name="citation_{key}" content="{e(str(value))}">\n'
         body=f'<div class="breadcrumb"><a href="/#{p["topic"]}">Publications / {GROUPS[p["topic"]][1]}</a></div><p class="eyebrow">{p["year"]} / {TYPES[p["type"]]}</p><h1>{e(p["title"])}</h1><p class="authors">{authors(p)}</p><p class="venue">{venue(p)}</p><div class="paper-actions">{resources(p)}</div>'
         if p.get('abstract'):body+=f'<section><h2>Abstract</h2><p class="abstract">{e(p["abstract"])}</p></section>'
-        body+=f'<section><h2>Research summary</h2><p>{e(p["summary"])}</p><p lang="zh-Hans">{e(p["summary_zh"])}</p>{tags(p)}</section>'
+        body+=f'<section><h2>Research summary</h2><p>{e(p["summary"])}</p>{tags(p)}</section>'
         if p.get('pdf'):body+=f'<p class="source">PDF: {e(p["pdf"]["version"])} · <a href="{e(p["pdf"]["source_url"])}">Source</a>. The linked PDF is the reference for equations, figures and tables.</p>'
         else:body+=f'<p class="source">A PDF is not currently archived in this collection. <a href="{e("https://doi.org/"+p["doi"] if p.get("doi") else p["sources"][0])}">Publication record</a>.</p>'
         if p.get('arxiv_id'):body+=f'<p class="source">Preprint record: <a href="https://arxiv.org/abs/{p["arxiv_id"]}">arXiv:{p["arxiv_id"]}</a>.</p>'
@@ -144,25 +148,27 @@ def main():
         if p.get('doi'):md+=f'DOI: https://doi.org/{p["doi"]}\n\n'
         md+=f'Canonical page: {ORIGIN}/{base}\n\n'
         if p.get('abstract'):md+='## Abstract\n\n'+p['abstract']+'\n\n'
-        md+='## Research summary\n\n'+p['summary']+'\n\n'+p['summary_zh']+'\n\nKeywords: '+', '.join(p['keywords'])+'\n\n## Resources\n\n'
-        for label,url in [('PDF',(p.get('pdf') or {}).get('url') or p.get('external_pdf_url')),('Extracted full text',p.get('fulltext_url')),('Code',p.get('code_url')),('BibTeX',ORIGIN+'/'+base+'citation.bib')]:
+        md+='## Research summary\n\n'+p['summary']+'\n\nKeywords: '+', '.join(p['keywords'])+'\n\n## Resources\n\n'
+        for label,url in [('PDF',(p.get('pdf') or {}).get('url') or p.get('external_pdf_url')),('Extracted full text',p.get('fulltext_url')),('GitHub',p.get('code_url')),('Related GitHub code',p.get('related_code_url')),('BibTeX',ORIGIN+'/'+base+'citation.bib')]:
             if url:md+=f'- [{label}]({url})\n'
         md+='\n## Sources\n\n'+''.join(f'- {url}\n' for url in p['sources'])
         md+='\n## Citation\n\n```bibtex\n'+bib+'```\n'
         write(base+'index.md',md)
     write('publications.bib','\n'.join(bibtex(p) for p in PAPERS))
     md='# Weiqi Ji · 季维奇 — Research publications\n\n'+ORIGIN+'\n\n'
-    for group,(_,title,zh) in GROUPS.items():
-        md+=f'## {title} / {zh}\n\n'
+    for group,(_,title,subtitle) in GROUPS.items():
+        md+=f'## {title}\n\n'
         for p in sorted([x for x in PAPERS if x['topic']==group],key=lambda x:-x['year']):
             md+=f'- **{p["year"]}** [{p["title"]}]({ORIGIN}/papers/{p["id"]}/index.md) — {p["summary"]}\n'
         md+='\n'
     write('publications.md',md)
-    llms='# Weiqi Ji (季维奇)\n\nResearch in uncertainty quantification, active subspaces, sensitivity analysis, stiff differential equations and scientific machine learning.\n\n## Catalog\n\n- [Research homepage]('+ORIGIN+'/): publication pages and research themes.\n- [Structured metadata]('+ORIGIN+'/publications.json): titles, authors, publication types, DOI, abstracts, summaries and full-text locations.\n- [BibTeX]('+ORIGIN+'/publications.bib): citations for the collection.\n- [Markdown index]('+ORIGIN+'/publications.md): papers grouped by research topic.\n\n## Full text\n\n'
+    llms='# Weiqi Ji (季维奇)\n\n'+BIO+'\n\n'+RESEARCH+'\n\n[LinkedIn]('+LINKEDIN+')\n\n## Catalog\n\n- [Research homepage]('+ORIGIN+'/): publication pages and research themes.\n- [Structured metadata]('+ORIGIN+'/publications.json): titles, authors, publication types, DOI, abstracts, summaries, GitHub repositories and full-text locations.\n- [BibTeX]('+ORIGIN+'/publications.bib): citations for the collection.\n- [Markdown index]('+ORIGIN+'/publications.md): papers grouped by research topic.\n\n## Full text\n\n'
     for p in PAPERS:
         llms+=f'- [{p["title"]}]({ORIGIN}/papers/{p["id"]}/index.md)'
         if p.get('fulltext_url'):llms+=f' | [text]({p["fulltext_url"]}) | [PDF]({p["pdf"]["url"]})'
         elif p.get('external_pdf_url'):llms+=f' | [PDF]({p["external_pdf_url"]})'
+        if p.get('code_url'):llms+=f' | [GitHub]({p["code_url"]})'
+        if p.get('related_code_url'):llms+=f' | [related code]({p["related_code_url"]})'
         llms+='\n'
     llms+='\nPDF text extraction may lose mathematical notation and table layout. Consult the PDF when studying equations, figures or tables. Publication type and preprint identifiers are recorded separately in the catalog.\n'
     write('llms.txt',llms)

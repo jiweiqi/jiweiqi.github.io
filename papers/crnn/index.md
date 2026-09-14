@@ -16,15 +16,13 @@ Chemical reactions occur in energy, environmental, biological, and many other na
 
 Infers interpretable reaction pathways and kinetic parameters from concentration time series using a neural architecture based on mass-action and Arrhenius laws.
 
-利用满足质量作用定律和 Arrhenius 定律的网络，从浓度时间序列推断可解释反应路径与动力学参数。
-
 Keywords: CRNN, reaction discovery, neural ODEs, interpretable models
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/crnn/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/crnn/fulltext.txt)
-- [Code](https://github.com/DENG-MIT/CRNN)
+- [GitHub](https://github.com/DENG-MIT/CRNN)
 - [BibTeX](https://jiweiqi.github.io/papers/crnn/citation.bib)
 
 ## Sources

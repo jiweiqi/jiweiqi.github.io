@@ -17,20 +17,20 @@ Abstract
 
 Infers unknown inlet composition and flow fluctuations from sparse combustor-temperature measurements using neural differential equations.
 
-利用神经微分方程，从稀疏燃烧室温度观测反演入口组分与流量波动。
-
 Keywords: inverse problems, neural differential equations, combustor dynamics
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/inverse-combustors/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/inverse-combustors/fulltext.txt)
+- [GitHub](https://github.com/DENG-MIT/NN-PSR)
 - [BibTeX](https://jiweiqi.github.io/papers/inverse-combustors/citation.bib)
 
 ## Sources
 
 - https://doi.org/10.1115/imece2021-69657
 - https://arxiv.org/abs/2107.11510
+- https://github.com/DENG-MIT/NN-PSR
 
 ## Citation
 

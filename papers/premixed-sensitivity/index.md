@@ -16,8 +16,6 @@ The sensitivities of turbulent combustion simulations to chemical kinetic parame
 
 Investigates how kinetic sensitivity directions vary through premixed flame structures and their connection to laminar flame speed and extinction.
 
-分析预混火焰内的动力学灵敏度方向，以及与层流火焰速度、熄火状态的联系。
-
 Keywords: sensitivity analysis, premixed flames, flame speed, extinction
 
 ## Resources

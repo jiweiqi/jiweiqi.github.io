@@ -16,15 +16,13 @@ Modeling the burning processes of biomass such as wood, grass, and crops is cruc
 
 Learns biomass pyrolysis kinetics from thermogravimetric measurements with interpretable chemical reaction neural networks.
 
-通过可解释化学反应神经网络，从热重实验中学习生物质热解动力学。
-
 Keywords: CRNN, biomass pyrolysis, model discovery
 
 ## Resources
 
 - [PDF](https://jiweiqi.github.io/papers/biomass-crnn/paper.pdf)
 - [Extracted full text](https://jiweiqi.github.io/papers/biomass-crnn/fulltext.txt)
-- [Code](https://github.com/DENG-MIT/Biomass.jl)
+- [GitHub](https://github.com/DENG-MIT/Biomass.jl)
 - [BibTeX](https://jiweiqi.github.io/papers/biomass-crnn/citation.bib)
 
 ## Sources
