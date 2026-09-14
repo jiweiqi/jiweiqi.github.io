@@ -1,0 +1,632 @@
+Proceedings of the ASME 2021
+Internal Combustion Engine Division Fall Technical Conference
+ICEF2021
+October 13-15, 2021, Virtual, Online
+
+DATA-DRIVEN APPROACHES TO LEARN HYCHEM MODELS
+Weiqi Ji
+Department of Mechanical Engineering
+Massachusetts Institute of Technology
+Cambridge, MA 02139
+Email: weiqiji@mit.edu
+
+Julian Zanders
+Department of Electrical Engineering and Computer Science
+Massachusetts Institute of Technology
+Cambridge, MA 02139
+Email: jzanders@mit.edu
+
+Ji-Woong Park
+Argonne National Laboratory
+Lemont, IL 60439
+Email: ji.park@anl.gov
+
+Sili Deng ∗
+Department of Mechanical Engineering
+Massachusetts Institute of Technology
+Cambridge, MA 02139
+Email: silideng@mit.edu
+
+ABSTRACT
+The HyChem (Hybrid Chemistry) approach has recently
+been proposed for modeling high-temperature combustion of
+real, multi-component fuels. The approach combines lumped reaction steps for fuel thermal and oxidative pyrolysis with detailed
+chemistry for the oxidation of the resulting pyrolysis products.
+Determining the pyrolysis submodel requires extensive experimentation on speciation measurements. Recent work has been
+directed to learn HyChem from an existing HyChem model for
+a similar fuel, which requires less data. However, the approach
+usually shows substantial discrepancies with experimental data
+within the Negative Temperature Coefficient (NTC) regime, as
+the low-temperature chemistry is more fuel-specific than hightemperature chemistry. This paper proposes a machine learning approach to learn the HyChem models that can cover both
+high-temperature and low-temperature regimes. Specifically, we
+develop a HyChem model using the experimental datasets of ignition delay times covering a wide range of temperatures and
+equivalence ratios. The chemical kinetic model is treated as a
+neural network model, and we then employ stochastic gradient
+descent (SGD), a technique that was developed for deep learn-
+
+ing, for the training. We demonstrate the approach in learning
+the HyChem model for F-24, which is a Jet-A derived fuel, and
+compare the results with previous work employing genetic algorithms. The results show that the SGD approach can achieve
+comparable model performance with genetic algorithms but the
+computational cost is reduced by 1000 times. In addition, with
+regularization in SGD, the SGD approach changes the kinetic
+parameters from their original values much less than genetic algorithm and is thus more likely to retrain mechanistic meanings.
+Finally, our approach is built upon open-source packages and
+can be applied to the development and optimization of chemical
+kinetic models for internal combustion engine simulations.
+
+INTRODUCTION
+Predictive chemical kinetic models for real fuels play an important role in modeling the combustion processes in practical
+engines. Modeling real fuels is very challenging since real fuels
+are comprised of a variety of components with different physical
+and chemical properties. Therefore, much effort has been directed to developing compact models for real fuels that are computationally efficient and can accommodate the variations in fuel
+compositions. These approaches can be categorized as the ”sur-
+
+∗ Address all correspondence to this author.
+
+This work was authored in part by a U.S. Government employee in the scope of his/her employment.
+ASME disclaims all interest in the U.S. Government’s contribution.
+V001T06A011-1
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+ICEF2021-67925
+
+ing scalability and generalization of the data-driven HyChem
+model using techniques developed for training deep neural network models. We propose the stochastic gradient descent (SGD)
+optimizer to learn the pyrolysis submodel in HyChem models.
+The SGD optimizer is widely applied in the deep learning communities for its efficiency as well as scalability in dealing with
+large datasets, and its robustness in optimizing high-dimensional
+non-convex neural network models. Our recent work [10] has
+also shown that a chemical reaction network is equivalent to a
+neural network with a single hidden layer. Similarly, solving ordinary differential equations (ODEs) of reaction network models is equivalent to solving infinite-depth deep residual networks
+[11], which further rationalizes exploiting SGD in training HyChem models. However, the base model is constrained using the
+sequential optimization from multiple datasets, and thus changing the kinetic parameters too much has the risk of over-fitting
+the experimental dataset. Therefore, we also adopt various regularization techniques used in training deep neural network models to increase the generalization performance of learned models.
+Thus, we can achieve a model that has comparable performance
+to the conventional GA approach, but with much smaller changes
+in the kinetic parameters from the reference values.
+However, one of the major challenges in exploiting SGD
+for optimizing combustion kinetic models is the lack of software
+ecosystems that enable efficient and accurate computation of the
+gradient to model parameters. For instance, the finite difference
+method (often termed the ”brute-force method”) usually suffers
+both computational inefficiency due to the cost increases with the
+dimension of the parameters and inaccuracy due to the numerical
+truncation error [12]. Conversely, gradient computation methods
+based on auto-differentiation (AD) have shown both efficiency
+and accuracy in the training of large-scale deep neural network
+models. Many open-source AD packages have been developed
+in the last decade, such as TensorFlow [13] and PyTorch [14]
+in python, ForwardDiff.jl [15] and Zygote.jl [16] in Julia. To
+this end, this work employs an open-source simulation package
+Arrhenius.jl [17], which enables SGD for combustion model optimization, to the modeling of F-24, which is a variant of Jet-A
+with additives.
+
+METHODS
+Arrhenius.jl
+Arrhenius.jl is developed with the programming language of
+Julia to take advantages of the rich ecosystems of AD and ordinary differential equation solvers. Arrhenius.jl can do two kinds
+of differentiable programming: (I) it can differentiate each elemental computational block. For example, it can differentiate
+the chemical reaction source term with respect to the kinetic and
+thermodynamic parameters as well as species concentrations; (II)
+it differentiates the entire numerical simulation in various ways,
+such as forward sensitivity analysis by solving the continuous
+
+V001T06A011-2
+
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+rogate modeling approach” and the ”HyChem approach.”
+In the surrogate model approach [1, 2, 3], it is assumed that
+the functional groups characterize the combustion properties of a
+fuel mixture. More specifically, if a real fuel and a surrogate mixture share similar compositions of functional groups, they should
+also share similar combustion behaviors. Besides the functional
+groups, the physical properties of the mixture, such as heat capacity and molecular weights, also play important roles. Previous studies [1, 2, 3] have demonstrated that using a handful of
+pure hydrocarbon fuels could formulate a surrogate fuel mixture
+that effectively reproduces the combustion behaviors of a complex real fuel, including the ignition delay times (IDTs) and laminar flame speeds. However, it is often an art to determine the
+choice of surrogate fuel components and the procedures for developing surrogate fuels.
+Recently, Wang and his co-workers have proposed an endto-end modeling approach named ”HyChem (Hybrid Chemistry)” [4, 5, 6]. The HyChem approach describes the fuel pyrolysis and the subsequent oxidation of the pyrolysis products in
+two submodels. The fuel pyrolysis/oxidative pyrolysis is modeled by several experimentally constrained and lumped reaction
+steps. The oxidation of the pyrolysis products is modeled by a
+detailed foundational chemistry model. The two submodels are
+interconnected. The pyrolysis process provides ”reactants” for
+the oxidation process; the oxidation provides heat and radicals to
+facilitate the endothermic pyrolysis of the fuel.
+The lumped reaction steps are mainly determined via a sequential optimization using species profiles during the hightemperature pyrolysis. One can also use a neural network to
+represent the pyrolysis steps [7, 8] and learn the neural network
+using species profiles. Compared to the species profiles that require expensive laser diagnostic equipment, ignition delay times
+are easier to measures in shock tubes and rapid compression machines. Therefore, recent work [9] has proposed learning the rate
+constants of lumped reaction model from an ignition delay times
+dataset only by employing the stoichiometric coefficients from
+existing models for similar fuels. However, the base model usually shows large discrepancies in the low-temperature regimes,
+as the low-temperature chemistry is more fuel-specific compared
+to high-temperature chemistry. Thus, one has to optimize the
+lumped reaction steps from experimental data such that the optimized model can cover both high- and low-temperature regimes.
+Ryu et al. [9] employed genetic algorithms and IDT data to develop a data-driven kinetic model for the Jet fuel of F-24 using
+the Jet-A HyChem model as the base model. The core of such
+a data-driven modeling approach is the optimization step using
+genetic algorithms. However, genetic algorithms (GA) usually
+suffer from the curse of dimensionality, and thus they are usually limited to less than one hundred parameters. In addition, it
+is usually questionable how well a data-driven model is able to
+extrapolate beyond the training dataset.
+Therefore, this work aims to tackle the challenges in achiev-
+
+Schematic diagram showing the structure of the Arrhenius.jl [17] package.
+
+sensitivity equations [18] as did in CHEMKIN [19] and Cantera [20], and the adjoint methods [21, 22]. The first type of
+differentiation usually serves as the basis of the second type of
+high-level differentiation. Arrhenius.jl provides the core functionality of reacting flow simulations in native Julia programming, such that users can readily develop applications on top of
+Arrhenius.jl’s basic modules and exploit various approaches to
+do high-level differentiation.
+Figure 1 shows a schematic diagram of the Arrhenius.jl
+package. The package reads in the chemical mechanism files
+in YAML format from the Cantera community. The YAML file
+contains the kinetic, thermodynamic, and transport databases.
+The core functionality of Arrhenius.jl is computing the reaction
+source terms and mixture properties, such as heat capacities, enthalpies, Gibbs free energies, etc. Furthermore, Arrhenius.jl provides flexible interfaces for users to define neural network models as submodels and augment them into the governing equations.
+For example, one can employ a neural network submodel to represent the unknown chemical reaction pathways and exploit Scientific Machine Learning (SciML) approches to train the neural network models, such as neural ordinary differential equations [11,23] and physics-informed neural network [24,25]. One
+can then implement the governing equations for various applications with these core modules and solve the equations using classical numerical methods or neural-network-based solvers, such
+
+as physics-informed neural networks [24, 25]. Arrhenius.jl ships
+with applications for canonical combustion problems, such as
+simulating the auto-ignition in constant pressure/volume reactors
+and oxidation/pyrolysis in jet stirred reactors.
+Compared to other open-source combustion simulation
+packages, Arrhenius.jl can not only perform deterministic simulations given the physical models, but also can optimize model
+parameters based on experimental measurements. By efficiently
+and accurately computing the gradient of the numerical solutions
+to the model parameters, experimental data can be incorporated
+into the modeling pipeline to enable data-driven modeling with
+deep learning inspired algorithms.
+Dataset and Base Model
+Following the work of [9], we employ the IDT dataset compiled in [9], including the IDTs of the lean, stoichiometric, and
+rich F-24/air mixtures measured at 20 bars in a rapid compression machine (RCM) and a shock tube (ST) over the temperature
+range of 625 K to 1250 K. The RCM is driven pneumatically
+with a hydraulic stop apparatus, and the initial chamber temperature and pressure are achieved by adjusting the compression ratio [26]. Low-temperature (up to 700 K) IDTs were measured
+in the RCM. The shock tube uses a polycarbonate diaphragm to
+separate the driver and driven sections, the lengths of which are
+2.744 m and 4.227 m, respectively. A tailored mixture of He and
+
+V001T06A011-3
+
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+FIGURE 1.
+
+Gradient Evaluation
+As the only available dataset is the IDT, the key step in utilizing SGD for the optimization of the HyChem model is to compute the gradient of the IDT with respect to the kinetic parameters. Recent work [27, 18, 28, 29] have substantially advance
+the algorithms for computing the gradient of IDT to model parameters, this work employs the sensBVP method [27]. The approach converts the initial value problem (IVP) to a boundary
+value problem (BVP) by treating the temperature at ignition as a
+boundary condition and the IDT as a free variable to solve. The
+algorithm is implemented with Arrhenius.jl and further enhanced
+with the auto-differentiation, multi-threading, and sparse matrix
+techniques. In addition, the Arrhenius.jl enables gradient computation w.r.t. all of three Arrhenius parameters, which is crucial
+for the optimization, while the existing package of SensBVP in
+C++ [27] can only compute the gradient w.r.t. the pre-factor A.
+For the size of the skeletal HyChem model considered in this
+work, the computational cost of the sensitivity of IDT is negligible comparing to computing the IDT.
+It is worthy to note that the gradient of laminar flame speed
+to kinetic parameters is also usually computed using the boundary value problem approach as in the sensBVP approach for
+IDTs. Thus, the computational cost for the gradient computation of flame speed is also negligible comparing to computing
+the flame speed. Therefore, the gradient-based optimization approach proposed in this work can be readily extended to the experimental dataset of flame speed as well.
+Optimization Techniques
+Following the HyChem approach, the 16 steps of the pyrolysis submodel, listed in Table 1, are subject to optimization, and
+the rest of the core model is fixed. Although in the work of [9],
+only the pre-factor A and activation energy Ea are optimized, the
+SGD optimizer can easily scale up to high-dimension, such that
+all three parameters, including the non-exponential temperature
+dependence factor b, are optimized. Consequently, the optimization involves 48 parameters.
+As discussed in the introduction, we would like to regularize the model to achieve an optimized model that can fit the experimental datasets well but only moderately change the kinetic
+parameters from the base model. To facilitate regularization,
+
+the model parameters are scaled and centered at zero, such that
+the relative changes of Arrhenius parameters is to be optimized.
+Specifically, we define the scaled parameters as
+p = [ln(A/A0 ), b − b0 , Ea − Ea0 ],
+
+(1)
+
+where the subscript 0 refers to the base model and A, b, Ea
+are the three Arrhenius parameters in a Arrhenius equation
+a
+AT b exp( −E
+RT ). The dimension of Ea is specified as kcal/mol
+rather than cal/mol as a change of 2 kcal/mol in Ea is roughly
+equivalent to changes of e times in A, such that the changes in
+A and Ea will be balanced and avoid stiffness in the parameter
+space.
+The loss function is defined as the mean square error (MSE)
+between the predicted IDTs in the logarithmic scale using the
+optimized model and the measured IDTs, as shown in Eq. 2:
+Loss = MSE (log(IDT op ), log(IDT exp ))
+
+(2)
+
+The choice of logarithmic scale is similar to the choice of relative error between measured and predicted IDT as in [9]. The
+Adam [30] optimizer, a popular variant of SGD, with the default
+learning rate of 0.001 is adopted. Weight decaying and early
+stopping [31] are employed to regularize the parameters, such
+that the optimization will prefer kinetic parameters that are close
+to their original values.
+
+RESULTS
+In this section, we first present an overview of the learning
+results and then present the details of the learning algorithms.
+The code implementations can be found in the Github repository
+for Arrhenius.jl [17].
+Overview of Learning Results
+Figure 2 show the comparisons between the experimentally measured IDTs and the predictions using the base HyChem
+model, the optimized model using genetic algorithms (GA) by
+[9], and the current model. Overall, both of the optimized models agree with experimental data very well, with an MSE of 0.008
+for SGD and 0.044 for GA on the entire dataset. As pointed out
+by [9], the base model substantially underpredicts the IDTs in the
+NTC regimes for all three equivalence ratios, while it performs
+reasonably well in the high-temperature regimes. Conversely,
+both of the optimized models substantially improve the performance in the NTC regime.
+Since the slope of the response curve is indicative of the
+global activation energy, it is interesting to note that the current
+model shows a smaller global activation energy at lower temperature regimes, where the temperature is below 700 K, than the
+
+V001T06A011-4
+
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+N2 was used as the driver gas, and premixed F-24/air mixtures
+were introduced to the driven section.
+For the base model, we adopt a HyChem version of the JetA skeletal mechanism [5] that covers the NTC regime. It has
+48 species and 254 reactions. In addition, details of the formulations and stoichiometric coefficients in the F-24 model are the
+same as in [9], and they are listed in Table 1. For simplicity and
+consistency, all of the simulations are carried out under constant
+volume conditions using Arrhenius.jl.
+
+TABLE 1.
+
+List of reaction pathways in the pyrolysis submodel presented in the skeletal Jet-A HyChem model [5]
+
+1. The current model indeed underpredicts the activation energy due to large uncertainties in the training data, since the
+IDT measurements in the NTC regime are usually associated with large uncertainties. In addition, the simulations
+for training and predictions are carried out under constant
+volume assumptions for simplicity and consistency, which
+might not be appropriate for two-stage ignition [34]. These
+uncertainties in the training dataset and modeling may result in a biased model. In such case, the data re-balance
+procedure in [9] can be employed to increase the weights of
+low-temperature data on the model training.
+2. The reported measurements are subject to heat loss, and
+therefore overestimate the global activation energy. The heat
+loss for experiments with long testing time in RCM usually
+has a substantial effect on the IDTs. The reported experimental data using the temperature at the end of compression
+gives higher global activation energy than the actual one.
+In such case, the effective temperature [35, 36] is usually a
+better representative temperature than the temperature at the
+end of compression.
+On the other hand, the SGD optimization tends not to over-fit the
+
+data at low temperatures compared to the GA optimization, since
+multiple regularization techniques are employed to prevent overfitting. From this point of view, the experimental data are likely
+giving an overly large global activation energy than the actual
+one. Nevertheless, good data-driven modeling not only can help
+us develop a predictive model from experimental data but also
+help reveal potential experimental uncertainties and guide further
+experimental designs to advance our physical understandings.
+To assess the generalization capability of the learn model,
+we further evaluate the performance of the optimized models in
+predicting laminar flame speeds, although the model is not optimized against flame speed data. To the best of our knowledge,
+there are no experimental data of flame speed for F-24 in the
+open literature. Thus, we apply the model to predict flame speed
+for Jet-A as F-24 is derived from Jet-A and might share similar
+flame propagation behaviors. The predicted and measured flame
+speeds for Jet-A are presented in Fig. 3.
+While it is difficult to assess which model performs better given the uncertainties in the experimental data, we can use
+the base model as a reference, for the base model is calibrated
+for high-temperature pyrolysis. The base model is expected to
+perform well for flame propagation that is dominated by hightemperature chemistry. Overall, both SGD and GA models predict the similar flame speed with the base model, with the differences within 2 cm/s. On the other hand, the GA model systematically predicts slower laminar flame speeds than the base model.
+The predictions by the current model agree with those by the base
+model at fuel-lean conditions and show similar trends as those by
+the GA model under fuel-rich conditions. This could be poten-
+
+V001T06A011-5
+
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+one suggested by the experimental data and the GA model. Such
+global activation energy is related to the key reactions that govern the low-temperature auto-ignition [32, 33], and thus it is important to accurately predict the global activation energy to gain
+physical insight of the ignition behavior of F-24. The discrepancies in the predicted global activation energy can be attributed to
+several plausible reasons:
+
+FIGURE 2. Ignition delay times from F-24 RCM/shock tube measurements (Exp), and predicted by the skeletal Jet-A HyChem model
+(Base), the optimized HyChem model using SGD in current work
+(SGD), and optimized HyChem model using genetic algorithms in [9]
+(GA), at 20 bars for lean (φ = 0.5), stoichiometric, and rich (φ = 1.3)
+fuel/air mixtures.
+
+tially attributed to the regularization in the SGD optimization.
+As shown in Tables 2 and 3, the kinetic parameters in the current
+model are closer to the base model compared to those in the GA
+model. For the GA model, the activation energy for the direct
+decomposition reaction of R1 is changed a lot, and such changes
+may lead to systematic changes in flame speed under both fuellean and rich conditions. For the SGD model, it is possible that
+the flame speed is only sensitive to the changes of kinetic parameters under fuel-rich conditions, as the fuel-lean and rich conditions correspond to the different radical pools. Future work
+could exploit advanced pathway analysis tools, such as global
+pathway analysis [37], to further investigate the different trends
+under lean and rich conditions. Nevertheless, the SGD model
+tends to less affect the model parameters for high-temperature
+chemistry while improving the low-temperature chemistry from
+experimental data. Thus, comparing to the GA model, the SGD
+model is more likely to be able to extrapolate to conditions beyond the range of the training dataset.
+While the experimental dataset of laminar flame speed can
+be readily incorporated in the SGD approach as discussed in the
+methodology section, the results in Fig. 3 suggest that learning
+the HyChem model from the ignition delay time dataset might
+be sufficient to develop a model that works well for both ignition
+and flame propagation with the help of regularization. Such generalization capability is especially useful recognizing that experimental measurements of laminar flame speed are usually limited
+to near-atmospheric pressures due to the onset of turbulence at
+elevated pressures [38, 39]. Nevertheless, the SGD approach can
+
+V001T06A011-6
+
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+FIGURE 3. Laminar flame speeds from Jet-A measurements [5]
+(Exp), and predicted by the skeletal Jet-A HyChem model (Base), the
+optimized HyChem model using SGD in current work (SGD), and optimized HyChem model using genetic algorithms in [9] (GA), at one atm
+and 423 K.
+
+Details of Learning Algorithms
+We then present the details of the learning algorithms that
+produce the SGD-optimized model. Figure 4 shows the loss history in the training and validation of the model. 76 out of 96
+samples were randomly chosen as the training dataset, and the
+rest were for the validation. Within each epoch, the training
+dataset was randomly shuffled to introduce randomness to the
+training process to prevent over-fitting. Mini-batch optimization
+with a batch size of one was adopted such that the model parameters were updated for each sample and 76 times for each epoch.
+Cross-validation and early-stopping were exploited to prevent
+over-fitting. For instance, the training is stopped when the loss in
+the validation reaches a plateau, although the loss in the training
+is still decreasing. The validation loss reached a plateau at around
+60 epochs, although we let the training continues to 110 epochs
+to confirm the plateau. We thus select the model at 58 epochs,
+which is the closest checkpoint near 60 epochs, and the checkpoint is saved every time the validation loss reaches a new minimal. In summary, we adopted multiple techniques, including
+mini-batching, cross-validation and early-stopping, to regularize
+the model and prevent over-fitting. The regularization in SGD in
+general leads to better generalization performance, which is one
+of the most important advantages comparing to GA optimization,
+although both SGD and GA can give a similar fitness in a small
+dataset with less than one hundred parameters.
+As far as the computational cost is concerned, SGD optimization is also much more efficient than genetic algorithms. To
+estimate the computational costs for both algorithms, we denote
+the computation of the IDT for all 96 samples as one computational unit. Since the computational cost for gradient evaluation is negligible, the current SGD optimization for F-24 costs
+about 100 units. For comparison, the GA optimization for the
+same datasets and base model costs about 105 units, with 32
+particles and 300 generations [9]. Such direct comparison reveals 1000 times of acceleration, which also results in a reduced
+need for computational power. For example, the current training
+was performed on a desktop workstation for hours, while the GA
+optimization in [9] was performed on a high-performance cluster. Note that one can accelerate the GA optimization by parallel
+evaluation of the particles in each generation. In addition, the
+acceleration factor scales with the size of the dataset and the dimension of the model parameter. Therefore, such computational
+saving is expected to be more significant when the kinetic system
+is more complex and more data are available.
+
+FIGURE 4. The history of the loss function in the training (with 76
+samples) and validation (with 20 samples). Within each epoch, the training dataset was randomly shuffled and the optimizer updated the model
+parameters for each sample and 76 times for each epoch.
+
+CONCLUSION
+This work presents a machine learning approach for learning
+and optimizing HyChem models. By treating the kinetic model
+as a neural network and using the stochastic gradient descent for
+optimization, HyChem models can be learned from ignition delay time measurements. Such an approach was demonstrated in
+training a HyChem model for the jet fuel of F-24. Compared to
+the commonly utilized genetic algorithms, the current approach
+has 1000 times less computational cost and better generalization
+performance with minimal degradation to the high-temperature
+chemistry while significantly improving the performance at low
+temperatures. In addition, further computational cost-saving is
+expected for larger datasets and more complex kinetic systems.
+Finally, the code for the current approach is built upon opensource packages and is available online.
+While the current work focuses on developing HyChem
+models, such optimization techniques can be readily applied to
+other computational tasks. For example, optimizing overly reduced chemical models is a technique that has been pursued in
+practical engine simulations [40, 41]. In such tasks, high dimensional kinetic systems with hundreds of model parameters are
+usually present. Therefore, the current SGD-based approach will
+be superior to genetic algorithms.
+
+ACKNOWLEDGMENT
+WJ and SD would like to acknowledge the funding support
+from Weichai Power Co., Ltd. WJ would like to acknowledge
+the help from Dr. Vyaas Gururajan on the implementation of the
+sensBVP method and the help from Dr. Je Ir Ryu on simulating
+
+V001T06A011-7
+
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+potentially enable us to develop a data-driven kinetic model by
+providing only the high-pressure ignition delay time dataset but
+can work well for predicting both ignition and flame propagation
+at engine relevant elevated pressures.
+
+TABLE 2. The kinetic parameters of the pyrolysis submodels in the skeletal Jet-A HyChem model [5] (Base), the optimized model using SGD in
+current work (SGD), and the optimized model using genetic algorithm in [9] (GA).
+
+V001T06A011-8
+
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+TABLE 3. The changes of the kinetic parameters in the optimized models in current work (SGD) and in [9] (GA) with respect to the base model of a
+skeletal Jet-A HyChem model [5].
+
+F-24 ignition with the GA-optimized HyChem model.
+
+V001T06A011-9
+
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+REFERENCES
+[1] Violi, A., Yan, S., Eddings, E., Sarofim, A., Granata, S.,
+Faravelli, T., and Ranzi, E., 2002. “Experimental formulation and kinetic model for jp-8 surrogate mixtures”. Combustion Science and Technology, 174(11-12), pp. 399–417.
+[2] Eddings, E. G., Yan, S., Ciro, W., and Sarofim, A. F., 2005.
+“Formulation of a surrogate for the simulation of jet fuel
+pool fires”. Combustion science and technology, 177(4),
+pp. 715–739.
+[3] Dooley, S., Won, S. H., Chaos, M., Heyne, J., Ju, Y., Dryer,
+F. L., Kumar, K., Sung, C.-J., Wang, H., Oehlschlaeger,
+M. A., et al., 2010. “A jet fuel surrogate formulated by
+real fuel properties”. Combustion and flame, 157(12),
+pp. 2333–2339.
+[4] Wang, H., Xu, R., Wang, K., Bowman, C. T., Hanson,
+R. K., Davidson, D. F., Brezinsky, K., and Egolfopoulos,
+F. N., 2018. “A physics-based approach to modeling realfuel combustion chemistry-i. evidence from experiments,
+and thermodynamic, chemical kinetic and statistical considerations”. Combustion and Flame, 193, pp. 502–519.
+[5] Xu, R., Wang, K., Banerjee, S., Shao, J., Parise, T., Zhu, Y.,
+Wang, S., Movaghar, A., Lee, D. J., Zhao, R., et al., 2018.
+“A physics-based approach to modeling real-fuel combustion chemistry–ii. reaction kinetic models of jet and rocket
+fuels”. Combustion and Flame, 193, pp. 520–537.
+[6] Xu, R., Saggese, C., Lawson, R., Movaghar, A., Parise, T.,
+Shao, J., Choudhary, R., Park, J.-W., Lu, T., Hanson, R. K.,
+et al., 2020. “A physics-based approach to modeling realfuel combustion chemistry–vi. predictive kinetic models of
+gasoline fuels”. Combustion and Flame, 220, pp. 475–487.
+[7] Ranade, R., Alqahtani, S., Farooq, A., and Echekki, T.,
+2019. “An ann based hybrid chemistry framework for complex fuels”. Fuel, 241, pp. 625–636.
+[8] Ranade, R., Alqahtani, S., Farooq, A., and Echekki, T.,
+2019. “An extended hybrid chemistry framework for complex hydrocarbon fuels”. Fuel, 251, pp. 276–284.
+[9] Ryu, J. I., Kim, K., Min, K., Scarcelli, R., Som, S., Kim,
+K. S., Temme, J. E., Kweon, C.-B. M., and Lee, T., 2021.
+“Data-driven chemical kinetic reaction mechanism for f-24
+jet fuel ignition”. Fuel, 290, p. 119508.
+[10] Ji, W., and Deng, S., 2021. “Autonomous discovery of unknown reaction pathways from data by chemical reaction
+neural network”. The Journal of Physical Chemistry A,
+125(4), pp. 1082–1092.
+[11] Chen, R. T., Rubanova, Y., Bettencourt, J., and Duvenaud,
+D., 2018. “Neural ordinary differential equations”. arXiv
+preprint arXiv:1806.07366.
+[12] Baydin, A. G., Pearlmutter, B. A., Radul, A. A., and
+Siskind, J. M., 2018. “Automatic differentiation in machine
+
+learning: a survey”. Journal of machine learning research,
+18.
+[13] Abadi, M., Barham, P., Chen, J., Chen, Z., Davis, A.,
+Dean, J., Devin, M., Ghemawat, S., Irving, G., Isard, M.,
+et al., 2016. “Tensorflow: A system for large-scale machine learning”. In 12th {USENIX} symposium on operating systems design and implementation ({OSDI} 16),
+pp. 265–283.
+[14] Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury,
+J., Chanan, G., Killeen, T., Lin, Z., Gimelshein, N.,
+Antiga, L., et al., 2019. “Pytorch: An imperative style,
+high-performance deep learning library”. arXiv preprint
+arXiv:1912.01703.
+[15] Revels, J., Lubin, M., and Papamarkou, T., 2016. “Forwardmode automatic differentiation in julia”. arXiv preprint
+arXiv:1607.07892.
+[16] Innes, M., 2018. “Don’t unroll adjoint: Differentiating ssaform programs”. arXiv preprint arXiv:1810.07951.
+[17] Ji, W., and Deng, S., 2021. Arrhenius.jl: A differentiable
+combustion simulation package. https://github.
+com/DENG-MIT/Arrhenius.jl.
+[18] Ji, W., Ren, Z., and Law, C. K., 2019. “Evolution of sensitivity directions during autoignition”. Proceedings of the
+Combustion Institute, 37(1), pp. 807–815.
+[19] Kee, R. J., Rupley, F. M., and Miller, J. A., 1989. Chemkinii: A fortran chemical kinetics package for the analysis of
+gas-phase chemical kinetics. Tech. rep., Sandia National
+Lab.(SNL-CA), Livermore, CA (United States).
+[20] Goodwin, D. G., Moffat, H. K., and Speth, R. L., 2009.
+Cantera: An object-oriented software toolkit for chemical
+kinetics, thermodynamics, and transport processes.
+[21] Rackauckas, C., Ma, Y., Dixit, V., Guo, X., Innes, M., Revels, J., Nyberg, J., and Ivaturi, V., 2018. “A comparison of
+automatic differentiation and continuous sensitivity analysis for derivatives of differential equation solutions”. arXiv
+preprint arXiv:1812.01892.
+[22] Rackauckas, C., and Nie, Q., 2017. “Differentialequations.
+jl–a performant and feature-rich ecosystem for solving differential equations in julia”. Journal of Open Research Software, 5(1).
+[23] Rackauckas, C., Ma, Y., Martensen, J., Warner, C., Zubov,
+K., Supekar, R., Skinner, D., Ramadhan, A., and Edelman,
+A., 2020. “Universal differential equations for scientific
+machine learning”. arXiv preprint arXiv:2001.04385.
+[24] Raissi, M., Perdikaris, P., and Karniadakis, G. E., 2019.
+“Physics-informed neural networks: A deep learning
+framework for solving forward and inverse problems involving nonlinear partial differential equations”. Journal
+of Computational Physics, 378, pp. 686–707.
+[25] Ji, W., Qiu, W., Shi, Z., Pan, S., and Deng, S., 2020. “Stiffpinn: Physics-informed neural network for stiff chemical
+kinetics”. arXiv preprint arXiv:2011.04520.
+
+bustion and Flame, 220, pp. 16–22.
+[40] Mittal, A., Wijeyakulasuriya, S. D., Probst, D., Banerjee,
+S., Finney, C. E., Edwards, K. D., Willcox, M., and Naber,
+C., 2017. “Multi-dimensional computational combustion of
+highly dilute, premixed spark-ignited opposed-piston gasoline engine using direct chemistry with a new primary reference fuel mechanism”. In Internal Combustion Engine
+Division Fall Technical Conference, Vol. 58325, American
+Society of Mechanical Engineers, p. V002T06A022.
+[41] Kelly, M., Dooley, S., and Bourque, G., 2021. “Toward machine learned highly reduce kinetic models for methane/air
+combustion”. arXiv preprint arXiv:2103.08377.
+
+V001T06A011-10
+
+Copyright © 2021 by ASME and
+The United States Government
+
+Downloaded from http://asmedigitalcollection.asme.org/ICEF/proceedings-pdf/ICEF2021/85512/V001T06A011/6802968/v001t06a011-icef2021-67925.pdf by Massachusetts Inst Of Tech. user on 22 June 2023
+
+[26] Allen, C., Toulson, E., Edwards, T., and Lee, T., 2012. “Application of a novel charge preparation approach to testing
+the autoignition characteristics of jp-8 and camelina hydroprocessed renewable jet fuel in a rapid compression machine”. Combustion and Flame, 159(9), pp. 2780–2788.
+[27] Gururajan, V., and Egolfopoulos, F. N., 2019. “Direct sensitivity analysis for ignition delay times”. Combustion and
+Flame, 209, pp. 478–480.
+[28] Lemke, M., Cai, L., Reiss, J., Pitsch, H., and Sesterhenn,
+J., 2019. “Adjoint-based sensitivity analysis of quantities
+of interest of complex combustion models”. Combustion
+Theory and Modelling, 23(1), pp. 180–196.
+[29] Almohammadi, S., Hantouche, M., Le Maı̂tre, O. P., and
+Knio, O. M., 2021. “A tangent linear approximation of the
+ignition delay time. i: Sensitivity to rate parameters”. Combustion and Flame, 230, p. 111426.
+[30] Kingma, D. P., and Ba, J., 2014. “Adam: A method for
+stochastic optimization”. arXiv preprint arXiv:1412.6980.
+[31] Bengio, Y., Goodfellow, I., and Courville, A., 2017. Deep
+learning, Vol. 1. MIT press Massachusetts, USA:.
+[32] Ji, W., Zhao, P., Zhang, P., Ren, Z., He, X., and Law, C. K.,
+2017. “On the crossover temperature and lower turnover
+state in the ntc regime”. Proceedings of the Combustion
+Institute, 36(1), pp. 343–353.
+[33] Zhao, P., and Law, C. K., 2013. “The role of global and
+detailed kinetics in the first-stage ignition delay in ntcaffected phenomena”. Combustion and Flame, 160(11),
+pp. 2352–2358.
+[34] Zhang, P., Ji, W., He, T., He, X., Wang, Z., Yang, B., and
+Law, C. K., 2016. “First-stage ignition delay in the negative
+temperature coefficient behavior: Experiment and simulation”. Combustion and Flame, 167, pp. 14–23.
+[35] He, X., Donovan, M., Zigler, B., Palmer, T., Walton, S.,
+Wooldridge, M., and Atreya, A., 2005. “An experimental
+and modeling study of iso-octane ignition delay times under homogeneous charge compression ignition conditions”.
+Combustion and Flame, 142(3), pp. 266–275.
+[36] Ji, W., Zhang, P., He, T., Wang, Z., Tao, L., He, X., and
+Law, C. K., 2015. “Intermediate species measurement during iso-butanol auto-ignition”. Combustion and Flame,
+162(10), pp. 3541–3553.
+[37] Gao, X., Gou, X., and Sun, W., 2019. “Global pathway
+analysis: a hierarchical framework to understand complex
+chemical kinetics”. Combustion Theory and Modelling,
+23(3), pp. 549–571.
+[38] Long, A. E., Speth, R. L., and Green, W. H., 2019. “Numerical investigation of strained extinction at engine-relevant
+pressures: Pressure dependence and sensitivity to chemical
+and physical parameters for methane-based flames”. Combustion and Flame, 202, pp. 318–333.
+[39] Ji, W., Yang, T., Ren, Z., and Deng, S., 2020. “Dependence
+of kinetic sensitivity direction in premixed flames”. Com-
+
+

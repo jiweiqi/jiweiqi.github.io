@@ -1,0 +1,315 @@
+Uncertainty Propagation in Deep Neural Network Using Active Subspace
+Weiqi Ji a, Zhuyin Ren a and Chung K. Law a,b
+a Tsinghua University, Beijing, China b Princeton University, NJ, USA
+
+weiqiji@mit.edu (W. Ji), zhuyinren@tsinghua.edu.cn (Z. Ren),
+cklaw@princeton.edu (C. K. Law)
+Abstract
+The inputs of deep neural network (DNN) from real-world data usually come with
+uncertainties. Yet, it is challenging to propagate the uncertainty in the input features to the
+DNN predictions at a low computational cost. This work employs a gradient-based
+subspace method and response surface technique to accelerate the uncertainty propagation
+in DNN. Specifically, the active subspace method is employed to identify the most
+important subspace in the input features using the gradient of the DNN output to the inputs.
+Then the response surface within that low-dimensional subspace can be efficiently built,
+and the uncertainty of the prediction can be acquired by evaluating the computationally
+cheap response surface instead of the DNN models. In addition, the subspace can help
+explain the adversarial examples. The approach is demonstrated in MNIST datasets with a
+convolutional neural network. Code is available at: https://github.com/jiweiqi/nnsubspace.
+Keywords: Deep learning, Uncertainty quantification, Adversarial examples, Active
+subspace, Gaussian noise
+1. Introduction
+Deep neural networks (DNNs) have demonstrated impressive performance over the
+years in many fields of research. The applications include object classification (Krizhevsky,
+Sutskever and Hinton 2012; He et al. 2016), semantic segmentation (Long, Shelhamer and
+Darrell 2015), activity recognition/detection (Tran et al. 2015) and speech recognition
+(Hinton et al. 2012) to name a few. Despite these successes, DNNs prove to be not very
+robust to noise in the input (Tang and Eliasmisth 2010). Recent works on adversarial
+perturbations (Szegedy et al. 2013) clearly show that small imperceptible perturbations to
+the input can result in a drastic negative effect on classification performance. Real world
+data come with uncertainties and quantifying the effect of input noise to DNN predictions
+becomes vital for those safety-critical systems such as autonomous driving (Gal and
+Ghahramani 2016). On the other hand, training networks with random noise applied to
+their inputs can enhance the robustness of networks (Sietsma and Dow 1991). Therefore,
+understanding the response of the network output to the input noise is also useful for
+training the network, and provides insight on searching adversarial examples (Goodfellow,
+Shlens and Szegedy 2014).
+
+Thus, in this work, we introduce the active subspace method (Constantine, Dow and
+Wang 2014) to identify the low-dimensional subspace from the high-dimensional input
+features in DNN. Along the active subspace, the perturbation of the inputs substantially
+changes the output while the perturbation in the complementary subspace has little effect
+on the output. The active subspace can be identified via the gradient of DNN output w.r.t.
+the inputs, which can be evaluated efficiently via backpropagation. We shall show that one
+or two-dimensional active subspace can reasonably capture most of the variations of the
+output in the MNIST dataset under a moderate level of perturbation. Then the uncertainty
+of the output can be efficiently estimated with few samples through building lowdimensional response surface against the active subspace.
+2. Related Work
+Monte Carlo (MC) sampling is the most straightforward approach that can be used to
+calculate the uncertainty of the output. It is based on randomly drawing a number of
+samples from the inputs distribution and then feed those samples to the network. The
+probabilistic density function, as well as the first and second moment of the output, can be
+estimated through those predictions. However, MC requires a large number of samples due
+to its slow convergence rate.
+Several approaches have been proposed to estimate the uncertainty of output efficiently,
+and they can be divided into two categories. One is layer-wise uncertainty propagation
+(Bibi, Alfadly and Ghanem 2018; Astudillo and Neto 2011) and the other one is using
+Unscented Transform (Simon and Uhlmann 1997; Abdelaziz et al. 2015). In the layer-wise
+approach, the first and second moment of a single layer’s output is analytically expressed
+as the layer inputs uncertainty under certain assumptions and then the uncertainty of the
+input is propagated to the final output layer-by-layer. However, the performance degrades
+when the network is deep as the error accumulates through layers. The Unscented
+Transform is based on the Unscented Kalman Filter (Simon and Uhlmann 1997), which
+assumes that the output follows a Gaussian distribution and its first and second moment
+can be accurately estimated via a series of weighted deterministic samples. However, the
+Unscented Transform requires 2𝑑 + 1 samples where 𝑑 is the dimension of the input
+features. The computational cost could be significant for DNN with high-dimensional input
+features.
+3. Approach
+We denote the input vector as x following the probabilistic distribution of 𝜋x . The
+deterministic DNN maps the inputs to output and is denoted as 𝑓(𝐱). The active subspace
+(AS) methodology is detailed in (Constantine, Dow and Wang 2014) with algorithms, a
+rigorous error analysis, and demonstrations. It has been applied to various engineering field
+in the context of forward uncertainty propagation (Constantine et al. 2015; Ji et al. 2018)
+
+and Bayesian inference (Constantine, Kent and Bui-Thanh 2016). Here we simply state the
+basic concepts. The AS method seeks an r-dimensional subspace in the d-dimensional input
+feature space that describes most of the variation of 𝑓(𝐱). The idea is to find a lowdimensional approximation of 𝑓(𝐱) as
+𝑓(𝐱) ≈ 𝑔(𝐱 𝑟 ), 𝐱 𝑟 = 𝑺𝑇 𝐱,
+
+(1)
+
+where 𝑔 is a function of the r-dimensional input 𝐱𝑟 with 𝑟 < 𝑑, and 𝑆 is an orthogonal
+matrix of size 𝑑×𝑟. The active subspace is defined as span{S}. One way to identify the
+active subspace is to perform an eigenvalue decomposition of the matrix C, defined as the
+expectation of the outer product of the gradient ∇𝑓 with itself, i.e.,
+𝑪 = ∫ ∇𝑓(𝐱)∇𝑓(𝐱)𝑇 πx (𝐱)d𝐱 = 𝑾𝜦𝑾𝑻 .
+
+(2)
+
+Note that C is symmetric, positive semi-definite, and of size 𝑑×d. The unitary matrix 𝑾
+consists of the d eigenvectors 𝐰1 , … , 𝐰𝑑 and 𝚲 is a diagonal matrix whose components are
+the eigenvalues 𝜆1,… 𝜆d, sorted in descending order. If there is a gap in the eigenvalues,
+meaning λ𝑟 ≫ λ𝑟+1, then the function 𝑓 varies mostly along the first r eigenvectors and is
+almost constant along the rest of the eigenvectors. The first r eigenvectors are selected as
+active directions, i.e., 𝑺 ≡ [𝐰1 , … , 𝐰𝑟 ] ; and its complement 𝑠𝑝𝑎𝑛{𝐰𝒓+𝟏 , … , 𝐰𝑑 } is
+identified as the inactive subspace. Then one can build a response surface, 𝑅𝑆(𝐱 𝑟 ), with 𝐱𝑟
+as input, and it is chosen as the function 𝑔, i.e.,
+𝑓(𝐱) ≈ 𝑔(𝐱 𝑟 ) = 𝑅𝑆(𝐱 𝑟 ).
+
+(3)
+
+The matrix C can be approximated by MC simulations. The number of gradient evaluations
+of the forward model, M, variable increases logarithmically with d, i.e.,
+𝑀 = 𝛼𝛽log(𝑑).
+
+(4)
+
+The constant 𝛼 is the over-sampling factor and is recommended to be between 2 and 10,
+and 𝛽 should be larger than 𝑟 + 1.
+Once the active subspace is identified, various response techniques, such as Polynomial
+Fitting and Polynomial Chaos Expansion (PCE) (Conrad and Marzouk 2013) can be readily
+applied to the low-dimensional active subspace. The entire workflow for propagating the
+input uncertainty to the DNN output will be:
+(I) Estimate the active subspace based on a small number, M, of samples drawn from πx ,
+and evaluate the gradient of 𝑓(𝐱) for each sample.
+(II) Build the response surface 𝑅𝑆(𝐱 𝑟 ) to the low-dimensional variable 𝐱𝑟.
+(III) Estimate the distribution of the DNN output by evaluating a large number of samples
+drawn from πx with 𝑓(𝐱) being approximated by the cheap response surface 𝑅𝑆(𝐱 𝑟 ).
+
+4. Experimental Result
+In this section, we apply the active subspace method to the MNIST handwritten digital
+data (LeCun 1998). A (convolutional neural network) CNN, similar to LeNet (LeCun et al.
+1998), with four hidden layers was trained on 60000 images to the accuracy of 99.28%,
+and the test accuracy of 98.86% on another 10000 test images. Dropout is applied for the
+regularization and the activation function of softplus instead of ReLU is implemented such
+that the DNN output is mathematically differentiable w.r.t the input features. The
+uncertainty of the image follows Gaussian distribution, which is centered at the original
+image with a constant variance for all of the pixel values. The uncertainty of each pixel
+value is independent with each other. For instance, the variance of the input feature vector
+x can be written as σ2 𝐼784, in which x corresponds to the flatten vector of the image matrix,
+and I is the identity matrix of size 784 × 784. We denoted the additive Gaussian noise as
+𝝃, then we have
+𝐱 = 𝐱 0 + σ𝝃
+
+(3)
+
+in which 𝝃 follows a standard Gaussian distribution, i.e., 𝛏 ~ 𝑁 (𝟎, 𝐼784 ). Noting that the
+distribution of the added noise is truncated to ensure the pixel value to be within [0, 255].
+The output, corresponds to the predicted label of the original picture, is specified as the
+quantity of interest, although the predicted label might change after adding noise to the
+original picture. For example, a picture with the ground truth label of ‘6’ is classified as
+‘8’, then the output corresponds to the category of ‘8’, intead of ‘6’, will be specified as
+the quantity of interest. The constants of α and β in Eq. (4) are both specified as 10, and
+the number of evaluations of the gradient f (x) will be 667 = 10 ∗ 10 ∗ ln(28 ∗ 28) for
+each image.
+Figure 1 presents the eigenvalues and the summary plot of the output against the first
+active variable for an image from the test dataset, shown in Fig. 2. The first active variable
+defined as the projected value of noise onto the first active direction, i.e., 𝐰1𝑇 𝛏. The
+spectrum suggests a one-dimensional active subspace for the cases of σ = 20 and 30, and a
+two-dimensional active subspace for the case of larger uncertainty σ = 50. The summary
+plot shows that the first active variable can capture the changes of the output with the noise
+input very well, although the scattering in the case of σ = 50 becomes significant. In all
+three cases, the map from input features to output is close to linear with weak nonlinear
+behavior, and a response surface with second order polynomial fitting is sufficient for those
+cases. Finally, the uncertainty of the output is acquired by evaluating 50000 samples via
+the response surface. The histogram suggest that the distribution of the output is close to
+Gaussian distribution.
+As the DNN output changes most along the active direction, one can make adversarial
+examples by specifying the noise along the active direction. An example is shown in Fig.
+
+2. The score of the output is significantly changed, although there is no visual difference
+between the original and the perturbated image.
+
+Figure 1. The spectrum of the eigenvalues, the summary plot against the first active
+variable along with the second order polynomial fitting curve, and the histogram of the
+network output based on the response surface.
+
++
+
+=
+
+𝐱
+𝒘1𝑇 𝝃 = 63.75
+x+𝒘1𝑇 𝝃
+{‘6’: 0.69 confidence}
+{‘1’: 0.19 confidence }
+{‘0’: 0.89 confidence }
+Figure 2. The original image (left), addictive noise along the first active direction, and the
+image added with the noise. 𝐰1𝑇 corresponds to the active subspace for the case of σ = 20.
+Finally, the accuracy of the computed output uncertainty through one-dimensional
+active subspace and second-order polynomial fitting is validated against MC sampling.
+Figure 3 shows the conditional plot of the standard deviations of the DNN output against
+its mean from 1000 test images. For each image, we use 50000 samples for the Monte
+Carlo integration, and the uncertainty of the input is specified as σ = 20. As expected, the
+uncertainty of the output is very small when the highest score of the prediction is close to
+100%. Therefore, we shall focus on the images whose highest score is less than 0.9. Figure
+4 presents the results from active subspace with response surface and the direct MC. In all
+three cases, the mean and the variance of the DNN output agree with MC very well.
+Assuming that the computational cost of the gradient evaluation is the same as the forward
+prediction of DNN and ignoring the cost of building response surface, the total cost of the
+current approach is lower than that of direct MC by two magnitudes.
+
+Figure 3. The conditional plot of the standard deviations of the output against its mean.
+The statistics of the output is acquired via direct Monte Carlo sampling with 50000 samples
+for each image under σ = 20.
+
+Figure 4. The mean and standard deviation of the output acquired via response surface (rs
+mean & std) against the ones from direct Monte Carlo sampling (mc mean & std).
+5. Discussion
+The current work shows that there exist one-dimensional active subspace from the map
+of the network inputs to the output for most of the test images under a moderate level of
+uncertainty, although some images show two-dimensional active subspace. Furthermore,
+the map between the output and inputs is close to linear for most of the images especially
+when the variance of the input uncertainty is small. These observations justify the argument
+made by (Goodfellow, Shlens and Szegedy 2014), that the linear nature of DNN w.r.t the
+perturbations to inputs can explain the adversarial examples rather than the nonlinear
+
+response. Regarding the cases where the active subspace is higher than one-dimension or
+the response of the output is nonlinear, the summary plot against the one and twodimensional active subspace enable us to visualize the response of the output to the
+perturbations.
+The number of gradient evaluations specified in the current work is very conservative,
+and it can be further reduced to facilitate the efficiency requirement of real-time prediction,
+such as the perception and end-to-end control in autonomous driving.
+As a byproduct, the active subspace also reveals the global sensitivity of the output to
+the inputs (Constantine and Diaz 2017), i.e., large components of the active direction
+corresponds to the influential features. This opens the possibility of developing subspace
+based metrics for attributing the prediction of DNN to its input features (Sundararajan, Taly
+and Yan 2017).
+In the future, we shall apply the approach to more complex datasets, such as ImageNet
+(Deng et al. 2009), with much deeper networks, such as ResNet (He et al. 2016) and
+DenseNet (Huang et al. 2017). As the number of evaluations of gradients increases
+logarithmically with the dimension of inputs, the active subspace can also be applied to the
+uncertainty in the model parameters with hundreds of gradient evaluation. For example,
+ResNet50 contains about 2.5 × 107 model parameters, the number of gradient evaluation
+with both α and β set as 5 will be 425. Although Monte Carlo dropout (Gal and Ghahramani
+2016) is widely adopted for propagating the uncertainties in the network parameters to the
+network output, it assumes that the uncertainty of the model parameters follows a Bernoulli
+distribution. The approach presented in the current work is suitable for more complex
+distributions in the model parameters.
+6. Conclusion
+In this work, the active subspace is applied to identify the low-dimensional subspace
+in the map from the input features to the network output. With backpropagation, the active
+subspace can be identified with hundreds of gradient evaluations. One dimensional active
+subspace and linear response are observed for most of the test images under a moderate
+level of perturbations to the inputs, although two-dimensional active subspace and nonlinear response are also observed for large input uncertainties. Those findings are useful
+for the explanations and searching of adversarial examples. In conjunction with response
+surface methodology, the statistics of the DNN output can also be efficiently acquired, and
+the computational cost is less than the direct Monte Carlo method by two magnitudes in
+the MNIST dataset.
+
+7. Acknowledgment
+This work was supported by the National Natural Science Foundation of China No.
+91441202.
+References
+[Abdelaziz et al., 2015] Abdelaziz, A.H., Watanabe, S., Hershey, J.R., Vincent, E. and
+Kolossa, D., 2015, September. Uncertainty propagation through deep neural networks.
+In Interspeech 2015.
+[Astudillo and Neto 2011] Astudillo, R.F. and Neto, J.P.D.S., 2011. Propagation of
+uncertainty through multilayer perceptrons for robust automatic speech recognition.
+In Twelfth Annual Conference of the International Speech Communication Association.
+[Bibi, Alfadly and Ghanem 2018] Bibi, A., Alfadly, M. and Ghanem, B., 2018. Analytic
+Expressions for Probabilistic Moments of PL-DNN with Gaussian Input, In Proceedings
+of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9099–9107.
+[Conrad and Marzouk 2013] Conrad, P.R. and Marzouk, Y.M., 2013. Adaptive Smolyak
+pseudospectral approximations. SIAM Journal on Scientific Computing, 35(6), pages
+A2643-A2670.
+[Constantine, Dow and Wang 2014] Constantine, P.G., Dow, E. and Wang, Q., 2014.
+Active subspace methods in theory and practice: applications to kriging surfaces. SIAM
+Journal on Scientific Computing, 36(4), pages A1500-A1524.
+[Constantine et al. 2015] Constantine, P.G., Emory, M., Larsson, J. and Iaccarino, G., 2015.
+Exploiting active subspaces to quantify uncertainty in the numerical simulation of the
+HyShot II scramjet. Journal of Computational Physics, 302, pages1-20.
+[Constantine and Diaz 2017.] Constantine, P.G. and Diaz, P., 2017. Global sensitivity
+metrics from active subspaces. Reliability Engineering & System Safety, 162, pages1-13.
+[Constantine, Kent and Bui-Thanh 2016] Constantine, P.G., Kent, C. and Bui-Thanh, T.,
+2016. Accelerating Markov chain Monte Carlo with active subspaces. SIAM Journal on
+Scientific Computing, 38(5), pages A2779-A2805.
+[Deng et al. 2009] Deng, J., Dong, W., Socher, R., Li, L.J., Li, K. and Fei-Fei, L., 2009.
+Imagenet: A large-scale hierarchical image database.
+[Gal and Ghahramani 2016] Gal, Y. and Ghahramani, Z., 2016, June. Dropout as a bayesian
+approximation: Representing model uncertainty in deep learning. In international
+conference on machine learning, pages 1050-1059.
+
+[Goodfellow, Shlens and Szegedy 2014] Goodfellow, I.J., Shlens, J. and Szegedy, C., 2014.
+Explaining and harnessing adversarial examples. arXiv preprint arXiv:1412.6572.
+[He et al. 2016] He, K., Zhang, X., Ren, S. and Sun, J., 2016. Deep residual learning for
+image recognition. In Proceedings of the IEEE conference on computer vision and pattern
+recognition, pages 770-778.
+[Hinton et al. 2012] Hinton, G., Deng, L., Yu, D., Dahl, G., Mohamed, A.R., Jaitly, N.,
+Senior, A., Vanhoucke, V., Nguyen, P., Kingsbury, B. and Sainath, T., 2012. Deep neural
+networks for acoustic modeling in speech recognition. IEEE Signal processing
+magazine, 29.
+[Huang et al. 2017] Huang, G., Liu, Z., Van Der Maaten, L. and Weinberger, K.Q., 2017.
+Densely connected convolutional networks. In Proceedings of the IEEE conference on
+computer vision and pattern recognition, pages 4700-4708.
+[Ji et al., 2018] Ji, W., Wang, J., Zahm, O., Marzouk, Y.M., Yang, B., Ren, Z. and Law,
+C.K., 2018. Shared low-dimensional subspaces for propagating kinetic uncertainty to
+multiple outputs. Combustion and Flame, 190, pages146-157.
+[Krizhevsky, Sutskever and Hinton 2012] Krizhevsky, A., Sutskever, I. and Hinton, G.E.,
+2012. Imagenet classification with deep convolutional neural networks. In Advances in
+neural information processing systems, pages 1097-1105.
+[LeCun 1998] LeCun, Y., 1998. The MNIST database of handwritten digits. http://yann.
+lecun. com/exdb/mnist/.
+[LeCun et al. 1998] LeCun, Y., Bottou, L., Bengio, Y. and Haffner, P., 1998. Gradientbased learning applied to document recognition. Proceedings of the IEEE, 86(11), pages
+2278-2324.
+[Long, Shelhamer and Darrell 2015] Long, J., Shelhamer, E. and Darrell, T., 2015. Fully
+convolutional networks for semantic segmentation. In Proceedings of the IEEE conference
+on computer vision and pattern recognition, pages 3431-3440.
+[Sundararajan, Taly and Yan 2017] Sundararajan, M., Taly, A. and Yan, Q., 2017, August.
+Axiomatic attribution for deep networks. In Proceedings of the 34th International
+Conference on Machine Learning-Volume 70 pages 3319-3328.
+[Sietsma and Dow 1991] Sietsma, J. and Dow, R. J. F., 1991, Creating artificial neural
+networks that generalize, Neural Networks, 4(1), pages 67–79.
+[Simon and Uhlmann 1997] Simon J, J. and Uhlmann K., J., 1997, A New Extention of the
+Kalman Filter to Nonlinear Systems, AeroSense’97. International Society for Optics and
+Photonics, pages 182–193.
+
+[Szegedy et al. 2013] Szegedy, C., Zaremba, W., Sutskever, I., Bruna, J., Erhan, D.,
+Goodfellow, I. and Fergus, R., 2013. Intriguing properties of neural networks. arXiv
+preprint arXiv:1312.6199.
+[Tran et al. 2015] Tran, D., Bourdev, L., Fergus, R., Torresani, L. and Paluri, M., 2015.
+Learning spatiotemporal features with 3d convolutional networks. In Proceedings of the
+IEEE international conference on computer vision, pages 4489-4497.
+
+

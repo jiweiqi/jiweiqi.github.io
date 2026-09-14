@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stiff neural ordinary differential equations | Weiqi Ji</title><meta name="description" content="Studies stiff neural ODE training using scale-aware architectures, output and loss scaling, and stabilized gradient calculations."><link rel="canonical" href="https://jiweiqi.github.io/papers/stiff-neural-ode/">
+<meta name="author" content="Weiqi Ji"><meta name="robots" content="index,follow"><meta property="og:type" content="article"><meta property="og:title" content="Stiff neural ordinary differential equations | Weiqi Ji"><meta property="og:description" content="Studies stiff neural ODE training using scale-aware architectures, output and loss scaling, and stabilized gradient calculations."><meta property="og:url" content="https://jiweiqi.github.io/papers/stiff-neural-ode/">
+<link rel="stylesheet" href="/assets/site.css"><link rel="alternate" type="application/json" href="/publications.json" title="Publication metadata">
+<meta name="citation_title" content="Stiff neural ordinary differential equations">
+<meta name="citation_publication_date" content="2021">
+<meta name="citation_author" content="Suyong Kim">
+<meta name="citation_author" content="Weiqi Ji">
+<meta name="citation_author" content="Sili Deng">
+<meta name="citation_author" content="Yingbo Ma">
+<meta name="citation_author" content="Christopher Rackauckas">
+<meta name="citation_doi" content="10.1063/5.0060697">
+<meta name="citation_pdf_url" content="https://jiweiqi.github.io/papers/stiff-neural-ode/paper.pdf">
+<meta name="citation_journal_title" content="Chaos: An Interdisciplinary Journal of Nonlinear Science">
+<meta name="citation_arxiv_id" content="2103.15341">
+<meta name="citation_volume" content="31">
+<meta name="citation_issue" content="9">
+<meta name="citation_firstpage" content="093122">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "name": "Stiff neural ordinary differential equations", "headline": "Stiff neural ordinary differential equations", "author": [{"@type": "Person", "name": "Suyong Kim"}, {"@type": "Person", "name": "Weiqi Ji", "sameAs": "https://orcid.org/0000-0002-7097-0219"}, {"@type": "Person", "name": "Sili Deng"}, {"@type": "Person", "name": "Yingbo Ma"}, {"@type": "Person", "name": "Christopher Rackauckas"}], "datePublished": "2021", "url": "https://jiweiqi.github.io/papers/stiff-neural-ode/", "identifier": "10.1063/5.0060697", "keywords": ["neural ODEs", "stiff systems", "differentiable simulation"], "description": "Studies stiff neural ODE training using scale-aware architectures, output and loss scaling, and stabilized gradient calculations.", "isPartOf": {"@type": "Periodical", "name": "Chaos: An Interdisciplinary Journal of Nonlinear Science"}, "abstract": "Neural Ordinary Differential Equations (ODE) are a promising approach to\r\nlearn dynamic models from time-series data in science and engineering\r\napplications. This work aims at learning Neural ODE for stiff systems, which\r\nare usually raised from chemical kinetic modeling in chemical and biological\r\nsystems. We first show the challenges of learning neural ODE in the classical\r\nstiff ODE systems of Robertson's problem and propose techniques to mitigate the\r\nchallenges associated with scale separations in stiff systems. We then present\r\nsuccessful demonstrations in stiff systems of Robertson's problem and an air\r\npollution problem. The demonstrations show that the usage of deep networks with\r\nrectified activations, proper scaling of the network outputs as well as loss\r\nfunctions, and stabilized gradient calculations are the key techniques enabling\r\nthe learning of stiff neural ODE. The success of learning stiff neural ODE\r\nopens up possibilities of using neural ODEs in applications with widely varying\r\ntime-scales, like chemical dynamics in energy conversion, environmental\r\nengineering, and the life sciences.", "encoding": {"@type": "MediaObject", "contentUrl": "https://jiweiqi.github.io/papers/stiff-neural-ode/paper.pdf", "encodingFormat": "application/pdf"}}</script></head>
+<body class="paper"><a class="skip" href="#main">Skip to content</a><div class="shell"><aside class="sidebar"><div class="sidebar-inner">
+<div class="monogram" aria-hidden="true">WJ</div><p class="name">Weiqi Ji<span class="chinese" lang="zh-Hans">季维奇</span></p>
+<p class="affiliation">Associate Professor<br>School of Engineering Science<br>University of Chinese Academy of Sciences</p>
+<div class="profile-links"><a href="https://people.ucas.ac.cn/~0084227">UCAS</a><a href="https://scholar.google.com/citations?user=9b4iknkAAAAJ">Scholar</a><a href="https://orcid.org/0000-0002-7097-0219">ORCID</a><a href="https://github.com/jiweiqi">GitHub</a></div>
+<nav aria-label="Research topics"><a href="/#uq">Uncertainty & sensitivity</a><a href="/#sciml">Scientific machine learning</a><a href="/#applications">Reviews & applications</a><a href="/#kinetics">Combustion kinetics</a><a href="/#downloads">Research files</a></nav>
+<p class="sidebar-note">Research publications<br>and reproducible methods.</p></div></aside><main class="main" id="main"><div class="breadcrumb"><a href="/#sciml">Publications / Scientific machine learning</a></div><p class="eyebrow">2021 / Journal article</p><h1>Stiff neural ordinary differential equations</h1><p class="authors">Suyong Kim, <strong>Weiqi Ji</strong>, Sili Deng, Yingbo Ma, Christopher Rackauckas</p><p class="venue">Chaos: An Interdisciplinary Journal of Nonlinear Science, 31(9), 093122 · 2021</p><div class="paper-actions"><div class="links"><a href="/papers/stiff-neural-ode/paper.pdf">PDF</a><a href="/papers/stiff-neural-ode/fulltext.txt">Full text</a><a href="https://doi.org/10.1063/5.0060697">DOI</a><a href="https://github.com/DENG-MIT/StiffNeuralODE">Code</a><a href="/papers/stiff-neural-ode/citation.bib">BibTeX</a><a href="/papers/stiff-neural-ode/index.md">Markdown</a></div></div><section><h2>Abstract</h2><p class="abstract">Neural Ordinary Differential Equations (ODE) are a promising approach to
+learn dynamic models from time-series data in science and engineering
+applications. This work aims at learning Neural ODE for stiff systems, which
+are usually raised from chemical kinetic modeling in chemical and biological
+systems. We first show the challenges of learning neural ODE in the classical
+stiff ODE systems of Robertson&#x27;s problem and propose techniques to mitigate the
+challenges associated with scale separations in stiff systems. We then present
+successful demonstrations in stiff systems of Robertson&#x27;s problem and an air
+pollution problem. The demonstrations show that the usage of deep networks with
+rectified activations, proper scaling of the network outputs as well as loss
+functions, and stabilized gradient calculations are the key techniques enabling
+the learning of stiff neural ODE. The success of learning stiff neural ODE
+opens up possibilities of using neural ODEs in applications with widely varying
+time-scales, like chemical dynamics in energy conversion, environmental
+engineering, and the life sciences.</p></section><section><h2>Research summary</h2><p>Studies stiff neural ODE training using scale-aware architectures, output and loss scaling, and stabilized gradient calculations.</p><p lang="zh-Hans">通过网络结构、输出与损失尺度处理及稳定梯度计算，学习刚性神经常微分方程。</p><div class="tags"><span class="tag">neural ODEs</span><span class="tag">stiff systems</span><span class="tag">differentiable simulation</span></div></section><p class="source">PDF: MIT repository copy · <a href="https://hdl.handle.net/1721.1/138719">Source</a>. The linked PDF is the reference for equations, figures and tables.</p><p class="source">Preprint record: <a href="https://arxiv.org/abs/2103.15341">arXiv:2103.15341</a>.</p><section><h2>Cite this work</h2><pre>@article{stiffneuralode2021,
+  title = {{Stiff neural ordinary differential equations}},
+  author = {Suyong Kim and Weiqi Ji and Sili Deng and Yingbo Ma and Christopher Rackauckas},
+  year = {2021},
+  journal = {Chaos: An Interdisciplinary Journal of Nonlinear Science},
+  volume = {31},
+  pages = {093122},
+  doi = {10.1063/5.0060697},
+  number = {9},
+  eprint = {2103.15341},
+  archivePrefix = {arXiv},
+  url = {https://jiweiqi.github.io/papers/stiff-neural-ode/}
+}
+</pre></section><section><h2>Related work in this collection</h2><div class="related"><a href="/papers/stiff-pinn/">Stiff-PINN: Physics-Informed Neural Network for Stiff Chemical Kinetics (2021)</a><a href="/papers/arrhenius-jl/">Arrhenius.jl: A Differentiable Combustion Simulation Package (2021)</a></div></section>
+<footer class="footer"><span>Weiqi Ji · 季维奇</span><a href="https://github.com/jiweiqi/jiweiqi.github.io">Source on GitHub</a></footer></main></div></body></html>

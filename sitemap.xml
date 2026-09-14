@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://jiweiqi.github.io/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/shared-subspaces/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/turbulent-uq/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/ignition-sensitivity/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/neural-network-uq/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/premixed-sensitivity/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/mechanism-reduction-uq/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/flamelet-subspace/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/shock-tube-bayes/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/crnn/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/stiff-pinn/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/stiff-neural-ode/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/arrhenius-jl/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/hychem/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/sgd-kinetics/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/biomass-crnn/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/kinetics-neural-ode/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/kinet/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/inverse-combustors/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/cellbox-adjoint/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/machine-learning-combustion/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/mobility-demand/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/rcm-rate-constants/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/naphtha-ignition/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/ntc-lower-turnover/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/first-stage-ntc/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/ntc-upper-turnover/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/isobutanol-intermediates/</loc></url>
+<url><loc>https://jiweiqi.github.io/papers/surrogate-subspace/</loc></url>
+</urlset>

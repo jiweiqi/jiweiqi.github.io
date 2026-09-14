@@ -1,0 +1,3851 @@
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+On the Controlling Mechanism of the Upper Turnover States in the NTC
+Regime
+Weiqi Ji a, Peng Zhao b,c,*,†, Tanjin He d, Xin He a,d, Aamir Farooq e, Chung K. Law a,c,*,‡
+a
+
+Center for Combustion Energy, Tsinghua University, Beijing 100084, China
+Department of Mechanical Engineering, Oakland University, Rochester, MI, 48309, USA
+c
+Department of Mechanical and Aerospace Engineering, Princeton University, Princeton, NJ
+08544, USA
+d
+State Key Laboratory of Automotive Safety and Energy, Tsinghua University, Beijing
+100084, China
+e
+Clean Combustion Research Center, Division of Physical Sciences and Engineering, King
+Abdullah University of Science and Technology, Thuwal 23955-6900, Saudi Arabia
+b
+
+*Corresponding authors
+†
+Email: pengzhao@oakland.edu
+‡
+Email: cklaw@princeton.edu
+
+1
+
+Abstract
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Using n-butane, n-heptane and iso-octane as representative fuels exhibiting NTC
+(negative temperature coefficient) behavior, comprehensive computational studies with
+detailed mechanisms and theoretical analysis were performed to investigate the upper
+stationary point, denoted as turnover states, on the NTC curve near the higher temperature
+regime, where the ignition delay τ exhibits a local maximum. It is found that the global
+behavior of the turnover states exhibits distinctive thermodynamic and kinetic characteristics
+under different pressures, in that the ignition delay at the turnover states shows an Arrhenius
+dependence on the temperature T and an approximate inverse quadratic power law
+dependence on the pressure P. These global behaviors imply that the temperature and
+pressure of the turnover states are not independent and can be correlated by an Arrhenius
+dependence, as ln P ∝ 1/T. Further theoretical analyses demonstrate that such turnover states
+result from the competition between the low-temperature chain branching reactions and the
+decomposition of the intermediate species, and therefore correspond to a critical value, α, of
+the ratio of OH production from low-temperature chemistry. In addition, the ignition delay at
+the turnover state can be well correlated by the analytical expression derived by Peters et al.,
+with the further demonstration that the pressure dependence of the turnover ignition delay
+mainly result from the H2O2 decomposition reaction. Comparison of the present results with
+the literature experimental data of n-heptane ignition delay time shows very good agreement.
+Key Words: NTC; Turnover; Auto-ignition; Chain branching ratio; Low temperature
+chemistry
+
+2
+
+1. Introduction
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+The phenomenon of negative temperature coefficient (NTC) is an essential feature of the
+oxidation kinetics of large hydrocarbons, and is closely related to such practically important
+phenomena and processes as low-temperature ignition [1], cool flames [2, 3], flame
+stabilization [4], fuel processing [5], engine knock [6] and the development of HCCI
+(homogenous charge compression ignition) engines [7]. It refers to the effect that, for a given
+pressure and in an initial temperature regime much lower than the adiabatic flame
+temperature of the reacting mixture, the ignition delay could increase with increasing initial
+temperature. The NTC behavior in auto-ignition has been extensively observed and studied in
+homogenous systems such as the shock tube [8], jet-stirred reactor [9], flow reactor [10] and
+rapid compression machine (RCM) [11].
+It is widely accepted that the NTC behavior is due to the peroxy-chemistry pathways in
+the low-to-intermediate temperature regimes, as discussed in [12-14]. As an example, Fig. 1
+shows a schematic reaction path for the oxidation of large alkanes in such regimes.
+Specifically, fuel consumption occurs via H-atom abstraction from the fuel molecule to form
+the alkyl radical, R. Since β scission is slow at low temperatures, O2 addition to the R radical
+is dominant, forming the RO2 radical. Then isomerization of RO2 forms the
+hydroperoxy-alkyl radical (QOOH). Further O2 addition to QOOH forms a transition-ring
+complex (O2QOOH) that isomerizes and decomposes to form ketohydroperoxide (KET) and
+the hydroxyl radical (OH) (red arrows in Fig. 1). The KET then decomposes to carbonyl,
+aldehyde and generates another OH radical, leading to the key chain branching of
+low-temperature chemistry. However, with increasing temperature, all the oxygen addition
+reactions shift towards the decomposition side, and as such the extent of low-T chain
+3
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+branching is reduced. Meanwhile, at higher, intermediate temperatures (800K < T < 900K, 20
+atm for n-heptane), dissociation of the low-temperature intermediates (e.g., RO2 and QOOH)
+and the R radical through β scission gradually becomes important and forms different
+products, including alkenes, HO2 and other alkyl radicals (blue arrows in Fig. 1), which
+further compete with the low-temperature chain branching pathway. The backward shift of
+the low-temperature reaction channel, together with the favored β scission at intermediate
+temperatures, results in globally reduced chemical reactivity at moderate temperatures in the
+NTC regime.
+At intermediate-to-high initial temperatures (900K < T < 1200K, 20 atm for n-heptane),
+the major chain branching that drives the system runaway is hydrogen peroxide (H2O2)
+decomposition [15] forming two OH radicals, with its rate constant increasing with
+temperature. Consequently, the ignition delay starts to decrease again with increasing
+temperature beyond a threshold value, termed the “turnover temperature”, corresponding to
+the local maximum of the ignition delay time.
+In this work, the characteristics of the turnover states including the thermodynamic and
+chemical kinetic behaviors are studied. The motivations are three-fold: First, since the
+turnover state also corresponds to the intermediate-to-high temperature boundary of the NTC
+regime, identification of the mechanism controlling it will lead to new insights on the NTC
+behavior, and can bring about significant convenience in the description of auto-ignition.
+Second, sensitivity of the ignition delay to temperature variation is one of the key factors
+affecting the flame propagation mode in HCCI engines [16] and relevant RCM experiments
+[17, 18], deeper understanding of the underlying mechanism of the temperature-insensitive
+4
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+nature of the ignition delay at the turnover state could be helpful in interpreting the various
+combustion modes under HCCI conditions. Third, correlations of the ignition delay time as a
+function of initial pressure and temperature usually show large deviations near the turnover
+temperature [8, 19]. Thus, developing global scaling for the turnover temperature can help to
+reduce the uncertainties and provide an accurate reference for the selection of experimental
+data at the relevant experimental conditions.
+The present study is computational. The fuels investigated are n-butane, n-heptane and
+iso-octane, which represent typical short and long straight-chain alkanes as well as branched
+alkanes. The mechanisms used are the NUIG n-butane mechanism [20], the LLNL n-heptane
+mechanism version 3.1 [12], and the LLNL iso-octane mechanism version 3 [21],
+respectively. The global behaviors of the ignition delay at turnover temperatures under
+different pressures are investigated for all of the three fuels. It is noted that although the
+pressure dependence of the rate constants of the oxygen addition reactions, alkylperoxy
+radical (RO2) dissociation and isomerization reactions, are not considered, it has been
+recently demonstrated in [22, 23] that the high-pressure limits for these reactions are
+sufficient to describe the low-temperature chemistry at the conditions of this study. The
+mechanism for n-heptane updated by Karwat et al. [24], based on the rate rules from Villano
+et al. [22, 23], is also referred to show that the behavior demonstrated in this study is
+mechanism independent and with general implications on the low-temperature kinetics.
+In the following sections, we shall first identify the global system behavior at the
+turnover states under different pressures. We shall then analyze the coupling between
+pressure and the turnover temperature, as well as the power-law dependence on the pressure
+5
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+for the ignition delay at the turnover states. Finally, the characteristics of the turnover states
+are validated against available ignition delay data in the literature, demonstrating good
+agreement.
+
+2. Global behavior of the turnover states
+Figure 2 shows the ignition delay as a function of temperature for a homogeneous,
+stoichiometric mixture of n-heptane and air under 2-60 atm pressure, using detailed
+mechanism [12]. It is seen that for each pressure, the total ignition delay, τ, first decreases
+and then increases with increasing initial temperature, T, in the NTC regime, and finally
+decreases again when the temperature is above the turnover temperature, Tm , which, marked
+by symbols, is seen to shift to higher values as pressure is increased.
+We next note that the ignition delay, τm , at the turnover state exhibits unique dependences
+on the corresponding temperature, Tm, and the system pressure, P. Specifically, its linear
+variation with Tm in the plot of Fig. 2 suggests an Arrhenius correlation, namely
+ln τ m  1 / Tm , while Fig. 3 shows it also varies nearly quadratically with the system
+
+pressure, as τ m  P 2 . These results then suggest that Tm and P can be related by
+ln P  1/ Tm , as shown in Fig. 4, yielding a thermodynamic correlation between the
+
+turnover temperature and the system pressure. It is further noted that the data in Figs. 3 and 4
+include those for φ = 0.5, 1 and 2, demonstrating that these observations are also insensitive
+to the equivalence ratio. We shall demonstrate in the following the underlying kinetic
+mechanism affecting such a behavior.
+
+6
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+3. Chemical Kinetic Analysis on the Turnover States
+3.1 Low-Temperature Chain Branching Ratio at the Turnover State
+Figure 5 shows the evolution of the intermediate species at the turnover states, using
+stoichiometric n-butane/air mixtures under 20 atm for demonstration because less isomers are
+involved in its oxidation process. It is seen that many radicals of interest, largely remain
+quasi-steady for an extended period between the starting chain initiation and the final ignition
+runaway. Take OH as an example, the OH consumption rate is about 10-5 ~ 10-4 mole/cm3s as
+shown in Fig. 6, while the net OH production rate at the same condition is below 10-9
+mole/cm3s, four orders of magnitude lower. As such, the OH mole fraction is kept at a low
+level (less than 10-8) before ignition as shown in Fig. 5 and could be assumed to be in
+quasi-steady in the plateau period. Therefore, the total production and consumption rates of
+OH should approximately balance. Figure 6 then plots the rates of the important reactions
+consuming OH and the fuel molecule, showing that OH is mainly consumed by H-abstraction
+from the fuel molecule (nearly 90% of OH consumption at the instant of 75% τm in Fig. 6a),
+while fuel consumption is also mainly through the H-abstraction by OH (nearly 90% of fuel
+consumption at the instant of 75% τm by the four reactions in Fig. 6b). Consequently, the OH
+production rate can be estimated by the consumption rate of the fuel molecule. We shall
+demonstrate in the following how these observations identify the major kinetic characteristics
+at the turnover states.
+The controlling reactions for the turnover temperature were identified by performing
+sensitivity analysis, with the sensitivity coefficient calculated by perturbing the A-factor of
+each elemental reaction rate by 30%, following the definition:
+7
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+S
+
+d ln(T ) ln(T1.3k )  ln(Tk )
+
+d ln(k ) ln(1.3k )  ln( k )
+
+(1)
+
+A step size of 0.1 K was used to search the turnover temperature, and the perturbation of
+30% was selected to allow sufficient change of the turnover temperature for accurate
+evaluation. We shall only present the sensitivity for n-butane as the mechanisms for
+n-heptane and iso-octane are based on similar reaction classes and rate rules.
+Figure 7 shows the sensitivity for the stoichiometric n-butane/air mixture at 2 and 10 atm.
+The most sensitive reactions are shown to be the chain termination reactions from the β
+scission of RO2 and QOOH, as well as the isomerization from RO2 to QOOH and the
+subsequent chain branching and propagation reactions. However, it is seen that the turnover
+temperature is not sensitive to the HO2 chain termination reaction and the H2O2 chain
+branching reaction. Consequently, the turnover state is mainly controlled by the competition
+between the β scission of low-temperature intermediates as chain termination reactions
+producing
+
+the
+
+stable
+
+intermediates
+
+and
+
+HO2,
+
+and
+
+the
+
+low-temperature
+
+chain
+
+branching/propagation reactions producing OH. It should be noted that the turnover
+temperature is insensitive to the perturbation of the rate of oxygen addition to QOOH reaction
+as long as its equilibrium constant is not perturbed. Such a behavior is expected as the oxygen
+addition to QOOH is in the partial equilibrium state, and the low-T chain branching is only
+affected by the equilibrium constant. Therefore, the result by perturbing the oxygen addition
+to QOOH using reversible reactions is not presented in Fig. 7, which otherwise might cause
+misleading and underestimate its role at the turnover states.
+We note in passing the worthwhile studies on such competitions in the first-stage ignition
+controlled by the low-temperature chemistry. Specifically, Peters et al. [25] defined a ratio
+8
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+between the R + O2 ⇌ RO2 with subsequent isomerization RO2 ⇌ QOOH and the β scission
+of R to determine the crossover temperature, at which the concentration of KET reaches its
+peak value and the first-stage ignition occurs. Merchant et al. [26] used a similar concept to
+study the first-stage ignition of propane, and included the HO2 chemistry, namely RO2 →
+Alkene + HO2, which was not included in [25, 27]. However, these ratios were derived from
+a reduced mechanism, and only specific isomers of R, RO2 and QOOH were taken into
+account. Thus, these definitions are applicable only for limited conditions and for certain
+mechanisms, in the context of two-stage ignition. However, for the concept of the turnover
+state of current interest, sensitivity analysis has shown that the turnover temperature is also
+sensitive to the decomposition of QOOH to produce OH. Consequently, we shall define a
+ratio of the OH production rate, instead of the KET production rate, to the total production
+rate of R, as a criterion to evaluate the net contribution from the low-temperature chain
+branching:
+
+α
+
+OH production rate from low-T chain-branching
+total production rate of R
+OH production rate from low-T chain-branching
+total rate of H-abstraction from RH
+
+The ratio α can be readily determined from the detailed mechanism including all isomers of R,
+RO2, and QOOH. In particular, we have followed the reaction flux from RH to OH, as shown
+in Fig. 8, and have considered the effect from β scission at each step, defined by the
+following ratios:
+
+ηi 
+
+rate of RH+OH  i-R+H 2O
+rate of RH  i -R
+
+total rates of RH  R total rates of RH+OH  R+H 2O
+
+βi 
+
+net rate of i -R  i -RO 2
+total production rate of i-R
+9
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+γi , j 
+
+net rate of i -RO 2  i, j -QOOH
+total production rate of i -RO2
+
+θi , j 
+
+net rate of i, j -QOOH  OH
+total production rate of i, j -QOOH
+
+The subscript or prefix i indicates the index of the isomer of R, and those of i, j indicate the
+index of the isomer of QOOH. Thus, α is determined by
+
+α   ηi βi  γi , j θi , j
+i
+
+(2)
+
+j
+
+In the Appendix, we present a systematic determination of α by first deriving it using a
+simplified skeletal mechanism with major reaction steps involving only one isomer, shown in
+Fig. 1 and Table 1. We shall then extend the analytical expressions to detailed kinetics
+involving all of the isomers.
+We shall now show that the turnover state can be defined well by a constant value of α
+under different pressures. Following the definition of Eq. (2), the computed α as a function of
+temperature under various pressures for the three fuels are shown in Figs. 9 a, b and c,
+respectively. As expected, α decreases with increasing temperature, and eventually to zero at
+high enough temperatures. This shows the progressively decreasing significance of the
+low-temperature chain branching reactions with increasing temperature. Similar to the shift of
+NTC, the α curves shift to higher temperature with increasing pressure.
+Based on α, we define a second ratio, αRO 2 , which corresponds to the ideal case where all R
+radicals participate in the oxygen addition reaction without β scission, i.e., βi = 1:
+
+αRO2   ηi  γi , j θi , j
+i
+
+j
+
+10
+
+(3)
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+which is also plotted in Fig. 9. Consequently, this definition isolates the effect of the
+competition between β scission and oxygen addition to R. It is seen that αRO2 is equal to α at
+low temperatures, but becomes larger than α when the temperature reaches a critical value at
+intermediate to high temperatures. These results then indicate that β scission of the R radical is
+negligible in the low-to-intermediate temperature regime before the turnover state is reached.
+In Fig. 9, the values of α corresponding to the turnover temperatures are marked by
+symbols in the evolution with increasing temperature. It is then of interest to note that the
+turnover temperatures for different pressures largely correspond to a narrow range of α,
+which, for a given fuel, slightly depends on the pressure range. Figure 10 further shows that
+the turnover states calculated using a constant α agree well with those obtained with detailed
+mechanism, thereby supporting the suggestion that the turnover states can be correlated with
+a critical state of the low-temperature chain branching ratio, with the associated reactions
+involved in the determination of α. The critical value of α is found to be less than one, and is
+different for each fuel studied here, potentially depending on the fuel structure and the range of
+the turnover temperatures. The pressure effect on α is mainly through the equilibrium shift of
+oxygen addition reactions, as implied from Eq. (A11) in the Appendix.
+It is worth noting that the α ratio developed in the current work is based on the widely used
+rate rules in low temperature chemistry, and it can be readily extended to future mechanisms
+with more accurate rate coefficients. Recently, extensive work has been done on the
+uncertainty quantification in kinetic analysis and combustion modeling [28-30]. Following the
+idea of uncertainty propagation, the value of α in this study is rate dependent and will be
+affected by the uncertainty in the rate coefficients, however, such uncertainty will not affect the
+11
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+scaling characteristics and the controlling mechanism identified for the turnover states. On the
+other hand, there are some other factors that could affect the quantitative determination of the α
+value, such as the transient effects of species concentration and other possible reaction
+channels, however, those effects are secondary with negligible influence compared with the
+leading order quasi-steady assumptions and dominant reaction channels. It is found that the
+correlation of the turnover state with a constant α value is valid and general for different fuels
+and mechanisms, as demonstrated by both detailed calculations and experimental validations
+in Sec. 4.
+3.2 Pressure Scaling of Ignition Delay at Turnover States
+With the thermodynamic condition identified at the turnover state, we next investigate
+the reactions controlling the pressure-scaling factor for the turnover ignition delay, shown in
+Fig. 3. The sensitivity on the turnover ignition delay, defined as S  d (ln τ ) / d (ln k ) and
+shown in Fig. 11 for n-butane and n-heptane (results for iso-octane are similar), demonstrates
+that the most sensitive reactions are those involving the HO2 and H2O2 chemistry, while the
+secondary important reactions are those involved in the low-T chemistry that determine α.
+Peters et al. [25] have derived an analytical solution for the ignition delay time τ in the
+intermediate temperature range based on the quasi-steady-state approximation for HO2, as
+1/3
+
+
+
+3
+1  α  k11
+
+
+
+τ ξ
+2 2 
+2
+c
+(
+k
+)
+k
+ Fuel  12,i 13 
+i
+
+
+
+(4)
+
+where ξ is a proportional constant, α is defined by Eq. (2), cFuel is the fuel concentration,
+and k11, k12,i, k13 correspond to the rate constants of 2HO2 → H2O2 + O2 (R11), RH + HO2 →
+i-R + H2O2 (R12), and H2O2 (+M) → 2OH (+M) (R13), respectively. Figure 12 shows the
+12
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+turnover ignition delay calculated using both detail mechanism and the correlation of Eq. (4).
+It is seen that very good agreement is achieved between the two, and the pressure-scaling
+factor for all of three fuels are well reproduced.
+Equation (4) employs the rates of three types of elemental reactions, namely R11, R12,
+and R13 to correlate the HO2 and H2O2 chemistry on the ignition delay. The ratio α is also
+employed in Eq. (4) to account for the contribution from low-temperature chemistry on the
+ignition delay. Since ξ and α are both constants, the change of τm is therefore dominated by
+the rate change of R11, R12, and R13. Especially, the k13 corresponding to the decomposition
+of H2O2 with inherent pressure dependence is described by a Troe formula [28] and varies
+nearly quadratically with changes of the turnover temperature and pressure in the fall-off
+regime, shown in Fig. 13. Therefore, given the fact that τm and k13 vary nearly quadratically in
+terms of pressure with power index being about -2 and 2 respectively, it could be shown from
+Eq. (4) that the rate change of H2O2 decomposition reaction R13 contributes to about
+two-thirds of the pressure dependence for τm, while the rate changes of R12 by the cFuel ,
+i.e. cFuel ~P, and the effect of temperature variation on k11, k12,i contribute to the rest
+one-third.
+
+4. Experimental validation
+We now assess the validity of the above two global behaviors and correlations against the
+ignition delay data available in literature, with the ignition delay for n-heptane/air mixture
+with φ = 1, covering the turnover temperature under 4 – 55 atm, reported in shock tube [8, 31,
+32] and in RCM [11].
+13
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Gauthier et al. [8] reported a pressure scaling factor of -1.64 for the ignition delay under
+the pressure range of 13-55 atm by using a quadratic fitting to determine the conditions at the
+turnover state, while the high temperature ignition data show a scaling factor of -0.55 [33].
+However, simulation using the LLNL n-heptane mechanism [12] shows that the ignition
+delay at the turnover state acquired from quadratic fitting covering the data points in regimes
+of both high temperature and near the turnover states is lower than the actual value. Thus, a
+cubic fitting covering only the points near the turnover temperature is adopted here, as shown
+in Fig. 14, because computation shows that the cubic relation also cannot hold far from the
+turnover state. Higher order fitting is also precluded due to the limited number of data points
+of each dataset.
+The conditions corresponding to the turnover states derived from the fitting curve are
+plotted in Figs. 15 and 16. Strong Arrhenius dependence is found between pressure and
+temperature. The predictions using the LLNL n-heptane mechanism [12] and the updated
+n-heptane mechanism from Karwat et al. [24] are also plotted in Fig. 15 for comparison. Both
+mechanisms reproduce the Arrhenius behavior between the turnover temperature and pressure,
+and the “slopes” predicted from both mechanisms are close to those from the experimental
+data. The prediction using α = 0.64 from the LLNL n-heptane mechanism [12] is plotted in
+Fig. 14, and agrees with the experimental data very well. Strong power law dependence is
+also found between ignition delay and pressure with τ m  P
+
+1.79
+
+, and the correlation using
+
+Eq. (4) agrees well with the measurements in Fig. 16.
+It is nevertheless also noted that the fitted turnover temperature under 12 atm from Shen
+et al. [31] and under 20 atm from Gauthier et al. [8] show large deviations from the Arrhenius
+14
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+correlation with pressure, due to the lack of data near the turnover state. The deviation is
+smaller for the power law between the ignition delay and pressure, as the ignition delay is not
+sensitive to temperature near the turnover state.
+The validation demonstrates the potential to use these two behaviors and correlations to
+check the consistence among different ignition delay data. The correlations for the two
+behaviors can also be used for interpolating measured sample data to other conditions.
+
+5. Conclusions
+The current work investigated the thermodynamic and chemical kinetic behavior of the
+upper turnover states of the NTC regime, namely, the Arrhenius behavior between the
+turnover temperature and pressure, and the power law between the ignition delay and
+pressure at the turnover states. The underlying mechanism for these two behaviors was
+further derived from the detailed mechanism. It is found that the turnover states under
+different pressures correspond to a near-constant ratio α between the OH production from the
+low-temperature chemistry and the total fuel consumption, and that the pressure-scaling
+between the ignition delay at the turnover states can be correlated well using the analytical
+solution from Peters et al. [25]. The analytical expression for the ignition delay only employs
+the rates of three types of reactions on HO2 and H2O2 chemistry and the ratio α.
+The two behaviors and correlations were further validated against the ignition delay data
+for n-heptane/air mixture with φ = 1, covering the turnover states under 4 – 55 atm;
+demonstrating quantitative agreement.
+The correlations for the two global behaviors at turnover states provide insights into the
+mechanism controlling the transition from low-temperature to intermediate-to-high
+15
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+temperature regimes. The behaviors and their controlling mechanism can also assist in the
+design and validation of measured ignition delay data near turnover states, provide reference
+points for developing correlation of ignition delay from experimental data, and help to
+identify the regime where the ignition delay is not sensitive to temperature. Furthermore,
+these correlations can provide targets for optimizing the reaction rate rules for the NTC
+chemistry.
+
+Acknowledgements
+This work was primarily supported by the National Natural Science Foundation of
+China 91441202. The work at Princeton University was supported by the Combustion Energy
+Frontier Research Center, an Energy Frontier Research Center funded by the US Department
+of Energy, Office of Basic Energy Sciences under Award Number DESC0001198. Peng Zhao
+was also supported by the startup funding at Oakland University. The guidance on the NUIG
+n-butane mechanism from Dr. Kuiwen Zhang from NUIG is very much appreciated.
+
+References
+1. C. K. Law; P. Zhao, NTC-affected ignition in nonpremixed counterflow, Combust. Flame
+159 (2012) 1044-1054.
+2. S. Deng; P. Zhao; D. Zhu; C. K. Law, NTC-affected ignition and low-temperature flames
+in nonpremixed DME/air counterflow, Combust. Flame 161 (2014) 1993-1997.
+3. P. Zhao; W. Liang; S. Deng; C.K. Law, Initiation and propagation of laminar premixed
+cool flames, Fuel (2015) http://dx.doi.org/10.1016/j.fuel.2015.11.025.
+4. S. Deng; P. Zhao; M. E. Mueller; C. K. Law, Autoignition-affected stabilization of
+laminar nonpremixed DME/air coflow flames, Combust. Flame 162 (2015) 3437-3445.
+5. A. Naidja; C. R. Krishna; T. Butcher; D. Mahajan, Cool flame partial oxidation and its
+role in combustion and reforming of fuels for fuel cell systems, Prog. Energy Combust. Sci.
+29 (2003) 155-191.
+6. J. F. Griffiths; J. P. MacNamara; C. G. W. Sheppard; D. A. Turton; B. J. Whitaker, The
+16
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+relationship of knock during controlled autoignition to temperature inhomogeneities and fuel
+reactivity, Fuel 81 (2002) 2219-2225.
+7. M. Yao; Z. Zheng; H. Liu, Progress and recent trends in homogeneous charge
+compression ignition (HCCI) engines, Prog. Energy Combust. Sci. 35 (2009) 398-437.
+8. B. M. Gauthier; D. F. Davidson; R. K. Hanson, Shock tube determination of ignition
+delay times in full-blend and surrogate fuel mixtures, Combust. Flame 139 (2004) 300-311.
+9. P. Dagaut; M. Reuillon; M. Cathonnet, High pressure oxidation of liquid fuels from low
+to high temperature. 1. n-Heptane and iso-Octane, Combust. Sci. Tecnol. 95 (1993) 233-260.
+10. T. Wada; A. Sudholt; H. Pitsch; N. Peters, Analysis of first stage ignition delay times of
+dimethyl ether in a laminar flow reactor, Combustion Theory and Modelling 17 (2013)
+906-936.
+11. R. Minetti; M. Carlier; M. Ribaucour; E. Therssen; L. R. Sochet, A rapid compression
+machine investigation of oxidation and auto-ignition of n-Heptane: Measurements and
+modeling, Combust. Flame 102 (1995) 298-309.
+12. M. Mehl; W. J. Pitz; C. K. Westbrook; H. J. Curran, Kinetic modeling of gasoline
+surrogate components and mixtures under engine conditions, Proc. Combust. Inst. 33 (2011)
+193-200.
+13. J. A. Miller; M. J. Pilling; J. Troe, Unravelling combustion mechanisms through a
+quantitative understanding of elementary reactions, Proc. Combust. Inst. 30 (2005) 43-88.
+14. H. J. Curran; P. Gaffuri; W. J. Pitz; C. K. Westbrook, A Comprehensive Modeling Study
+of n-Heptane Oxidation, Combust. Flame 114 (1998) 149-177.
+15. C. K. Westbrook, Chemical kinetics of hydrocarbon ignition in practical combustion
+systems, Proc. Combust. Inst. 28 (2000) 1563-1577.
+16. J. H. Chen; E. R. Hawkes; R. Sankaran; S. D. Mason; H. G. Im, Direct numerical
+simulation of ignition front propagation in a constant volume with temperature
+inhomogeneities: I. Fundamental analysis and diagnostics, Combust. Flame 145 (2006)
+128-144.
+17. H. G. Im; P. Pal; M. S. Wooldridge; A. B. Mansfield, A Regime Diagram for Autoignition
+of Homogeneous Reactant Mixtures with Turbulent Velocity and Temperature Fluctuations,
+Combust. Sci. Tecnol. 187 (2015) 1263-1275.
+18. K. P. Grogan; S. Scott Goldsborough; M. Ihme, Ignition regimes in rapid compression
+machines, Combust. Flame 162 (2015) 3071-3080.
+19. S. S. Goldsborough, A chemical kinetically based ignition delay correlation for
+iso-octane covering a wide range of conditions including the NTC region, Combust. Flame
+156 (2009) 1248-1262.
+20. D. Healy; N. S. Donato; C. J. Aul; E. L. Petersen; C. M. Zinner; G. Bourque; H. J.
+Curran, n-Butane: Ignition delay measurements at high pressure and detailed chemical kinetic
+simulations, Combust. Flame 157 (2010) 1526-1539.
+21. M. Mehl; H. Curran; W. Pitz; C. Westbrook, Chemical kinetic modeling of component
+mixtures relevant to gasoline, European Combustion Meeting (2009)
+22. S. M. Villano; L. K. Huynh; H.-H. Carstensen; A. M. Dean, High-Pressure Rate Rules for
+Alkyl + O2 Reactions. 2. The Isomerization, Cyclic Ether Formation, and β-Scission
+Reactions of Hydroperoxy Alkyl Radicals, J. Phys. Chem. A 116 (2012) 5068-5089.
+23. S. M. Villano; L. K. Huynh; H.-H. Carstensen; A. M. Dean, High-Pressure Rate Rules for
+17
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Alkyl + O2 Reactions. 1. The Dissociation, Concerted Elimination, and Isomerization
+Channels of the Alkyl Peroxy Radical, J. Phys. Chem. A 115 (2011) 13425-13442.
+24. D. M. A. Karwat; S. W. Wagnon; M. S. Wooldridge; C. K. Westbrook, Low-temperature
+speciation and chemical kinetic studies of n-heptane, Combust. Flame 160 (2013) 2693-2706.
+25. N. Peters; G. Paczko; R. Seiser; K. Seshadri, Temperature cross-over and non-thermal
+runaway at two-stage ignition of n-heptane, Combust. Flame 128 (2002) 38-59.
+26. S. S. Merchant; C. F. Goldsmith; A. G. Vandeputte; M. P. Burke; S. J. Klippenstein; W. H.
+Green, Understanding low-temperature first-stage ignition delay: Propane, Combust. Flame
+162 (2015) 3658-3673.
+27. J. Beeckmann; L. Cai; A. Berens; N. Peters; H. Pitsch, An analytical approximation for
+low- and high-temperature autoignition for dimethyl ether–air mixtures, Proc. Combust. Inst.
+35 (2015) 275-281.
+28. L. Cai; H. Pitsch, Optimized chemical mechanism for combustion of gasoline surrogate
+fuels, Combust. Flame 162 (2015) 1623-1637.
+29. L. Cai; H. Pitsch, Mechanism optimization based on reaction rate rules, Combust. Flame
+161 (2014) 405-415.
+30. H. Wang; D. A. Sheen, Combustion kinetic model uncertainty quantification, propagation
+and minimization, Prog. Energy Combust. Sci. 47 (2015) 1-31.
+31. H.-P. S. Shen; J. Steinberg; J. Vanderover; M. A. Oehlschlaeger, A shock tube study of
+the ignition of n-heptane, n-decane, n-dodecane, and n-tetradecane at elevated pressures,
+Energy Fuels 23 (2009) 2482-2489.
+32. H. K. Ciezki; G. Adomeit, Shock-tube investigation of self-ignition of n-heptane-air
+mixtures under engine relevant conditions, Combust. Flame 93 (1993) 421-433.
+33. D. C. Horning; D. F. Davidson; R. K. Hanson, Study of the High-Temperature
+Autoignition of n-Alkane/O/Ar Mixtures, Journal of Propulsion and Power 18 (2002)
+363-371.
+
+18
+
+Appendix: Determination of the Low Temperature Chain Branching Ratio α
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Species time histories plotted in Fig. 5 show that it is justified to set R, RO2, QOOH,
+O2QOOH and KET into quasi-steady state, for which the production rates balance the
+consumption rates, yielding:
+
+w1  w2 w3
+
+w ,3
+
+
+
+3
+
+w
+ w 3  w 4 w5
+
+w5
+
+
+
+w5  w5  w6  w7  w8  w8
+w8  w8  w9 , w9  w10
+
+(A1, A2)
+(A3)
+(A4, A5)
+
+From the definition of θ and applying Eq. (A3-A5), we have
+
+θ
+
+w7  w9  w10
+w7  2w9
+
+w5
+w5  w6  w7  w9
+
+(A6)
+
+Introducing Eq. (A4) and the rate expressions into Eq. (A6), and further define
+K8  k8 / (k8  k9 ) , we obtain
+
+θ
+
+k7  2k9 K8 [O 2 ]
+k5  k6  k7  k9 K8 [O 2 ]
+
+(A7)
+
+Recall the definition of γ, and assume w5  w5 , we obtain
+
+γ
+
+w5  w5
+w5
+k5
+
+
+w3  w3 w4  w5 k4  k5
+
+(A8)
+
+which is only temperature dependent.
+Recall the definition of β:
+
+β
+
+w3  w3
+w3  w3
+
+w1
+w2  w3  w3
+
+Substitute Eq. (A2) into Eq. (A9) with rate expressions, and further define
+K3  k3 / (k3  k4  k5 ) , we have β as
+
+19
+
+(A9)
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+β
+
+(k4  k5 ) K 3[O 2 ]
+k2  (k4  k5 ) K 3 [O 2 ]
+
+(A10)
+
+As there is only one isomer of R is involved, we have η = 1. By substituting Eq. (A7), Eq.
+(A8) and Eq. (A10) into Eq. (2), we obtain
+
+α
+
+(k4  k5 ) K3[O 2 ]
+k5
+k7  2k9 K8 [O2 ]
+k2  (k4  k5 ) K3[O 2 ] k4  k5 k5  k6  k7  k9 K8 [O 2 ]
+
+(A11)
+
+Clearly, it depends on both temperature and pressure, with the pressure dependence mainly
+through the oxygen concentration and therefore oxygen addition reactions.
+To determine α using detailed mechanism, the reaction path and rate corresponding to each
+isomer should be taken into account for different low-temperature intermediates. In the
+following, we shall present the adaptive definitions of βi, γi,j and θi,j considering isomeric
+effects.
+Merchant et al. [26] noticed that the decomposition of O2QOOH to KET and subsequent
+reactions may lead to three OH in some cases, e.g., the case where CH2CHO is in the products
+of KET decomposition. Besides, detailed mechanism shows that R7 and subsequent reactions
+may lead to more than one OH in some cases, e.g., the reaction of C7H14OOH1-3 →
+C4H7OOH1-4 + NC3H7 will lead to two OH radicals in the LLNL n-heptane mechanism [12].
+For generality, the number of OH produced by R7 and R9 with their subsequent reactions are
+denoted as n7, n9, respectively, and θi,j is determined by rewriting Eq. (A7) as
+
+ n7 k7i , j  n9 k9i , j K8i , j [O 2 ] 
+θi , j   i , j i , j i , j i , j i , j
+
+ k5  k6  k7  k9 K8 [O2 ] i , j QOOH
+
+(A12)
+
+where the superscript i,j indicates that the rate constant corresponds to the specific isomer of
+i,j-QOOH.
+As i-RO2 can isomerize to several isomers of QOOH, γi,j can be determined by including
+20
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+all of the isomerization reactions from i-RO2 and rewriting Eq. (A8) as
+
+
+
+k5i , j
+
+
+γi , j   i
+i ,m 
+ k 4   k5 
+m
+
+i  RO2  i , j QOOH
+
+(A13)
+
+i, j
+
+where k5 corresponds to the rate of isomerization from i-RO2 to i,j-QOOH.
+The βi can be determined by specifying the rates in Eq. (A10) for each isomer of i-R as.
+
+ (k4i   k5i ,m ) K3i [O 2 ] 
+
+
+m
+βi   i
+
+i
+i ,m
+i
+ k2  (k4   k5 ) K 3[O 2 ] 
+m
+
+i  R
+
+(A14)
+
+w1i
+k1i
+ηi 
+
+ w1m  k1m
+
+(A15)
+
+Similarly, ηi is determined by
+
+m
+
+m
+
+21
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+List of Tables
+Table 1. Reactions used for determining α.
+Label
+R1
+R2
+R3
+R4
+R5
+R6
+R7
+R8
+R9
+R10
+
+Reaction
+RH + OH → R + H2O
+R → R1 + Alkene
+R + O2 ⇌ RO2
+RO2 → Alkene + HO2
+RO2 ⇌ QOOH
+QOOH → Alkene + HO2 b
+QOOH → Epoxide + OH c
+QOOH + O2 ⇌ O2QOOH
+O2QOOH → KET + OH
+KET → P + OH
+
+Rate coefficient
+k1
+k2
+k3, k-3 a
+k4
+k5, k-5
+k6
+k7
+k8, k-8
+k9
+k10
+
+Rate
+w1
+w2
+w3, w-3 a
+w4
+w5, w-5
+w6
+w7
+w8, w-8
+w9
+w10
+
+a
+
+k-3 is corresponding to the reverse rate of k3
+
+b
+
+Decomposition reaction of QOOH that does not lead to OH production is also classified in R6
+
+c
+
+Decomposition reaction of QOOH that leads to one OH radical is also classified in R7
+
+22
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Figure Captions
+Fig. 1. Schematic mechanism for the low temperature oxidation of a large alkane, RH.
+Fig. 2. Total ignition delay as a function of the initial temperature T for stoichiometric
+n-heptane/air mixture under various pressure. The turnover ignition delays are marked by the
+triangle symbols, showing an Arrhenius dependence on the turnover temperature for different
+pressures.
+Fig. 3. Computed ignition delays at turnover temperatures for stoichiometric n-butane,
+n-heptane and iso-octane in air. The turnover ignition delays show a power law dependence
+on the pressure, to the order of -2, approximately.
+Fig. 4. Dependence of pressure and temperature at the turnover states for stoichiometric
+n-butane, n-heptane and iso-octane in air.
+Fig. 5. Computed species and temperature profiles for stoichiometric n-butane/air mixture at
+the turnover temperature under 20 atm.
+Fig. 6. Magnitudes of the rates of important reactions producing or consuming OH (a) and
+fuel molecule (b) for stoichiometric n-butane/air mixture at the turnover temperature under 20
+atm.
+Fig. 7. The brute force sensitivity on the turnover temperature for stoichiometric n-butane/air
+mixture.
+Fig. 8. Reaction flux from RH to OH and the definition of ηi, β i, γi,j, θi,j. Only one of the
+isomers at every step is presented as an example.
+Fig. 9. Computed α and αRO2 as a function of temperature under various pressures.
+Fig. 10. Turnover temperature calculated using detailed mechanism and obtained at a constant
+α.
+23
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 11. The brute force sensitivity on the ignition delay at turnover temperature for n-butane
+and n-heptane.
+Fig. 12. The ignition delays from simulation using detailed mechanism and from the
+correlation using Eq. (4).
+Fig. 13. The rates of H2O2 (+M) → 2OH (+M) as a function of pressure at turnover
+temperature, and those rates at various temperature and pressure.
+Fig. 14. Ignition delay data for stoichiometric n-heptane/air mixture under various pressure.
+All the data are scaled to the listed pressures using τ  P 1 to account for deviations in
+experimental pressure [31]. Each dataset is fitted using a cubic polynomial and covering the
+points near turnover temperature.
+Fig. 15. The pressure and turnover temperature of each dataset.
+Fig. 16. The ignition delay from measurements and those from correlation using Eq. (4).
+
+24
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 1. Schematic mechanism for the low temperature oxidation of a large alkane, RH.
+
+25
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 2. Total ignition delay as a function of the initial temperature T for stoichiometric
+n-heptane/air mixture under various pressure. The turnover ignition delays are marked by the
+triangle symbols, showing an Arrhenius dependence on the turnover temperature for different
+pressures.
+
+26
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 3. Computed ignition delays at turnover temperatures for stoichiometric n-butane,
+n-heptane and iso-octane in air. The turnover ignition delays show a power law dependence
+on the pressure, to the order of -2, approximately.
+
+27
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 4. Dependence of pressure and temperature at the turnover states for stoichiometric
+n-butane, n-heptane and iso-octane in air.
+
+28
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 5. Computed species and temperature profiles for stoichiometric n-butane/air
+mixture at the turnover temperature under 20 atm.
+
+29
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+(a)
+
+30
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+(b)
+Fig. 6. Magnitudes of the rates of important reactions consuming OH (a) and fuel molecule (b)
+for stoichiometric n-butane/air mixture at the turnover temperature under 20 atm. The
+presented reactions contribute nearly 90% to the total consumption rate at the instant of 75%
+τm.
+
+31
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 7. The brute force sensitivity on the turnover temperature for stoichiometric n-butane/air
+mixture.
+
+32
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 8. Reaction flux from RH to OH and the definition of ηi, β i, γi,j, θi,j. Only one of the
+isomers at every step is presented as an example.
+
+33
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+(a)
+
+34
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+(b)
+
+35
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+(c)
+Fig. 9. Computed α and αRO2 as a function of temperature under various pressures for
+different fuels.
+
+36
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 10. Turnover temperature calculated using detailed mechanism (symbols) and obtained at
+a constant α (lines).
+
+37
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+(a)
+
+38
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+(b)
+Fig. 11. The brute force sensitivity on the ignition delay at turnover temperature for n-butane
+and n-heptane.
+
+39
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 12. The ignition delays from simulation using detailed mechanism (symbols) and from
+the correlation using Eq. (4).
+
+40
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 13. The rates of H2O2 (+M) → 2OH (+M) as a function of pressure at turnover
+temperature for stoichiometric n-butane, n-heptane and iso-octane in air (symbols), and those
+rates at various temperature and pressure (dash lines). The rate constants are adopted from
+each detailed mechanism.
+
+41
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 14. Ignition delay data for stoichiometric n-heptane/air mixture under various pressure.
+All the data are scaled to the listed pressures using τ  P 1 to account for deviations in
+experimental pressure [31]. Each dataset is fitted using a cubic polynomial and covering the
+points near turnover temperature.
+
+42
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 15. The dependence of pressure on turnover temperatures for stoichiometric
+n-heptane/air mixture obtained from different methods.
+
+43
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+
+Fig. 16. The ignition delay from measurements and those from correlation using Eq. (4).
+
+44
+
+

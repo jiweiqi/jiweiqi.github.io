@@ -1,0 +1,966 @@
+Stiff-PINN: Physics-Informed Neural Network for Stiff Chemical Kinetics
+Weiqi Ji a†*, , Weilun Qiu b†, Zhiyu Shi b†, Shaowu Pan c, Sili Deng a*
+a
+
+Department of Mechanical Engineering, Massachusetts Institute of Technology,
+Cambridge, MA 02139, USA
+b
+
+c
+
+College of Engineering, Peking University, Beijing 100871, China
+
+Department of Aerospace Engineering, University of Michigan, Ann Arbor, MI 48109, USA
+†
+
+*
+
+These authors contributed equally to this work.
+
+Corresponding Author: Sili Deng (silideng@mit.edu)
+Preprint | Aug 20, 2021
+Abstract
+
+Recently developed physics-informed neural network (PINN) has achieved success in many
+science and engineering disciplines by encoding physics laws into the loss functions of the
+neural network, such that the network not only conforms to the measurements, initial and
+boundary conditions but also satisfies the governing equations. This work first investigates the
+performance of PINN in solving stiff chemical kinetic problems with governing equations of
+stiff ordinary differential equations (ODEs). The results elucidate the challenges of utilizing
+PINN in stiff ODE systems. Consequently, we employ Quasi-Steady-State-Assumptions
+(QSSA) to reduce the stiffness of the ODE systems, and the PINN then can be successfully
+applied to the converted non/mild-stiff systems. Therefore, the results suggest that stiffness
+could be the major reason for the failure of the regular PINN in the studied stiff chemical kinetic
+systems. The developed Stiff-PINN approach that utilizes QSSA to enable PINN to solve stiff
+chemical kinetics shall open the possibility of applying PINN to various reaction-diffusion
+systems involving stiff dynamics.
+Keywords: Physics-Informed Neural Network; Chemical Kinetics; Stiffness; Quasi Steady
+1
+
+State Assumptions.
+
+1. Introduction
+Deep learning has enabled advances in many scientific and engineering disciplines, such as
+computer visions, natural language processing, and autonomous driving. Depending on the
+applications, many different neural network architectures have been developed, including Deep
+Neural Networks (DNN), Convolutional Neural Networks (CNN), Recurrent Neural Networks
+(RNN), and Graph Neural Network (GNN). Some of them have also been employed for datadriven physics modeling 1–8, including turbulent flow modeling 9 and chemical kinetic
+modeling 10–14. Those different neural network architectures introduce specific regularization
+to the neural network based on the nature of the task such as the scale and rotation invariant of
+the convolutional kernel in CNN. Among them, the recently developed Physics-Informed
+Neural Network approach (PINN) 15–21 enables the construction of the solution space of
+differential equations using deep neural networks with space and time coordinates as the inputs.
+The governing equations (mainly differential equations) are enforced by minimizing the
+residual loss function using automatic differentiation and thus it becomes a physics
+regularization of the deep neural network. This framework permits solving differential
+equations (i.e., forward problems) and conducting parameter inference from observations (i.e.,
+inverse problems). PINN has been employed for predicting the solutions for the Burgers’
+equation, the Navier–Stokes equations, and the Schrodinger equation 16. To enhance the
+robustness and generality of PINN, multiple variations of PINN have also been developed,
+such as Variational PINNs 22, Parareal PINNs 23, and nonlocal PINN 24.
+Despite the successful demonstration of PINN in many of the above works, Wang et al. 25
+investigated a fundamental mode of failure of PINN that is related to numerical stiffness
+leading to unbalanced back-propagated gradients between the loss function of initial/boundary
+conditions and the loss function of residuals of the differential equations during model training.
+In addition to the numerical stiffness, physical stiffness might also impose new challenges in
+the training of PINN. While PINN has been applied for solving chemical reaction systems
+2
+
+involving a single-step reaction 19, stiffness usually results from the nonlinearity and
+complexity of the reaction network, where the characteristic time scales for species span a wide
+range of magnitude. Consequently, the challenges for PINN to accommodate stiff kinetics can
+potentially arise from several reasons, including the high dimensionality of the state variables
+(i.e., the number of species), the high nonlinearity resulted from the interactions among species,
+the imbalance in the loss functions for different state variables since the species concentrations
+could span several orders of magnitudes. Nonetheless, stiff chemical kinetics is essential for
+the modeling of almost every real-world chemical system such as atmospheric chemistry and
+the environment, energy conversion and storage, materials and chemical engineering,
+biomedical and pharmaceutical engineering. Enabling PINN for handling stiff kinetics will
+open the possibilities of using PINN to facilitate the design and optimization of these wide
+ranges of chemical systems.
+In chemical kinetics, the evolution of the species concentrations can be described as ordinary
+differential equation (ODE) systems with the net production rates of the species as the source
+terms. If the characteristic time scales for species span a wide range of magnitude, integrating
+the entire ODE systems becomes computationally intensive. Quasi-Steady-State-Assumptions
+(QSSA) have been widely adopted to simplify and solve stiff kinetic problems, especially in
+the 1960s when efficient ODE integrators were unavailable 26. A canonical example of the
+utilization of QSSA is the Michaelis–Menten kinetic formula, which is still widely adopted to
+formulate enzyme reactions in biochemistry. Nowadays, QSSA is still widely employed in
+numerical simulations of reaction-transport systems to remove chemical stiffness and enable
+the explicit time integration with relatively large time steps 27–29. Moreover, imposing QSSA
+also reduces the number of state variables and transport equations by eliminating the fast
+species such that the computational cost can be greatly reduced. From a physical perspective
+26,30
+
+, QSSA identifies the species (termed as QSS species) that are usually radicals with
+
+relatively low concentrations. Their net production rates are much lower than their
+consumption and production rates and thus can be assumed zero. From a mathematical
+3
+
+perspective 26, the stiffness of the ODEs can be characterized by the largest absolute
+eigenvalues of the Jacobian matrix, i.e., the Jacobian matrix of the reaction source term to the
+species concentrations. QSSA identifies the species that correspond to the relatively large
+eigenvalues of the chemical Jacobian matrix and then approximate the ODEs with differentialalgebraic equations to reduce the magnitude of the largest eigenvalue of the Jacobian matrix
+and thus the stiffness.
+In the current work, we will evaluate the performance of PINN in solving two classical stiff
+dynamics problems and compare it with the performance of Stiff-PINN, which incorporates
+QSSA into PINN to reduce stiffness. In Section 2, the two classical stiff kinetic systems, the
+corresponding PINN models, and the implementation of QSSA to formulate the Stiff-PINN
+models will be presented. In Section 3, the performances of the regular-PINN and Stiff-PINN
+in solving the two stiff problems will be investigated. Finally, conclusions and the outlook of
+future work will be presented.
+
+2. Methodology
+2.1 Stiff Chemical Kinetic Systems
+A homogenous chemical reaction system can be modeled using the following ordinary
+differential equations (ODEs):
+𝑑𝒚
+= 𝒇(𝑡, 𝒚),
+𝑑𝑡
+
+𝑡0 ≤ 𝑡 ≤ 𝑡𝑓𝑖𝑛𝑎𝑙
+
+𝒚(𝑡0 ) = 𝒚0 ,
+
+(2.1)
+(2.2)
+
+where 𝒚 = [𝑦1 , 𝑦2 , … , 𝑦𝑁 ]𝑇 is the column vector of species concentrations, and 𝑁 is the
+number of chemical species. 𝑡 is the time, and the initial and final time are denoted as 𝑡0 and
+𝑡𝑓𝑖𝑛𝑎𝑙 , respectively. 𝒚0 is the column vector of the initial species concentrations. The ODE
+system described by Eq. (2.1) with the initial conditions specified by Eq. (2.2) can be
+numerically solved using an ODE integrator such as the explicit Euler method or Runge-Kutta
+method. However, many ODEs for chemical kinetic models are stiff 31, and solving stiff ODEs
+4
+
+with an explicit method requires very small time steps such that the integration could be
+computationally intensive. Otherwise, implicit ODE integrators such as Backward
+Differentiation Formula can be used. However, in general, solving stiff ODEs is timeconsuming since the implicit method usually involves solving the nonlinear systems with
+Newton iteration. Therefore, it is still an active research area to efficiently solve stiff ODE
+systems 32,33, which is an integral part of many reaction-diffusion systems, such as in chemical
+engineering, energy conversion, and biomedical applications.
+While it is difficult to give a precise definition of the stiffness of a chemical kinetic model, one
+criterion can be whether there are largely separated time scales for different species. For
+instance, some of the fast-evolving species have very short time scales while some of the
+species evolve very slowly and have orders of magnitude longer time scales. To resolve those
+species concentrations with short time scales 𝜏𝑓𝑎𝑠𝑡 , one has to use very small time steps in the
+explicit ODE integrators. However, to resolve the slowly evolving species, the number of
+integration steps scale with 𝑆 = 𝜏𝑓𝑖𝑛𝑎𝑙 /𝜏𝑓𝑎𝑠𝑡 . If 𝑆 is on the order of 1000 or larger, the system
+will be considered as stiff 31. However, the shortest time scale 𝜏𝑓𝑎𝑠𝑡 is defined locally and is
+evolving, such that it is difficult to define the stiffness of a problem precisely. A practical
+approach to measure the stiffness is to compare the computational cost of explicit ODE
+integrators developed for non-stiff problems and implicit ones for stiff problems on a specific
+problem. If the computational cost using an implicit ODE integrator is much lower than the
+explicit ODE integrators, the problem can be regarded as a very stiff problem.
+This work will investigate the performance of PINN in two classical stiff chemical kinetic
+problems, ROBER 34 and POLLU 35, which are extensively used for testing stiff ODE
+integrators. Specifically, the ROBER problem 34 consists of three species and five reactions,
+and the POLLU problem 35 consists of 20 species and 25 reactions describing the air pollution
+formation in atmospheric chemistry. The formula of the ROBER problem (three ODEs) is
+presented here to illustrate the implementation of PINN in the following sections, while the
+formula of the POLLU problem (20 ODEs) is presented in the Supporting Information.
+5
+
+The ROBER problem refers to the following reaction network,
+𝑘1
+
+𝐴 → 𝐵,
+𝑘2
+
+𝐵 + 𝐵 → 𝐶 + 𝐵,
+
+(2.3)
+
+𝑘3
+
+𝐵 + 𝐶 → 𝐴 + 𝐶.
+The reaction rate constants are 𝑘1 = 0.04, 𝑘2 = 3 × 107 , 𝑘3 = 104 , and the initial conditions
+are 𝑦1 (0) = 1, 𝑦2 (0) = 0, 𝑦3 (0) = 0, where 𝑦1 , 𝑦2 , 𝑦3 denote the concentrations of A, B,
+C, respectively. The evolution of the species concentrations can be described by the following
+ODEs:
+𝑑𝑦1
+= −𝑘1 𝑦1 + 𝑘3 𝑦2 𝑦3 ,
+𝑑𝑡
+𝑑𝑦2
+= 𝑘1 𝑦1 − 𝑘2 𝑦22 − 𝑘3 𝑦2 𝑦3 ,
+𝑑𝑡
+𝑑𝑦3
+= 𝑘2 𝑦22 .
+𝑑𝑡
+
+(2.4)
+
+The reaction rate constants vary in a range of nine orders of magnitude, i.e., 𝑘2 /𝑘1 ~ 109,
+resulting in a system with strong stiffness.
+2.2 Physics-Informed Neural Network
+Without loss of generality, we shall use the ROBER problem to illustrate the framework of the
+PINN. Figure 1 illustrates the structure of PINN informed by the ODEs of the ROBER problem.
+
+6
+
+Figure 1. A schematic of the regular-PINN for the ROBER problem. The only input is the time
+t, and the output is the solution vector [𝑦1 (𝑡), 𝑦2 (𝑡), 𝑦3 (𝑡)]𝑇 , which has to satisfy the governing
+equations and the initial conditions. The two neutral networks, NN(w, b) and NN_ODE(k1, k2,
+k3), share parameters, and both contribute to the loss function.
+The PINN framework consists of two neural networks. The first part of the framework is a
+neural network NN(w, b) that takes the time 𝑡 as the input and outputs the concentrations of
+all of the species 𝒚 = [𝑦1 , 𝑦2 , 𝑦3 ]𝑇 at that time. Then the output of NN is fed into a second
+network NN_ODE(k1, k2, k3), which is essentially the governing differential equations of the
+ROBER problem, to evaluate the residuals of the ODEs. Finally, a loss function is constructed
+by combining the loss functions of the initial conditions and residuals. Specifically,
+𝑙𝑜𝑠𝑠 = 𝑙𝑜𝑠𝑠𝐼𝐶 + 𝑙𝑜𝑠𝑠𝑟𝑒𝑠 ,
+𝑖 [𝑦 𝑁𝑁
+𝑙𝑜𝑠𝑠𝐼𝐶 = ∑3𝑖=1 𝑤𝐼𝐶
+𝑖 (𝑡 = 𝑡0 ) − 𝑦𝑖 (𝑡 = 𝑡0 )],
+𝑅
+
+𝑙𝑜𝑠𝑠𝑟𝑒𝑠 =
+
+(2.5)
+
+3
+
+1
+𝑖
+∑ ∑ 𝑤𝑟𝑒𝑠
+[𝑟𝑒𝑠𝑖 (𝑡 = 𝑡𝑗 )].
+𝑅
+𝑗=1 𝑖=1
+
+where the weights of the initial conditions and the residuals for different species in the loss
+7
+
+𝑖
+𝑖
+functions are rescaled by 𝑤𝐼𝐶
+and 𝑤𝑟𝑒𝑠
+, since they could be unbalanced with each other by
+
+orders of magnitude and hinder the training. The predicted initial conditions to evaluate 𝑙𝑜𝑠𝑠𝐼𝐶
+are from the first neural network NN, and the loss of the residuals is from the second network
+NN_ODE. The residual loss 𝑙𝑜𝑠𝑠𝑟𝑒𝑠 is evaluated at randomly sampled points in the
+computational domains, i.e., {𝑡1 , 𝑡2 , … , 𝑡𝑅 } ∈ [𝑡0 , 𝑡𝑓𝑖𝑛𝑎𝑙 ] . Backpropagation through the two
+networks is conducted on the auto-differentiation framework of PyTorch to compute the
+gradient of the loss functions to the weights of the neural networks. The time derivatives of
+𝑑𝑦𝑖 ⁄𝑑𝑡 used in the residual loss is obtained using auto-differentiation as well. The neural
+network is optimized via the first-order optimizer Adam 36.
+2.3 Quasi-Steady-State Assumptions
+As previously discussed, the QSSA is often imposed on certain species to reduce the
+computational cost of simulating the evolution of the system. These QSS species, which are
+often radicals and unstable intermediates, generally have shorter time scales compared to other
+species. By assuming that the net production rates of the QSS species are zero, the
+concentrations of these species can be expressed by algebra equations instead of ODEs, such
+that the number of ODEs to model the kinetic system is reduced. Note that although the net
+production rates of the QSS species are small, the production and consumption rates of them
+are not necessarily small. In a general form, the net production rate of species k can be written
+as
+𝑑𝑌𝑘
+= 𝜔𝑘+ − 𝜔𝑘− .
+𝑑𝑡
+
+(2.6)
+
+𝑌𝑘 is the species concentration, and 𝜔𝑘+ , 𝜔𝑘− are the production and consumption rate,
+respectively. QSSA requires that
+|
+
+𝑑𝑌𝑘
+| ≪ (𝜔𝑘+ , 𝜔𝑘− ),
+𝑑𝑡
+
+so that
+
+8
+
+(2.7)
+
+𝜔𝑘+ − 𝜔𝑘− ≈ 0.
+
+(2.8)
+
+Take the ROBER problem as an example, as shown in Fig. 2, the concentration of species 𝑦2
+increases sharply during the initial induction period, and then it goes to a phase of slow change
+with considerably low concentrations compared to 𝑦1 and 𝑦3 . The production rate of 𝑦2 is
+comparable with the consumption rate of 𝑦1 , as can be seen from Eq. (2.3). However, since
+the net production rate over the entire integration range can be estimated to be proportional to
+the maximum species concentrations and the maximum concentration of 𝑦2 is five orders of
+magnitude lower than that of 𝑦1 , the net production rate of 𝑦2 is much slower than 𝑦1 .
+Similarly, the consumption rate of 𝑦2 is comparable with the production rate of 𝑦3 , while the
+net production rate of 𝑦2 is much slower than 𝑦3 . Therefore, the species 𝑦2 is likely to be a
+QSS species compared to 𝑦1 and 𝑦3 .
+
+Figure 2. The comparisons of the solutions of the ROBER problem using BDF solver and the
+solutions of the reduced system via QSSA using Dopri5. QSSA does not affect the solution of
+𝑦1 and 𝑦3 and accurately predicts 𝑦2 after the initial induction period. Note that the time is
+presented in the logarithmic scale to better illustrate the evolution of 𝑦2 during the induction
+period.
+The assumption of 𝑦2 as a QSS species implies that
+0 = 𝑘1 𝑦1 − 𝑘2 𝑦22 − 𝑘3 𝑦2 𝑦3
+and
+9
+
+(2.9)
+
+𝑦2 =
+
+−𝑘3 𝑦3 +√𝑘32 𝑦32 +4𝑘1 𝑘2 𝑦1
+2𝑘2
+
+.
+
+(2.10)
+
+Consequently, the original ROBER problem of three ODEs can be approximated by the
+following differential-algebraic equations (DAEs) and two ODEs.
+𝑑𝑦1
+= −𝑘1 𝑦1 + 𝑘3 𝑦2 𝑦3 ,
+𝑑𝑡
+−𝑘3 𝑦3 + √𝑘32 𝑦32 + 4𝑘1 𝑘2 𝑦1
+𝑦2 =
+,
+2𝑘2
+
+(2.11)
+
+𝑑𝑦3
+= 𝑘2 𝑦22 .
+𝑑𝑡
+The issue of stiffness in the system described by Eq. (2.11) should be reduced compared to the
+system described by Eq. (2.4) since the fast-evolving species 𝑦2 is not explicitly solved.
+Therefore, we can use an explicit integrator to solve Eq. (2.10) and the results are shown in Fig.
+2. It is shown that the explicit Runge-Kutta method of Dopri5 method well predicts 𝑦1 and
+𝑦3 under QSSA. In addition, the species profile of 𝑦2 can be computed based on the algebraic
+equation in Eq. (2.10), and the approximated profile agrees well with the accurate solution of
+𝑦2 except for the initial induction period. Note that, in practice, what interests us are the stable
+species rather than unstable intermediates.
+We can then integrate QSSA into the framework of PINN, and the new framework denoted as
+Stiff-PINN is illustrated in Fig. 3. The key differences between stiff-PINN and regular-PINN
+are three folds: first, NN_ODE is informed by the reduced systems with QSSA, instead of the
+original ODEs. Second, NN will only output the non-QSS species, and the QSS species are
+approximated in NN_ODE. Third, the QSS species are excluded from the loss functions of the
+initial conditions and the loss functions of the residuals, and therefore, loss functions will only
+consist of the information of non-QSS species.
+It is worthy to note that manually deriving explicit algebraic expressions for the QSS species
+could be challenging for complex systems. Automatic model reduction tools 37,38 could help
+10
+
+tackle the challenges by linearizing the QSSA approximation. Alternatively, the QSS species
+have to be solved via an additional nonlinear optimization step.
+
+Figure 3. A schematic of the Stiff-PINN for the ROBER problem. Comparing the model
+pipeline for Stiff-PINN with that for the regular-PINN, species 𝑦2 is assumed in quasi-state
+state (QSS) and the residuals of these QSS species are excluded from the loss functions during
+the training of Stiff-PINN. By removing these relatively fast-evolving species from the loss
+function, the stiffness of the differential equations is reduced.
+
+3. Results and Discussions
+In this section, the performance of regular-PINN in two classical stiff chemical kinetic
+problems: ROBER and POLLU will be investigated. As will be discussed, the stiffness is the
+main reason for the failure of regular-PINN, and the performance of Stiff-PINN in removing
+stiffness and predicting the species profiles will then be demonstrated. The code used to
+produce the results are available at https://github.com/DENG-MIT/Stiff-PINN.
+3.1 ROBER problem
+We first employed a regular-PINN to solve the ROBER problem. The NN has a single input of
+11
+
+time 𝑡 and outputs the concentrations of three species [𝑦1 , 𝑦2 , 𝑦3 ]𝑇 . To avoid the imbalance
+between the loss of initial conditions and the loss of residuals, we hardcoded the initial
+conditions to the NN architecture, i.e.,
+𝒚 = 𝒚𝟎 + 𝑡 ∗ 𝑁𝑁(log (𝑡)).
+
+(3.1)
+
+Therefore, to train the regular-PINN, only the loss functions of the residuals for the three
+species needed to be minimized. A total of 2500 data points is sampled uniformly in a
+logarithmic scale of the computational domain (time domain of 𝑡 ∈ [0, 105 𝑠]) to evaluate the
+residuals. The neural network had three hidden layers and 128 nodes per hidden layer, with the
+activation function of Gaussian Error Linear Units (GELU) 39. The weights of the NN were
+initialized using Xavier 40 and optimized via Adam 36, with the default learning rate of 0.001.
+The training was conducted via mini-batch training with a mini-batch size of 128. The training
+results are shown in Fig. 4. Overall, the learned regular-PINN can capture species 𝑦1 and 𝑦3
+during the initial stage of 𝑡 ∈ [0, 10 𝑠], and then substantially deviate from the exact solutions.
+Although the adaptive weights were implemented for the loss components of the three species
+following 20,25, the training of regular-PINN for the ROBER problem still failed. The deficiency
+of adaptive weights in the ROBER problem might be due to the fact that the stiffness here is
+due to the multiscale nature in the chemical dynamic system, while the stiffness in 25 is
+attributed to the imbalance among the loss functions of boundary conditions and residuals.
+We hypothesize that the failure is due to the physical stiffness of the ROBER problem. A natural
+way to test this hypothesis is to convert this problem to a non-stiff problem and see whether
+the regular-PINN would work. We then applied Stiff-PINN to the ROBER problem with QSSA,
+described by Eq. (2.11), and the results are also shown in Fig. 4. Although the species 𝑦2 is
+not included in the output of the NN, it can be computed via Eq. (2.10). The hyper-parameters
+for Stiff-PINN are almost identical to those of the regular-PINN except that the Stiff-PINN
+only outputs two species while the regular-PINN outputs three species. Here, we take the
+absolute value of 𝑦1 and 𝑦3 to ensure the validity of Eq. (2.10). As can be seen in Fig. 4, the
+Stiff-PINN accurately captures all three species profiles, including 𝑦2 . The history of the loss
+12
+
+functions for both regular-PINN and Stiff-PINN are presented in Fig. 5. As expected, the loss
+function for regular-PINN stays at a very high value, while that of the Stiff-PINN is decreased
+by a factor of 6 orders of magnitude.
+
+Figure 4. Solutions of the benchmark ROBER problem using the BDF solver (the exact
+solution), regular-PINN, and Stiff-PINN with QSSA. While the regular-PINN fails to predict
+the kinetic evolution of the stiff system, Stiff-PINN with QSSA works very well.
+
+Figure 5. The history of the loss functions of regular-PINN and Stiff-PINN for the ROBER
+problem. The epoch here corresponds to each parameter update.
+While analyzing the gradient flow dynamics is beyond the scope of this work, we draw some
+intuition on the difference in the performances between Stiff-PINN and regular-PINN. In StiffPINN, 𝑦2 is eliminated by QSSA, and 𝑦1 , 𝑦3 are of the same order of magnitude, which
+13
+
+makes their evolution much easier to be approximated with a single neural network. In addition,
+excluding 𝑦2 from the loss function also mitigates the imbalance among the residual losses
+for fast and slow species. However, in regular-PINN, the neural network has to approximate
+all three species simultaneously, where 𝑦2 ~𝑂(10−5 ) while 𝑦1 , 𝑦3 ~𝑂(1) . The large scale
+separation is a great challenge to the approximation capacity of the neural network. Therefore,
+even if the full ODE system is modeled with a sufficiently large and deep neural network, the
+training would be very challenging.
+We shall also briefly discuss the sensitivities of stiff-PINN to the number of nodes and layers
+of the NN model. The performance is found to be sensitive to the size (neurons × layers) of the
+NN as shown in Table 1. The general trend is that the performance of deeper neural networks
+performs better, by comparing the case of 64 × 5 with 64 × 4 and 128 × 3 with 128 × 2,
+respectively. Empirically, the architecture of three layers and 128 nodes per layer performances
+best in this work.
+Table 1. The root-mean-square-error (RSME) of Stiff-PINN with different NN sizes.
+neurons × layers
+
+𝑅𝑀𝑆𝐸(𝑦1 )
+
+𝑅𝑀𝑆𝐸(𝑦3 )
+
+64 × 4
+
+4.7954 × 10−3
+
+7.1774 × 10−3
+
+64 × 5
+
+1.4469 × 10−3
+
+5.0369 × 10−3
+
+128 × 2
+
+1.4805 × 10−2
+
+2.4651 × 10−2
+
+128 × 3
+
+1.3628 × 10−3
+
+2.0699 × 10−3
+
+256 × 1
+
+1.5961 × 10−2
+
+4.5460 × 10−2
+
+3.2 POLLU Problem
+The POLLU problem consists of 20 species and 25 reactions. It is an air pollution model
+developed at The Dutch National Institute of Public Health and Environmental Protection 35.
+The POLLU problem can be described mathematically by the following 20 non-linear ODEs
+14
+
+shown in Eq. (3.2). Full details about the model can be found in Error! Reference source not
+found.
+𝑑𝒚
+𝑑𝑡
+
+= 𝑓(𝒚), 𝒚(0) = 𝒚0, 𝐲 ∈ 𝑅 20 , 0 ≤ t ≤ 60 s.
+
+(3.2)
+
+As expected, the regular-PINN also failed in the POLLU problem, and the performance is
+shown in Fig. S1 of the Supporting Information. We then empirically chose 10 species as QSS
+species based on their maximum concentrations, i.e., lower than 1e-4, and derived the algebraic
+equations for those 10 species as shown in the Supporting Information. Then, the POLLU
+problem was reduced to 10 ODEs and 10 algebraic equations from 20 ODEs. The evolution of
+species concentrations described by the original ODEs and the reduced DAEs by imposing
+QSSA is shown in Figs. 6 and 7. The QSSA has little effects on the profiles of non-QSS species
+(Fig. 6), while there are some discrepancies in those of the QSS species (Fig. 7), especially
+during the initial induction period. However, the assumption does not affect the predictions of
+the stable species, which are often of greater interest than the unstable intermediates in practice.
+Also included in Figs. 6 and 7 are the solutions obtained with the Stiff-PINN approach. To
+facilitate the training, different fixed weights for each species in the residual loss function were
+applied to balance them, since the maximum concentrations of the non-QSS species still span
+several orders of magnitude. Stiff-PINN can accurately predict the evolution of non-QSS
+species and most of the QSS species. For QSS species [𝑦13 , 𝑦19 , 𝑦20 ], the concentrations of
+which are close to the non-QSS species, the QSSA tends to induce a larger error compared to
+the rest of the QSS species, which is expected and consistent with the results using ODE solvers.
+In general, Stiff-PINN can accurately solve the POLLU problem with stiffness removal via
+QSSA. We also analyzed the history of the loss functions for regular- and Stiff-PINN, as shown
+in Fig. 8. Although the loss functions of both regular-PINN and Stiff-PINN decrease as the
+training goes on, the loss in the Stiff-PINN is four orders of magnitude smaller than that of the
+regular-PINN.
+
+15
+
+Figure 6. The evolution of the concentration of the ten non-QSS species in the POLLU problem
+obtained by solving the original 20 ODEs using BDF, the reduced DAEs using Dopri5, and
+Stiff-PINN.
+
+16
+
+Figure 7. The evolution of the concentration of the ten QSS species in the POLLU problem
+obtained by solving the original 20 ODEs using BDF, the reduced DAEs using Dopri5, and
+Stiff-PINN.
+
+17
+
+Figure 8. The history of the loss functions of regular-PINN and Stiff-PINN for the POLLU
+problem.
+
+4. Conclusion and Outlook
+The performance of the physics-informed neural network in stiff chemical kinetic systems was
+investigated. In the two classical stiff chemical kinetic systems, ROBER and POLLU, the
+regular-PINN failed to predict the evolution of the systems. By imposing quasi-steady-stateassumptions on certain species in the kinetic systems and reducing the stiffness, the Stiff-PINN
+well captured the dynamic responses of the systems. Therefore, it indicates the failure of PINN
+was due to the physical stiffness, and the proposed Stiff-PINN is an effective and promising
+approach for stiff chemical kinetic systems.
+However, there are still a lot of open questions to be addressed in order to develop a robust and
+general PINN framework for stiff chemical kinetic problems. We shall highlight some of the
+challenges learned from performing this work that could guide future advances:
+(i)
+
+How to handle the fast time scales associated with linear combinations of several
+species 29,41, rather than single species? More general stiffness removal approaches may
+help address those challenges, such as computational singular perturbation (CSP) 42,43,
+intrinsic low dimensional manifolds (ILDM) 44,45, Global Quasi-Linearization (GQL)
+18
+
+29,41
+
+. Those advanced low-order modeling approaches will also help reduce the
+
+approximation error induced by QSSA, e.g., the species of 𝑦12 in the POLLU problem.
+(ii)
+
+Manually deriving the QSSA formula for complex chemical systems can be timeconsuming and requires a deep understanding of the process. How to identify QSS
+species and derive the corresponding DAEs automatically to be incorporated into the
+Stiff-PINN framework? Automatic reduction tools 37,46 and above general low-order
+approximation approaches (e.g., CSP, ILDM, and GQL) may help tackle the challenge.
+
+(iii)
+
+The stiffness in complex chemical systems may not be eliminated, and the reduced
+system may still show mild stiffness. Advancement in neural network optimizations is
+required to train PINN for mild stiff systems. A possible solution is exploiting stiff ODE
+solvers as neural network optimizers 47. One of the drawbacks of such an approach is
+that the Hessian matrix of the loss function w.r.t. the neural network parameters are
+required. Recent advancements in solving stiff ODEs using explicit method 32 and semiimplicit method 33 may help mitigate the requirements of the Hessian matrix. Another
+possible direction is normalizing the loss functions on-the-fly based on the time scales
+(e.g., via the eigenvalue of the Jacobian matrix) during the training process.
+
+Finally, while this work is focusing on enabling PINN for stiff systems, the idea of estimating
+the species that have slow time scales can also help tackle the challenges in other data-driven
+modeling approaches. For example, it has been shown that training Neural Ordinary
+Differential Equations for representing kinetic models using neural networks could be
+challenging for stiff chemical kinetic systems 48, and excluding QSS species from the network
+could help the training 49.
+
+Supporting Information.
+Details of the POLLU model including the original full model and the QSSA reduction;
+Training results for the POLLU model using regular-PINN.
+
+19
+
+Acknowledgement
+SD would like to acknowledge the support from the d’Arbeloff Career Development allowance
+at Massachusetts Institute of Technology.
+
+Reference
+(1)
+
+Qin, T.; Wu, K.; Xiu, D. Data Driven Governing Equations Approximation Using Deep
+Neural
+
+Networks.
+
+J.
+
+Comput.
+
+Phys.
+
+2019,
+
+395,
+
+620–635.
+
+https://doi.org/10.1016/j.jcp.2019.06.042.
+(2)
+
+Long, Z.; Lu, Y.; Ma, X.; Dong, B. PDE-Net: Learning PDEs from Data. arXiv Prepr.
+arXiv1710.09668 2017.
+
+(3)
+
+Raissi, M.; Wang, Z.; Triantafyllou, M. S.; Karniadakis, G. E. Deep Learning of VortexInduced
+
+Vibrations.
+
+J.
+
+Fluid
+
+Mech.
+
+2019,
+
+861,
+
+119–137.
+
+https://doi.org/10.1017/jfm.2018.872.
+(4)
+
+Schweidtmann, A. M.; Rittig, J. G.; König, A.; Grohe, M.; Mitsos, A.; Dahmen, M.
+Graph Neural Networks for Prediction of Fuel Ignition Quality. Energy & Fuels 2020,
+34 (9), 11395–11407. https://doi.org/10.1021/acs.energyfuels.0c01533.
+
+(5)
+
+Bar-Sinai, Y.; Hoyer, S.; Hickey, J.; Brenner, M. P. Learning Data-Driven Discretizations
+for Partial Differential Equations. Proc. Natl. Acad. Sci. U. S. A. 2019, 116 (31), 15344–
+15349. https://doi.org/10.1073/pnas.1814058116.
+
+(6)
+
+Champion, K.; Lusch, B.; Nathan Kutz, J.; Brunton, S. L. Data-Driven Discovery of
+Coordinates and Governing Equations. Proc. Natl. Acad. Sci. U. S. A. 2019, 116 (45),
+22445–22451. https://doi.org/10.1073/pnas.1906995116.
+
+(7)
+
+Xie, T.; Grossman, J. C. Crystal Graph Convolutional Neural Networks for an Accurate
+and Interpretable Prediction of Material Properties. Phys. Rev. Lett. 2018.
+https://doi.org/10.1103/PhysRevLett.120.145301.
+
+(8)
+
+Chen, R. T. Q.; Rubanova, Y.; Bettencourt, J.; Duvenaud, D. Neural Ordinary
+20
+
+Differential Equations.
+
+Adv. Neural Inf. Process. Syst.
+
+2018, 6571–6583.
+
+https://doi.org/10.2307/j.ctvcm4h3p.19.
+(9)
+
+Duraisamy, K.; Iaccarino, G.; Xiao, H. Turbulence Modeling in the Age of Data. Annual
+Review of Fluid Mechanics. 2019. https://doi.org/10.1146/annurev-fluid-010518040547.
+
+(10)
+
+Ranade, R.; Alqahtani, S.; Farooq, A.; Echekki, T. An Extended Hybrid Chemistry
+Framework
+
+for
+
+Complex
+
+Hydrocarbon
+
+Fuels.
+
+Fuel
+
+2019,
+
+251,
+
+276–284.
+
+https://doi.org/10.1016/j.fuel.2019.04.053.
+(11)
+
+Ji, W.; Deng, S. Autonomous Discovery of Unknown Reaction Pathways from Data by
+Chemical Reaction Neural Network. J. Phys. Chem. A 2021, 125 (4), 1082–1092.
+https://doi.org/10.1021/acs.jpca.0c09316.
+
+(12)
+
+Blasco, J. A.; Fueyo, N.; Larroya, J. C.; Dopazo, C.; Chen, Y. J. A Single-Step TimeIntegrator of a Methane-Air Chemical System Using Artificial Neural Networks.
+Comput. Chem. Eng. 1999, 23 (9), 1127–1133. https://doi.org/10.1016/S00981354(99)00278-1.
+
+(13)
+
+Franke, L. L. C.; Chatzopoulos, A. K.; Rigopoulos, S. Tabulation of Combustion
+Chemistry via Artificial Neural Networks (ANNs): Methodology and Application to
+LES-PDF Simulation of Sydney Flame L. Combust. Flame 2017, 185, 245–260.
+https://doi.org/10.1016/j.combustflame.2017.07.014.
+
+(14)
+
+Zhang, T.; Zhang, Y.; E, W.; Ju, Y. DLODE: A Deep Learning-Based ODE Solver for
+Chemistry Kinetics. 2021, No. January. https://doi.org/10.2514/6.2021-1139.
+
+(15)
+
+Raissi, M.; Yazdani, A.; Karniadakis, G. E. Hidden Fluid Mechanics: Learning Velocity
+and Pressure Fields from Flow Visualizations. Science 2020, 367 (6481), 1026–1030.
+https://doi.org/10.1126/science.aaw4741.
+
+(16)
+
+Raissi, M.; Perdikaris, P.; Karniadakis, G. E. Physics-Informed Neural Networks: A
+21
+
+Deep Learning Framework for Solving Forward and Inverse Problems Involving
+Nonlinear Partial Differential Equations. J. Comput. Phys. 2019, 378, 686–707.
+https://doi.org/https://doi.org/10.1016/j.jcp.2018.10.045.
+(17)
+
+Zhang, D.; Lu, L.; Guo, L.; Karniadakis, G. E. Quantifying Total Uncertainty in PhysicsInformed Neural Networks for Solving Forward and Inverse Stochastic Problems; 2019;
+Vol. 397. https://doi.org/10.1016/j.jcp.2019.07.048.
+
+(18)
+
+Lagaris, I. E.; Likas, A.; Fotiadis, D. I. Artificial Neural Networks for Solving Ordinary
+and Partial Differential Equations. IEEE Trans. Neural Networks 1998, 9 (5), 987–1000.
+https://doi.org/10.1109/72.712178.
+
+(19)
+
+Lu, L.; Meng, X.; Mao, Z.; Karniadakis, G. E. DeepXDE: A Deep Learning Library for
+Solving Differential Equations. 2019.
+
+(20)
+
+Jin, X.; Cai, S.; Li, H.; Karniadakis, G. E. NSFnets (Navier-Stokes Flow Nets): PhysicsInformed Neural Networks for the Incompressible Navier-Stokes Equations. 2020.
+
+(21)
+
+Sun, L.; Gao, H.; Pan, S.; Wang, J. X. Surrogate Modeling for Fluid Flows Based on
+Physics-Constrained Deep Learning without Simulation Data. Comput. Methods Appl.
+Mech. Eng. 2020. https://doi.org/10.1016/j.cma.2019.112732.
+
+(22)
+
+Kharazmi, E.; Zhang, Z.; Karniadakis, G. E. Variational Physics-Informed Neural
+Networks For Solving Partial Differential Equations. 2019, 1–24.
+
+(23)
+
+Meng, X.; Li, Z.; Zhang, D.; Karniadakis, G. E. PPINN: Parareal Physics-Informed
+Neural Network for Time-Dependent PDEs. Comput. Methods Appl. Mech. Eng. 2020,
+370, 113250. https://doi.org/10.1016/j.cma.2020.113250.
+
+(24)
+
+Haghighat, E.; Bekar, A. C.; Madenci, E.; Juanes, R. A Nonlocal Physics-Informed Deep
+Learning Framework Using the Peridynamic Differential Operator. 2020.
+
+(25)
+
+Wang, S.; Teng, Y.; Perdikaris, P. Understanding and Mitigating Gradient Pathologies in
+Physics-Informed Neural Networks. arXiv Prepr. arXiv2001.04536 2020.
+22
+
+(26)
+
+Turányi, T.; Tomlin, A. S.; Pilling, M. J. On the Error of the Quasi-Steady-State
+Approximation.
+
+J.
+
+Phys.
+
+Chem.
+
+1993,
+
+97
+
+(1),
+
+163–172.
+
+https://doi.org/10.1021/j100103a028.
+(27)
+
+Lu, T.; Law, C. K.; Yoo, C. S.; Chen, J. H. Dynamic Stiffness Removal for Direct
+Numerical
+
+Simulations.
+
+Combust.
+
+Flame
+
+2009,
+
+156
+
+(8),
+
+1542–1551.
+
+https://doi.org/10.1016/j.combustflame.2009.02.013.
+(28)
+
+Felden, A.; Pepiot, P.; Esclapez, L.; Riber, E.; Cuenot, B. Including Analytically
+Reduced Chemistry (ARC) in CFD Applications. Acta Astronaut. 2019, 158 (March),
+444–459. https://doi.org/10.1016/j.actaastro.2019.03.035.
+
+(29)
+
+Yu, C.; Bykov, V.; Maas, U. Global Quasi-Linearization (GQL) versus QSSA for a
+Hydrogen–Air Auto-Ignition Problem. Phys. Chem. Chem. Phys. 2018, 20 (16), 10770–
+10779. https://doi.org/10.1039/C7CP07213A.
+
+(30)
+
+Law, C. K. Combustion Physics; Cambridge University Press: Cambridge, 2006.
+https://doi.org/10.1017/CBO9780511754517.
+
+(31)
+
+Seinfeld, J. H.; Lapidus, L.; Hwang, M. Review of Numerical Integration Techniques
+for Stiff Ordinary Differential Equations. Ind. Eng. Chem. Fundam. 1970, 9 (2), 266–
+275.
+
+(32)
+
+Bassenne, M.; Fu, L.; Mani, A. Time-Accurate and Highly-Stable Explicit Operators for
+Stiff
+
+Differential
+
+Equations.
+
+J.
+
+Comput.
+
+Phys.
+
+2020,
+
+424,
+
+109847.
+
+https://doi.org/10.1016/j.jcp.2020.109847.
+(33)
+
+Wu, H.; Ma, P. C.; Ihme, M. Efficient Time-Stepping Techniques for Simulating
+Turbulent Reactive Flows with Stiff Chemistry. Comput. Phys. Commun. 2019, 243, 81–
+96. https://doi.org/10.1016/j.cpc.2019.04.016.
+
+(34)
+
+Robertson, H. The Solution of a Set of Reaction Rate Equations. In Numerical analysis:
+an introduction.; J. Walsh, Ed.; Academic Press: London, 1966; Vol. 178182, pp 178–
+23
+
+182.
+(35)
+
+Verwer, J. G. Gauss–Seidel Iteration for Stiff ODES from Chemical Kinetics. SIAM J.
+Sci. Comput. 1994, 15 (5), 1243–1250. https://doi.org/10.1137/0915076.
+
+(36)
+
+Kingma, D. P.; Ba, J. Adam: A Method for Stochastic Optimization. 2014.
+
+(37)
+
+Lu, T.; Law, C. K. A Criterion Based on Computational Singular Perturbation for the
+Identification of Quasi Steady State Species: A Reduced Mechanism for Methane
+Oxidation with NO Chemistry. Combust. Flame 2008, 154 (4), 761–774.
+https://doi.org/10.1016/j.combustflame.2008.04.025.
+
+(38)
+
+Lu; Law, C. K. Systematic Approach To Obtain Analytic Solutions of Quasi Steady State
+Species in Reduced Mechanisms. J. Phys. Chem. A 2006, 110 (49), 13202–13208.
+https://doi.org/10.1021/jp064482y.
+
+(39)
+
+Hendrycks, D.; Gimpel, K. Gaussian Error Linear Units (GELUs). arXiv Prepr.
+arXiv1606.08415 2016.
+
+(40)
+
+Glorot, X.; Bengio, Y. Understanding the Difficulty of Training Deep Feedforward
+Neural Networks. J. Mach. Learn. Res. 2010, 9, 249–256.
+
+(41)
+
+Bykov, V.; Gol’Dshtein, V.; Maas, U. Simple Global Reduction Technique Based on
+Decomposition Approach. Combust. Theory Model. 2008, 12 (2), 389–405.
+
+(42)
+
+Lam, S. H.; Goussis, D. A. Understanding Complex Chemical Kinetics with
+Computational Singular Perturbation. In Symposium (International) on Combustion;
+Elsevier, 1989; Vol. 22, pp 931–941.
+
+(43)
+
+Lam, S. H.; Goussis, D. A. The CSP Method for Simplifying Kinetics. Int. J. Chem.
+Kinet. 1994, 26 (4), 461–486.
+
+(44)
+
+Maas, U.; Pope, S. B. Simplifying Chemical Kinetics: Intrinsic Low-Dimensional
+Manifolds in Composition Space. Combust. Flame 1992, 88 (3–4), 239–264.
+24
+
+(45)
+
+Maas, U.; Pope, S. B. Implementation of Simplified Chemical Kinetics Based on
+Intrinsic Low-Dimensional Manifolds. In Symposium (International) on Combustion;
+Elsevier, 1992; Vol. 24, pp 103–112.
+
+(46)
+
+Pepiot, P. Automatic Strategies to Model Transportation Fuel Surrogates, Stanford
+University, Stanford, CA, 2008.
+
+(47)
+
+Owens, A. J.; Filkin, D. L. Efficient Training of the Back Propagation Network by
+Solving a System of Stiff Ordinary Differential Equations. In Proceedings IEEE/INNS
+International Joint Conference of Neural Networks; 1989; pp 381–386.
+
+(48)
+
+Kim, S.; Ji, W.; Deng, S.; Rackauckas, C. Stiff Neural Ordinary Differential Equations.
+arXiv Prepr. arXiv2103.15341 2021.
+
+(49)
+
+Owoyele, O.; Pal, P. A Neural Ordinary Differential Equations Approach for Chemical
+Kinetics
+
+Solvers.
+
+Prerints
+
+2020,
+
+https://doi.org/10.20944/preprints202012.0275.v1.
+
+25
+
+No.
+
+December.
+
+TOC Graphic
+
+26
+
+

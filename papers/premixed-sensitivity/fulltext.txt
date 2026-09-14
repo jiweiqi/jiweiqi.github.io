@@ -1,0 +1,857 @@
+Combustion and Flame 220 (2020) 16–22
+
+Contents lists available at ScienceDirect
+
+Combustion and Flame
+journal homepage: www.elsevier.com/locate/combustflame
+
+Dependence of kinetic sensitivity direction in premixed ﬂames
+Weiqi Ji a, Tianwei Yang b, Zhuyin Ren b, Sili Deng a,∗
+a
+b
+
+Department of Mechanical Engineering, Massachusetts Institute of Technology, MA 02139, USA
+Center for Combustion Energy, Tsinghua University, Beijing 100084, China
+
+a r t i c l e
+
+i n f o
+
+Article history:
+Received 12 April 2020
+Revised 17 June 2020
+Accepted 17 June 2020
+
+Keywords:
+Sensitivity Analysis
+Uncertainty quantiﬁcation
+Sensitivity direction
+Flamelet
+Extinction strain rate
+
+a b s t r a c t
+The sensitivities of turbulent combustion simulations to chemical kinetic parameters can be analyzed to
+understand the controlling reactions in turbulent ﬂames and to quantify the uncertainties in simulations.
+However, computing the sensitivity of turbulent combustion simulations to a large number of kinetic
+parameters is still challenging. A promising approach is to estimate the sensitivity from laminar ﬂames,
+especially for cases where the ﬂamelet model is applicable. Under these conditions, the underlying hypothesis is that the sensitivity direction of the ﬂamelet proﬁles is independent of the strain rate and
+the ﬂame coordinate, which is the progress variable for premixed ﬂames. In the present work, this hypothesis was tested in laminar premixed counterﬂow ﬂames. We ﬁrst studied the sensitivity directions
+of two extreme cases, the near-extinction strained ﬂames and the freely propagating unstretched ﬂames.
+It was found that the sensitivity directions of the extinction strain rate and the laminar ﬂame speed are
+aligned with each other for various fuels, equivalence ratios, and pressures. We then studied the dependence of the sensitivity direction of the maximum ﬂame temperature on the strain rate as well as the
+dependence of the sensitivity direction of the species proﬁles on the progress variable. It was found that
+the sensitivity direction of maximum temperature was largely independent of the strain rate. Moreover,
+the sensitivity directions of the temperature and species proﬁles were independent of the progress variable, and they were all similar to the sensitivity direction of the extinction strain rate. These ﬁndings
+suggest that there is a universal sensitivity direction for turbulent premixed ﬂames and the direction can
+be estimated by the sensitivity direction of extinction strain rate. These conclusions will enable eﬃcient
+sensitivity analysis of turbulent combustion simulations when the hypothesis is valid.
+© 2020 The Combustion Institute. Published by Elsevier Inc. All rights reserved.
+
+1. Introduction
+In order to accurately capture the pollution formation processes, modern turbulent combustion simulations usually adopt
+detailed chemical models which contain thousands of species and
+reactions. Since reaction rates are inevitably associated with certain uncertainties, it is often desirable to quantify the inﬂuence of
+the uncertainties in the chemical kinetic parameters on the simulation and to understand what reactions dominant the uncertainty
+[1–4].
+A common approach to elucidate the kinetic uncertainty is to
+conduct sensitivity analysis, such that the linear response of the
+ﬂame proﬁles to small perturbations of the kinetic parameters is
+quantiﬁed [5–7]. The uncertainty can also be estimated by ﬁrstorder Taylor expansion with the sensitivity as the derivative [8].
+Due to the high computational cost of turbulent combustion sim-
+
+∗
+
+Corresponding author.
+E-mail address: silideng@mit.edu (S. Deng).
+
+ulations, conducting sensitivity analysis for a large number of kinetic parameters is impractical.
+A potential approach to estimate the kinetic sensitivity of the
+expensive turbulent combustion simulations is to relate the sensitivity to that of the less expensive laminar ﬂames. For example, Mueller et al. [1] proposed to estimate the uncertainties of
+ﬂamelet-based large eddy simulations based on the uncertainties
+of steady ﬂamelets. Although not explicitly mentioned by Mueller
+et al. [1], the underlying hypothesis for the estimation is that
+the sensitivity directions of the ﬂamelet proﬁles under different
+strain rates and ﬂame coordinates (the mixture fraction for nonpremixed ﬂames and progress variable for premixed ﬂames) are
+the same. In other words, ﬂamelet proﬁles under different strain
+rates and ﬂame coordinates will change simultaneously with the
+perturbation of the kinetic parameters. For example, the changes
+of the temperature at two different strain rates but same ﬂame coordinates upon kinetic perturbation will be proportional to each
+other. Therefore, the uncertainty of the ﬂamelet can be parameterized by a single variable along the uniﬁed sensitivity direction, such that the high-dimensional kinetic uncertainty is reduced
+
+https://doi.org/10.1016/j.combustﬂame.2020.06.027
+0010-2180/© 2020 The Combustion Institute. Published by Elsevier Inc. All rights reserved.
+
+W. Ji, T. Yang and Z. Ren et al. / Combustion and Flame 220 (2020) 16–22
+
+17
+
+Fig. 1. Sensitivity analysis of LFS and ESR of the methane/air mixture with an equivalence ratio of 0.7 and at 30 atm using a detailed mechanism [14]. (a) Unnormalized
+sensitivities, (b) Normalized sensitivities.
+
+to one-dimensional uncertainty. Furthermore, the entire turbulent
+ﬂame share the same sensitivity direction everywhere, although
+the ﬂame involves a wide range of strain rates and mixture fractions/progress variables. Similarly, the universal sensitivity direction assumption is also required for the estimation of the active
+subspace of turbulent ﬂames based on laminar ﬂames [3].
+However, the hypothesis has not been validated in the literature
+since the sensitivity analysis of turbulent ﬂames is only available
+recently. Therefore, this work aims to test this hypothesis in laminar premixed ﬂames and build theoretical foundations for developing eﬃcient algorithms for the sensitivity analysis of turbulent
+combustion simulations. We shall ﬁrst study the sensitivity directions of two extreme cases of near-extinction strained ﬂames and
+freely propagating unstretched ﬂames. We will then study the dependence of the sensitivity direction of the maximum ﬂame temperature on the strain rate and that of the species proﬁles on the
+progress variable.
+
+ity analysis with respect to kinetic rate constants for ESR at the
+exact strain rate determined experimentally. In the reducing factor approach, the simulation of the counterﬂow premixed ﬂame
+starts from a low strain rate and gradually increases to the nearextinction state. The step size of the increment of the strain rate
+should be gradually decreased to retain the burning solutions up
+to the extinction point. Such an approach has been implemented
+in the open-source software of Ember [11], and the reducing factor
+approach with Ember has been reported to be more eﬃcient than
+the continuation approach implemented in Chemkin [13]. However,
+the sensitivity of ESR has to be evaluated using the ﬁnite difference
+method in the reducing factor approach, which could be computationally expensive. Nonetheless, in both approaches, the sensitivity
+is usually reported in its dimensionless form,
+
+2. Sensitivity directions of extinction strain rate and laminar
+ﬂame speed
+
+where ki is the rate constant for the i th reaction, and si is
+the corresponding sensitivity coeﬃcient. The sensitivity coeﬃcients
+for all reactions can be stacked into a sensitivity vector, i.e., S =
+[s1 , s2 , . . . , sn ]. Furthermore, the sensitivity vector is normalized
+by its magnitude ||S||2 to obtain the sensitivity direction S˜ (
+S=
+S/||S||2 ). Therefore, the sensitivity direction represents the normalized sensitivities of all reactions.
+Figure 1 shows the sensitivity analysis of LFS and ESR of a
+methane/air mixture using the detailed mechanism in Hashemi
+et al. [14]. The equivalence ratio is 0.7, and the pressure is 30 atm,
+which are kept the same as Long et al. [15]. The unnormalized and
+normalized sensitivities are shown in Figs. 1a and 1b, respectively.
+It can be seen that the sensitivity rankings for ESR and LFS are almost the same, with the most sensitive reaction being the primary
+chain-branching reaction of H + O2 <=>O+OH. The observation is
+consistent with many existing studies [15–17] which pointed out
+that the ESR and the LFS share the same set of controlling reactions. Overall, the magnitude of the sensitivity of ESR is larger than
+that of LFS. As pointed out in [15], this result is consistent with
+previous studies that showed LFS to scale with the square root of
+the overall reaction rate [18] while ESR was shown to scale linearly
+[19]. Therefore, normalization of the sensitivity by the sensitivity
+magnitude is necessary to assess the relative sensitivity of different reactions. Surprisingly, the normalized sensitivity for ESR and
+LFS are very similar to each other as shown in Fig. 1b. We consequently denote the alignment of the sensitivity directions as the
+kinetic similarity.
+
+Laminar freely propagating ﬂames and counterﬂow ﬂames near
+the extinction point are two extreme cases of strained ﬂames. They
+are usually characterized by the laminar ﬂame speed (LFS) and the
+extinction strain rate (ESR), respectively. Therefore, we ﬁrst study
+the sensitivity directions of ESR and LFS to investigate the effect of
+strain on the sensitivity directions. Since LFS is much more extensively studied than ESR both experimentally and numerically, we
+herein only brieﬂy discuss about the computation of ESR and its
+sensitivity directions.
+The ESR characterizes the response of the ﬂame to strain. A
+higher ESR indicates that the mixture is more likely to sustain
+combustion in strained ﬂows. ESR is usually measured and simulated in premixed counterﬂow twin ﬂames, the response of which
+can be described via the S-curve analysis [9]. The maximum strain
+rate that the ﬂame can sustain with ﬁxed composition and thermodynamic states at the inlet is deﬁned as the ESR. Speciﬁcally, the
+absolute value of the maximum velocity gradient is often utilized
+to evaluate ESR. Numerically, since the ESR corresponds to a singularity point, it has to be solved using either ﬂame continuation
+approach [10] or reducing factor approach [11].
+The continuation approach enables an eﬃcient sensitivity analysis of the ESR as ﬁrst proposed in [12]. By realizing that ESR becomes a dependent variable when the two-point continuation approach [10] is invoked, it is possible to perform rigorous sensitiv-
+
+si =
+
+∂ ln[ESR]
+ki ∂ [ESR]
+=
+,
+∂ ln[ki ]
+ESR ∂ [ki ]
+
+(1)
+
+18
+
+W. Ji, T. Yang and Z. Ren et al. / Combustion and Flame 220 (2020) 16–22
+Table 1
+The kinetic similarity between ESR and LFS evaluated for the sensitivities in the literature.
+No.
+
+Fuel
+
+Phi
+
+Cosine
+
+Top N
+
+p[atm]
+
+Ref.
+
+Alias
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+
+methanol
+isooctane
+n-dodecane
+n-dodecane
+n-dodecane
+dimethyl ether
+dimethyl ether
+dimethyl ether
+n-butanol
+n-butanol
+n-butanol
+n-butanol
+n-butanol
+n-butanol
+n-dodecane
+n-dodecane
+n-dodecane
+n-dodecane
+n-dodecane
+methyl-butanoate
+methyl-butanoate
+methyl-butanoate
+n-propylbenzene
+methane/C2 HF5
+methane/C2 HF3 Cl2
+methane/C3 H2 F3 Br
+methane
+methane
+methane
+methane
+methane
+methane
+
+0.77
+0.87
+1.0
+1.0
+1.0
+0.6
+1.0
+1.5
+0.6
+1.0
+1.5
+0.6
+1.0
+1.5
+0.7
+1.0
+1.4
+1.0
+1.0
+0.7
+1.0
+1.5
+1.0
+1.0
+1.0
+1.0
+0.7
+0.7
+0.7
+1.3
+1.3
+1.3
+
+1.00
+0.46
+0.94
+0.97
+0.95
+1.00
+0.99
+0.91
+0.59
+0.89
+0.96
+0.95
+0.97
+0.97
+0.96
+0.97
+0.97
+0.95
+0.97
+0.97
+0.98
+0.97
+0.96
+0.96
+0.99
+0.97
+0.98
+0.99
+0.98
+0.99
+0.97
+0.98
+
+16
+12
+10
+10
+10
+10
+10
+10
+8
+8
+8
+8
+8
+8
+10
+10
+10
+12
+10
+14
+14
+14
+10
+14
+14
+14
+15
+15
+15
+15
+15
+15
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+7
+30
+1
+7
+30
+
+[27]
+[27]
+[24]
+[24]
+[24]
+[28]
+[28]
+[28]
+[26]
+[26]
+[26]
+[26]
+[26]
+[26]
+[16]
+[16]
+[16]
+[29]
+[29]
+[30]
+[30]
+[30]
+[31]
+[32]
+[32]
+[32]
+[15]
+[15]
+[15]
+[15]
+[15]
+[15]
+
+Holley2006
+Holley2006
+Kumar2007
+Kumar2007
+Kumar2007
+Wang2009
+Wang2009
+Wang2009
+Veloo2010
+Veloo2010
+Veloo2010
+Veloo2010
+Veloo2010
+Veloo2010
+Ji2010
+Ji2010
+Ji2010
+Kumar2010
+Kumar2010
+Wang2011
+Wang2011
+Wang2011
+Hui2012
+Xu2017
+Xu2017
+Xu2017
+Long2019
+Long2019
+Long2019
+Long2019
+Long2019
+Long2019
+
+To measure the kinetic similarity between two sensitivity directions, the inner product between two normalized sensitivity vectors can be quantiﬁed, which is also termed as the cosine similarity [20–23]. The cosine similarity of unity corresponds to a perfect
+parallel, while zero indicates that two directions are orthogonal to
+each other. For the normalized sensitivities in Fig. 1b, the cosine
+similarity S˜ESR , S˜LF S  is 0.98, which suggests that the two sensitivity directions are almost parallel. This result implies that the ESR
+and the LFS for the speciﬁed mechanism and conditions are kinetically similar, in the sense that they share not only the same set
+of controlling reactions but also the same response to the coupling
+among these reactions.
+Next, we shall investigate the kinetic similarities between ESR
+and LFS with other fuels, equivalence ratios, and pressures. Computing the sensitivity of ESR for large hydrocarbon fuels could be
+time consuming since computing the ESR itself for large reaction
+model is already intensive [11] and hyperparameter tuning is often needed to save computational time while retaining a stable
+solution. Fortunately, the kinetic sensitivities of ESR are usually reported in the literature in addition to the experimental measurement of ESR. Therefore, we compiled the sensitivity analysis results
+of ESR as well as those of LFS from literature and normalized the
+sensitivities to obtain the cosine similarity.
+The compiled database is summarized in Table 1. The investigated conditions cover a wide variety of fuel, equivalence ratios
+(phi), and pressures (p [atm]). The “top N” in the table refers to
+the number of top-ranked sensitive reactions presented in the literature. For most of the cases, the cosine similarity is higher than
+0.95, which suggests that the two sensitivity directions for ESR
+and LFS are very similar to each other. The consistency between
+large hydrocarbon fuels and methane agrees with previous studies
+[16,17,24] which suggest that the ESR is most sensitive to smallmolecule reactions, i.e., H2 /CO/C1 –C2 kinetics.
+
+Note that there are a few outliers that have noticeable lower cosine similarity than the others. Regarding the outliers of #9–10, the
+difference is potentially because the ESR at lean condition is insensitive to the reaction of CO+OH<=>CO2 +H with the kinetic model
+published in 2009 [25]. The model signiﬁcantly underpredicted the
+ESR for lean and stoichiometric conditions. The predictions with
+the updated model employed in [26] agreed much better with the
+experimental data. Correspondingly, the difference in the sensitivity direction is signiﬁcantly reduced, as shown in #12–13. For the
+dataset of #2, the cause of the difference is suspected to be that
+the ESR is extremely sensitive to C3 H4 +O<=>CH2 O+C2 H2 based
+on the kinetic model published in 1998 [12]. The model showed
+large discrepancies from the experimental data of ESR. Therefore,
+it can be summarized that the similarity between the kinetic sensitivity of ESR and LFS is an inherent property of fuel-air mixtures,
+although such similarity might not show in computations if the
+models signiﬁcantly off predict the experimental measurements.
+It is worth to mention that the kinetic similarity is consistent
+with the historical views on the connection between ESR and LFS
+based on the time scale analysis by Peters [33]. The ﬂame residence time in ﬂame propagation is given by the ratio between the
+ﬂame thickness and LFS, while the quench time for ﬂame extinction is given by the inverse of ESR. The numerical simulations by
+Rogg [34] for a stoichiometric methane-air ﬂame show that the
+ﬂame residence time and the quench time are very close to each
+other, such that the quench time is subsequently approximated by
+the ﬂame residence time in ﬂame propagation for turbulent combustion modeling. Since both time scales are equal to the chemical
+time scale [33], one can imply that ﬂame extinction has similar
+chemical time scale with the unstretched ﬂame propagation. Since
+the chemical time scale is determined by the controlling reactions,
+the similarity of the controlling reactions and the sensitivity directions is consistent with the similarity in the time scales. It is
+
+W. Ji, T. Yang and Z. Ren et al. / Combustion and Flame 220 (2020) 16–22
+
+19
+
+Fig. 2. (a) The response of the maximum ﬂame temperature versus the strain rate. (b) The evolution of the cosine similarity and normalized magnitude with strain rates.
+The sensitivity magnitude is normalized by the maximum magnitude at the strain rate of 1075 1/s. The cosine similarity refers to the inner product between the sensitivity
+direction at each strain rate and the sensitivity direction of ESR.
+
+worthy to note that the above time scale analysis is qualitative,
+since the chemical time scale of LFS is not always equal to that of
+ESR [19], and the ﬂame temperature at extinction is much lower
+than the unstretched ﬂame. Thus, the classical time analysis cannot
+fully explain the quantitative similarity of the sensitivity directions.
+Therefore, more rigorous analysis on the dependence of sensitivity
+directions on the strain rate and ﬂame temperature will be carried
+out in Section 3.
+Leveraging the kinetic similarity between ESR and LFS, the sensitivity of ESR can be eﬃciently computed based on the sensitivity
+of LFS. Speciﬁcally, the similarity implies that
+
+∂ ln [ESR] ∂ ln [ESR] ∂ ln [LF S] ∂ ln [LF S]
+/
+=
+/
+,
+∂ ln [ki ] ∂ ln [km ]
+∂ ln [ki ] ∂ ln [km ]
+
+(2)
+
+where the sensitivity of LFS to all reactions can be eﬃciently computed with the adjoint approach. Therefore, to evaluate the sensitivity coeﬃcients of ESR for all reactions, we just need to compute the sensitivity of ESR to the most sensitive reaction km via
+the ﬁnite difference approach, and sensitivities to other reactions
+are readily available via Eq. (2). The eﬃcient computation of the
+sensitivity of ESR will beneﬁt the gradient-based optimization and
+uncertainty quantiﬁcation for ESR [35].
+3. Dependence of sensitivity direction on strain rate and
+progress variable
+Next, we shall study the evolution of sensitivity directions of
+ﬂame temperatures and species concentrations with the strain rate
+and the progress variable. The sensitivities of the ﬂame temperature and species concentrations are also computed using Ember
+with the ﬁnite difference approach for the top 15 reactions preselected based on the sensitivity of LFS. The simulation is conducted for a methane/air mixture using the detailed mechanism of
+GRI3.0 [36]. Details on the composition and thermodynamic states
+are: equivalence ratio of 0.7, inlet temperatures of 300 K, and atmospheric pressure.
+Figure 2a shows the response of the maximum temperature
+with the strain rate in the upper branch of the S-curve, and the
+ESR is around 1187 1/s. Since the perturbation of the kinetic rate
+constants also affects the ESR, the temperature and species sensitivity are computed from the strain rate of 500 to 1075 1/s.
+Figure 2b then shows the evolution of the sensitivity vector of
+the maximum temperature Tmax with strain rates. The sensitivity
+magnitude is normalized by the maximum magnitude at the strain
+
+rate of 1075 1/s. In order to display the sensitivity directions at
+all strain rates examined, we compute their cosine similarity with
+a reference sensitivity direction, which is that of the ESR. As expected, the sensitivity magnitude increases with the strain rate
+since the ﬂame is more sensitive to chemical kinetics when approaching extinction.
+Moreover, the sensitivity directions of Tmax are independent of
+the strain rate, and they are similar to the sensitivity direction of
+ESR with the minimum cosine similarity of 0.97 for the speciﬁed
+range of strain rates. Therefore, the controlling reactions of Tmax
+are independent with the strain rate. The independence is intriguing since the peak temperature, local chemical time scale, and sensitivity magnitude of the ﬂame all vary with strain rate. The independence also explain why the ESR and LFS share the same sensitivity direction while the local chemical time scales could be different for ESR and LFS [19].
+The evolution of the sensitivity directions of ﬂame temperatures and species concentrations with the locations in the ﬂame
+coordinate is further investigated to examine if there is a universal kinetic sensitivity direction for premixed ﬂames. Figure 3a
+presents the temperature proﬁle as a function of the distance to
+the stagnation-point. The perturbed proﬁles correspond to the solutions with perturbed rate constants. The gap between the original and perturbed proﬁles indicates the magnitude of sensitivity.
+It can be seen that the sensitivity magnitude is substantial near
+the ﬂame front, which corresponds to a large temperature gradient. The evolution of the sensitivity magnitudes is further detailed
+in Fig. 3b. The magnitude is normalized by the maximum magnitude in the entire ﬂame domain. The magnitude of the sensitivity
+is much weakened in the cold unburned regime and the hot equilibrium regime. Figure 3b also shows the evolution of the sensitivity direction, where the cosine similarity is computed with respect
+to the sensitivity direction of ESR. The evolution of the cosine similarity suggests that the sensitivity directions are almost the same
+across the entire ﬂame and are the same as that of ESR. The cosine similarity is above 0.9 for most of the locations, and the sensitivity magnitude is negligible when the cosine similarity is below
+0.9. In other words, a global similarity of the sensitivity direction is
+elucidated. Such global similarity has been previously observed in
+the homogenous auto-ignition system and one-dimensional burner
+stabilized ﬂame [20–22].
+To further elaborate the implications of the independence of
+sensitivity directions with locations in the ﬂame coordinate, Fig. 3a
+presents the changes of temperature at two distinct locations x1
+
+20
+
+W. Ji, T. Yang and Z. Ren et al. / Combustion and Flame 220 (2020) 16–22
+
+Fig. 3. (a) The temperature proﬁles of ﬂames with unperturbed and perturbed reactions in the ﬂame coordinate. (b) The evolution of the direction and magnitude of the
+temperature sensitivity with the distance to stagnation-point. The cosine similarity is computed with respect to the sensitivity direction of ESR. All results are computed
+under the strain rate of 500 1/s.
+
+Fig. 4. The evolution of the direction and magnitude of sensitivity of the ﬂame
+temperature with the progress variable and the strain rate. The cosine similarity is
+computed with respect to the sensitivity direction of ESR. The magnitude is normalized by the maximum magnitude across the entire ﬂame domain at each strain
+rate.
+
+and x2 . The independence implies that the ratio of the temperature
+changes T(x1 )/T(x2 ) is constant no matter what and how reaction rate constants are perturbed. The constant ratio will enable us
+to parameterize the uncertainties of the temperature proﬁles using a single random variable, which could potentially reduce the
+computational cost for uncertainty quantiﬁcations.
+We then present the sensitivity in the progress variable space
+for clear visualization since the compositions could change sharply
+in the narrow reaction zone. The progress variable c is deﬁned in
+terms of the temperature, i.e.,
+
+c=
+
+T − Tmin
+,
+Tmax (a ) − Tmin
+
+(3)
+
+where the maximum temperature Tmax changes with the strain
+rate a. The progress variable c is within the range of [0, 1]. The
+minimum temperature Tmin is the inlet temperature of 300 K.
+Figure 4 shows the evolution of sensitivity directions of the ﬂame
+temperature with progress variable at two representative strain
+rates. It again can be shown that the cosine similarity with ESR is
+higher than 0.9 in most of the high-temperature regime. It is noted
+that the cosine similarity deviates from unity when the progress
+variable is close to zero or is between 0.7 and 0.9. However, it
+is found that the magnitude of the sensitivity drastically reduces
+in the region where the cosine similarity deviates from unity, indicating that the local temperature is not sensitive to the kinetic
+parameters. In addition, the cosine similarity recovers to unity in
+
+the reaction zone, i.e., near c = 1. Therefore, evaluating the overall
+similarity across the progress variable based on the global sensitivity direction is still valid. Furthermore, the sensitivity direction
+of the ﬂame temperature is also approximately independent of the
+strain rate by comparing the evolutions at two distinct strain rates.
+These observations suggest that the temperature sensitivity direction keeps the same across the ﬂame in the ﬂow with various degrees of strain. Intuitively, the temperature sensitivity is a result of
+the sensitivity of heat release rate, and the changes of the ﬂame
+temperature due to ﬂame stretch do not alter the controlling reactions for heat release.
+Next, the evolution of the sensitivity direction of the species
+mass fractions with progress variable and strain rate are also studied for their relevance to emissions, as shown in Fig. 5. The sensitivity directions for major species, CH4 and CO (Figs. 5a and 5b,
+respectively), are also largely independent of the progress variable and are similar to the sensitivity direction of ESR. The sharp
+switching between positive and negative correlations corresponds
+to the local maximum species concentration [20]. The progress
+variable corresponding to the local maximum species concentration divides the ﬂame into two kinetic regimes. Take Fig. 5b as an
+example, the net production rate of CO is positive (produced) for
+c < 0.75, while it is negative (consumed) for c > 0.75, and thus CO
+concentration reaches maximum at c = 0.75. Thus, increasing the
+total reactivity will enhance CO production when c < 0.75, while
+enhance CO consumption when c > 0.75. Therefore, the sensitivity direction changes sign at local maximum concentration. The kinetic similarity is much weaker for the mass fraction of H radical
+compared to the temperature, and the less pronounced similarity
+could be attributed to the diffusion process [20]. While the diffusion process make the global similarity of all species less pronounced comparing with the homogenous ignition system in [20],
+the effect of diffusion on H radical is more signiﬁcant comparing
+to CH4 and CO, since H radical is one of the most important chain
+carriers and its diffusion is more pronounced due to the lighter
+molecular weight.
+Similar independence of the strain rate has been previously observed in the sensitivity directions of OH concentration in the simulation of a turbulent lifted ﬂame [5]. Therefore, the independence
+suggests that the sensitivity direction of ESR might be able to represent the sensitivity direction of the entire temperature ﬁeld for
+turbulent premixed ﬂames although a wide range of strain rates
+or scalar dissipation rates are involved in the ﬂow ﬁeld. Such representation could substantially accelerate the uncertainty quantiﬁcation of turbulent combustion simulations as demonstrated
+in [1].
+
+W. Ji, T. Yang and Z. Ren et al. / Combustion and Flame 220 (2020) 16–22
+
+21
+
+Fig. 5. The evolution of the sensitivity direction of species concentrations with the progress variable and strain rate. The cosine similarity is computed with respect to the
+sensitivity direction of ESR.
+
+Finally, we brieﬂy discuss how the universal sensitivity direction enables us to parameterize the uncertainties of hundreds
+of rate constants into one random variable, which is one of the
+key algorithms in [1]. Without loss of generality, let us assume
+that there are two rate constants, k1 and k2 , in the chemical
+model. Perturbing them by 1 and 2 , respectively, we can obtain
+three ﬂamelet proﬁles including the unperturbed one, as shown in
+Fig. 3a. By deﬁnition, the temperature changes at two distinct locations x1 and x2 can be calculated with the corresponding sensitivity coeﬃcients [s1, 1 , s2, 1 ] and [s1, 2 , s2, 2 ], and further related
+to the sensitivity directions [s
+1,1 , s
+2,1 ], [s
+1,2 , s
+2,2 ], as shown in
+Eqs. (4) and (5). Since there is a universal sensitivity direction
+across all locations, i.e., [s
+1,1 , s
+2,1 ] = [s
+1,2 , s
+2,2 ], we can then parameterize the high-dimensional kinetic uncertainty as a single
+random variable ξ , according to Eq. (6). Therefore, the temperature
+response at any location due to the perturbation is always proportional to ξ , as shown in Eqs. (7) and (8), with the difference in
+the sensitivity magnitude. Similarly, since the universal sensitivity
+direction is also valid for various strain rates, the temperature response at any strain rate is also always proportional to ξ .
+
+T ( x 1 ) = s 1 , 1 1 + s 2 , 1 2 =
+T ( x 2 ) = s 1 , 2 1 + s 2 , 2 2 =
+
+
+
+
+
+s21,1 + s22,1 (s
+1 , 1 1 + s
+2 , 1 2 )
+
+(4)
+
+
+s21,2 + s22,2 (s
+1 , 2 1 + s
+2 , 2 2 )
+
+(5)
+
+
+
+
+ξ = s
+1 , 1 1 + s
+2 , 1 2 = s
+1 , 2 1 + s
+2 , 2 2
+
+T ( x 1 ) =
+T ( x 2 ) =
+
+
+
+
+(6)
+
+s21,1 + s22,1 ξ
+
+(7)
+
+s21,2 + s22,2 ξ
+
+(8)
+
+In the context of ﬂamelet-based turbulent combustion simulations, the turbulent ﬂames can be represented as ensembles of
+laminar ﬂames under various strain rates. Since the sensitivity directions is independent of strain rate, one can imply that the entire turbulent ﬂame also has a universal sensitivity direction. The
+magnitude of the sensitivity at different locations can be eﬃciently
+computed by sampling along the one-dimensional random variable
+ξ . It has been demonstrated that the uncertainties of the 325 reaction rate constants in the GRI 3.0 model were quantiﬁed with only
+7 independent simulations with the rate constants varying along
+ξ [1]. Without assuming the universal sensitivity direction, direct
+Monte Carlo sampling would require at least 20 0 0 samples [1].
+The universal sensitivity direction could signiﬁcantly expedite
+the uncertainty quantiﬁcation of turbulent ﬂame simulations if
+there are low-dimensional manifolds in turbulent premixed ﬂames,
+such that we can use laminar ﬂamelets to estimate the sensitivity
+
+direction. While such assumption is usually valid in the wrinkled
+and corrugated ﬂamelet regimes, it is an open question whether
+the analysis still holds in the thin reaction zone and the broken
+reaction zone. We hope that current analysis can facilitate the research on uncertainty quantiﬁcation of turbulent ﬂames and provide an analysis framework to the community for future investigations.
+
+4. Conclusions
+We have shown that the kinetic sensitivity direction of extinction strain rate is similar to that of laminar ﬂame speed for various kinds of fuels, equivalence ratios, and pressures. The similarity is consistent with the ﬂame time scale analysis which shows
+that ﬂame extinction and propagation share similar chemical time
+scale although the ﬂame temperature at extinction is much lower.
+Furthermore, it is shown that the sensitivity direction of ﬂame
+proﬁles is largely independent of the strain rates and progress
+variable. Moreover, the sensitivity directions of temperature and
+species concentrations are similar to that of extinction strain rate.
+The behavior could be attributed to the fact that the controlling reactions that determine the sensitivities of temperature are not altered by the maximum ﬂame temperature. Therefore, the identiﬁed
+independence of sensitivity direction on strain rates and progress
+variable suggest that there exists a universal sensitivity direction
+in complex turbulent premixed ﬂames involving a wide range of
+strain rates and progress variables. Furthermore, the direction can
+be estimated as the sensitivity directions of extinction strain rate
+and laminar ﬂame speed. While the current study focuses on laminar premixed ﬂames, the analysis framework can be extended
+to nonpremixed ﬂames. These ﬁndings shall facilitate future algorithm development for sensitivity analysis and uncertainty quantiﬁcation of turbulent combustion simulations.
+
+Declaration of Competing Interest
+The authors declare that they have no known competing ﬁnancial interests or personal relationships that could have appeared to
+inﬂuence the work reported in this paper.
+
+Acknowledgments
+SD would like to acknowledge the support from the d’Arbeloff
+Career Development allowance at Massachusetts Institute of Technology. TY and ZR were supported by the National Natural Science
+Foundation of China 91841302.
+
+22
+
+W. Ji, T. Yang and Z. Ren et al. / Combustion and Flame 220 (2020) 16–22
+
+References
+[1] M.E. Mueller, G. Iaccarino, H. Pitsch, Chemical kinetic uncertainty quantiﬁcation for Large Eddy Simulation of turbulent nonpremixed combustion, Proc.
+Combust. Inst. 34 (1) (2013) 1299–1306.
+[2] H. Wang, D.A. Sheen, Combustion kinetic model uncertainty quantiﬁcation,
+propagation and minimization, Prog. Energy Combust. Sci. 47 (2015) 1–31.
+[3] W. Ji, Z. Ren, Y. Marzouk, C.K. Law, Quantifying kinetic uncertainty in turbulent combustion simulations using active subspaces, Proc. Combust. Inst. 37
+(2) (2019) 2175–2182.
+[4] X. Zhao, Y. Tao, T. Lu, H. Wang, Sensitivities of direct numerical simulations to
+chemical kinetic uncertainties: Spherical ﬂame kernel evolution of a real jet
+fuel, Combust. Flame 209 (2019) 117–132.
+[5] Z. Ren, S.B. Pope, Sensitivity calculations in PDF modelling of turbulent ﬂames,
+Proc. Combust. Inst. 32 (1) (2009) 1629–1637.
+[6] Z. Ren, S.B. Pope, Sensitivity calculations in PDF particle methods, Combust.
+Flame 153 (1–2) (2008) 202–215.
+[7] K. Braman, T.A. Oliver, V. Raman, Adjoint-based sensitivity analysis of ﬂames,
+Combust. Theory Model. 19 (1) (2015) 29–56.
+[8] S.G. Davis, A.B. Mhadeshwar, D.G. Vlachos, H. Wang, A new approach to response surface development for detailed gas-phase and surface reaction kinetic
+model optimization, Int. J. Chem. Kinet. 36 (2) (2003) 94–106.
+[9] C.K. Law, Combustion physics, Cambridge University Press, Cambridge, 2006.
+[10] F.N. Egolfopoulos, P.E. Dimotakis, Non-premixed hydrocarbon ignition at high
+strain rates, Symp. Combust. 27 (1) (1998) 641–648.
+[11] A.E. Long, R.L. Speth, W.H. Green, Ember: an open-source, transient solver for
+1D reacting ﬂow using large kinetic models, applied to strained extinction,
+Combust. Flame 195 (2018) 105–116.
+[12] Y. Dong, A.T. Holley, M.G. Andac, F.N. Egolfopoulos, S.G. Davis, P. Middha,
+H. Wang, Extinction of premixed H2 /air ﬂames: chemical kinetics and molecular diffusion effects, Combust. Flame 142 (4) (2005) 374–387.
+[13] R.J. Kee, J.A. Miller, H. Jefferson, T Chemkin, A general-purpose, problem-independent, transportable, fortran chemical kinetics code package, Sandia Labs,
+1980.
+[14] H. Hashemi, J.G. Jacobsen, C.T. Rasmussen, J.M. Christensen, P. Glarborg,
+S. Gersen, M. van Essen, H.B. Levinsky, S.J. Klippenstein, High-pressure oxidation of ethane, Combust. Flame 182 (2017) 150–166.
+[15] A.E. Long, R.L. Speth, W.H. Green, Numerical investigation of strained extinction at engine-relevant pressures: pressure dependence and sensitivity to
+chemical and physical parameters for methane-based ﬂames, Combust. Flame
+202 (2019) 318–333.
+[16] C. Ji, E. Dames, Y.L. Wang, H. Wang, F.N. Egolfopoulos, Propagation and extinction of premixed C5 -C12 n-alkane ﬂames, Combust. Flame 157 (2) (2010)
+277–287.
+[17] C. Ji, E. Dames, H. Wang, F.N. Egolfopoulos, Propagation and extinction of benzene and alkylated benzene ﬂames, Combust. Flame 159 (3) (2012) 1070–1081.
+[18] F.N. Egolfopoulos, C.K. Law, Chain mechanisms in the overall reaction orders in
+laminar ﬂame propagation, Combust. Flame 80 (1) (1990) 7–16.
+
+[19] E.S. Cho, S.H. Chung, T.K. Oh, Local karlovitz numbers at extinction for various
+fuels in counterﬂow premixed ﬂames, Combust. Sci. Technol. 178 (9) (2006)
+1559–1584.
+[20] I.G. Zsély, J. Zádor, T. Turányi, Similarity of sensitivity functions of reaction kinetic models, J. Phys. Chem. A 107 (13) (2003) 2216–2238.
+[21] J. Zádor, I.G. Zsély, T. Turányi, M. Ratto, S. Tarantola, A. Saltelli, Local and global
+uncertainty analyses of a methane ﬂame model, J. Phys. Chem. A 109 (43)
+(2005) 9795–9807.
+[22] I.G. Zsély, J. Zádor, T. Turányi, On the similarity of the sensitivity functions of
+methane combustion models, Combust. Theory Model. 9 (4) (2005) 721–738.
+[23] W. Ji, Z. Ren, C.K. Law, Evolution of sensitivity directions during autoignition,
+Proc. Combust. Inst. 37 (1) (2019) 807–815.
+[24] K. Kumar, C.J. Sung, Laminar ﬂame speeds and extinction limits of preheated
+n-decane/O2 /N2 and n-dodecane/O2 /N2 mixtures, Combust. Flame 151 (1–2)
+(2007) 209–224.
+[25] S.M. Sarathy, M.J. Thomson, C. Togbé, P. Dagaut, F. Halter, C. Mounaim-Rousselle, An experimental and kinetic modeling study of n-butanol combustion,
+Combust. Flame 156 (4) (2009) 852–864.
+[26] P.S. Veloo, Y.L. Wang, F.N. Egolfopoulos, C.K. Westbrook, A comparative experimental and computational study of methanol, ethanol, and n-butanol ﬂames,
+Combust. Flame 157 (10) (2010) 1989–2004.
+[27] A.T. Holley, Y. Dong, M.G. Andac, F.N. Egolfopoulos, Extinction of premixed
+ﬂames of practical liquid fuels: experiments and simulations, Combust. Flame
+144 (3) (2006) 448–460.
+[28] Y.L. Wang, A.T. Holley, C. Ji, F.N. Egolfopoulos, T.T. Tsotsis, H.J. Curran, Propagation and extinction of premixed dimethyl-ether/air ﬂames, Proc. Combust. Inst
+32 (1) (2009) 1035–1042.
+[29] K. Kumar, C.-.J. Sung, Flame propagation and extinction characteristics of neat
+surrogate fuel components, Energy Fuels 24 (7) (2010) 3840–3849.
+[30] Y.L. Wang, Q. Feng, F.N. Egolfopoulos, T.T. Tsotsis, Studies of C4 and C10 methyl
+ester ﬂames, Combust. Flame 158 (8) (2011) 1507–1519.
+[31] X. Hui, A.K. Das, K. Kumar, C.J. Sung, S. Dooley, F.L. Dryer, Laminar ﬂame
+speeds and extinction stretch rates of selected aromatic hydrocarbons, Fuel 97
+(2012) 695–702.
+[32] W. Xu, Y. Jiang, R. Qiu, X. Ren, Inﬂuence of halon replacements on laminar
+ﬂame speeds and extinction limits of hydrocarbon ﬂames, Combust. Flame 182
+(2017) 1–13.
+[33] N. Peters, Length scales in laminar and turbulent ﬂames, Numerical Approaches to Combustible Modelling, 135, American Institute of Aeronautics and
+Astronautics, Washington DC (1991), pp. 155–182.
+[34] B. Rogg, Response and ﬂamelet structure of stretched premixed methane/air
+ﬂames, Combust. Flame 73 (1) (1988) 45–65.
+[35] W. Ji, J. Wang, O. Zahm, Y.M. Marzouk, B. Yang, Z. Ren, C.K. Law, Shared low-dimensional subspaces for propagating kinetic uncertainty to multiple outputs,
+Combust. Flame 190 (2018) 146–157.
+[36] G.P. Smith, D.M. Golden, M. Frenklach, N.W. Moriarty, B. Eiteneer, M. Goldenberg, C.T. Bowman, R.K. Hanson, S. Song, W.C. Gardiner Jr, GRI 3.0 Mechanism.
+available at <www.me.berkeley.edu/gri_mech>.
+
+

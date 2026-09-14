@@ -1,0 +1,814 @@
+ARTICLE IN PRESS
+
+JID: PROCI
+
+[m;July 9, 2018;10:32]
+
+Available online at www.sciencedirect.com
+
+Proceedings of the Combustion Institute 000 (2018) 1–8
+www.elsevier.com/locate/proci
+
+Quantifying kinetic uncertainty in turbulent combustion
+simulations using active subspaces
+Weiqi Ji a, Zhuyin Ren a,∗, Youssef Marzouk b, Chung K. Law a,c
+a Center for Combustion Energy, Tsinghua University, Beijing 100084, China
+b Massachusetts Institute of Technology, Cambridge, MA 02139, USA
+c Department of Mechanical and Aerospace Engineering, Princeton University, Princeton, NJ 08544, USA
+
+Received 1 December 2017; accepted 26 June 2018
+Available online xxx
+
+Abstract
+Uncertainty quantification in expensive turbulent combustion simulations usually adopts response surface
+techniques to accelerate Monte Carlo sampling. However, it is computationally intractable to build response
+surfaces for high-dimensional kinetic parameters. We employ the active subspaces approach to reduce the
+dimension of the parameter space, such that building a response surface on the resulting low-dimensional
+subspace requires many fewer runs of the expensive simulation, rendering the approach suitable for various
+turbulent combustion models. We demonstrate this approach in simulations of the Cabra H2 /N2 jet flame,
+propagating the uncertainties of 21 kinetic parameters to the liftoff height. We identify a one-dimensional
+active subspace for the liftoff height using 84 runs of the simulations, from which a response surface with
+a one-dimensional input is built; the probability distribution of the liftoff height is then characterized by
+evaluating a large number of samples using the inexpensive response surface. In addition, the active subspace provides a global sensitivity metric for determining the most influential reactions. Comparison with
+autoignition tests reveals that the sensitivities to the HO2 -related reactions in the Cabra flame are promoted
+by the diffusion processes. The present work demonstrates the capability of active subspaces in quantifying
+uncertainty in turbulent combustion simulations and provides physical insights into the flame via the active
+subspace-based sensitivity metric.
+© 2018 The Combustion Institute. Published by Elsevier Inc. All rights reserved.
+Keywords: Uncertainty quantification; Active subspaces; Turbulent lifted flames; Autoignition
+
+1. Introduction
+Simulation of turbulent combustion is usually
+associated with uncertainties from the turbulent
+combustion model, the chemical kinetic model, the
+boundary conditions, etc. For example, detailed ki∗ Corresponding author.
+
+E-mail address: zhuyinren@tsinghua.edu.cn (Z. Ren).
+
+netic models for hydrocarbon fuels have a large set
+of elementary reactions with many rate constants
+which inevitably contain uncertainties. It remains
+an open question as whether the uncertainties in
+kinetic models can be small enough to satisfy the
+needs of combustion simulations with prescribed
+accuracy requirements.
+Uncertainty quantification (UQ) provides a
+set of methods to address the above question by
+
+https://doi.org/10.1016/j.proci.2018.06.206
+1540-7489 © 2018 The Combustion Institute. Published by Elsevier Inc. All rights reserved.
+
+Please cite this article as: W. Ji et al., Quantifying kinetic uncertainty in turbulent combustion simulations using active subspaces, Proceedings of the Combustion Institute (2018),
+https://doi.org/10.1016/j.proci.2018.06.206
+
+JID: PROCI
+
+2
+
+ARTICLE IN PRESS
+
+[m;July 9, 2018;10:32]
+
+W. Ji et al. / Proceedings of the Combustion Institute 000 (2018) 1–8
+
+quantifying the uncertainties in the models as well
+as the predictions, and usually consists of two steps.
+Take the kinetic uncertainty as an example. The
+first step, the so-called inverse problem [1–3], aims
+at quantifying the distribution of the model parameters based on experimental data under simplified
+flow conditions, such as the ignition delay time. The
+second step, usually referred to as the forward problem, with the combustion simulation being called
+the forward model, aims at quantifying the uncertainty in the predictions by propagating the above
+model uncertainties through combustion forward
+models. During this step, a large number of samples are drawn from the distribution of the model
+parameters characterized in the first step. Each
+sample corresponds to a set of model parameters,
+say the pre-factor A in the reaction mechanism, and
+the forward model is evaluated once for each sample. Consequently the statistics of the predictions
+from all of the samples can lead to the uncertainty
+in the prediction, such as its uncertainty interval.
+The forward problem has been studied for
+simple combustion problems [4–7], such as the
+0-D auto-ignition and the 1-D flame propagation.
+Most of the cited works employ non-intrusive
+methods with Monte Carlo (MC) method or its
+variation. Due to the slow convergence of MC, a
+large number of samples are required to reach convergence. To alleviate this computational challenge,
+various response surface techniques [7,8] have been
+adopted in conjunction with MC, in which one
+uses a few carefully selected runs of the expensive
+model to construct a cheaper response surface
+that is subsequently sampled for MC. However,
+building response surfaces requires a large number
+of runs of the expensive model when the number
+of input parameters is large. For high dimensional
+kinetic parameters, various methods have been
+used to reduce the dimension of the input parameter space. For example, local sensitivity analysis
+and screening methods have been used in [1,9] to
+identify the input parameters that contribute most
+to the uncertainties in the outputs. Subsequent response surface construction will then only involve
+these important parameters and requires much
+fewer runs of the expensive model.
+The present work focuses on the forward problem in turbulent combustion, in which the number
+of affordable simulations is more severely limited
+since it can take days to weeks for each sample.
+Recently, the active subspace (AS) dimension
+reduction method developed by Constantine et al.
+[10] has attracted considerable attention for UQ
+applications, and has been successfully applied to
+the simulations of autoignition and laminar flame
+speeds [11], and the turbulent combustion simulation of hypersonic scramjet engines [12]. Unlike
+the standard sensitivity analysis that identifies the
+important individual input parameters, the AS
+approach identifies the important directions in
+
+the input parameter space determined in terms
+of linear combinations of the input parameters.
+Since the direction is not constrained to be aligned
+with the canonical basis, the AS approach can lead
+to further dimension reduction. In [11], the AS
+method identified one-dimensional structure in
+the map from rate constants to the ignition delay
+time for hydrogen/air, methane/air mixtures and
+five-dimensional structure for dimethyl ether/air
+mixture under test conditions. In [12], the AS
+method identified one-dimensional structure in
+the map from seven input parameters of the operating conditions, such as the angle of attack and
+turbulence intensity, to the scramjet performance;
+thus the response surface of a single active variable
+derived from the seven inputs can be constructed.
+The total cost is much less than directly building
+a response surface of seven inputs. It also helps to
+understand and improve models by better visualizing the map from the high-dimensional inputs to
+outputs. As a byproduct, the active subspace also
+reveals the most sensitive parameters for the quantity of interest (QoI). Note that other dimension
+reduction approaches have also been exploited for
+turbulent combustion simulations. For example,
+Mueller et al. [13] developed a dimension reduction
+algorithm for flamelet-like models by decoupling
+the uncertainties in the flamelet table induced by
+kinetic uncertainty from the flow field. However,
+the algorithm is limited to flamelet-like models and
+the uncertainties induced by kinetic models. The
+AS approach is more general and it is suitable for
+propagating kinetic uncertainty as well as other
+types of uncertainty sources in the context of
+various turbulent combustion models.
+In this work, the active subspace method is
+for the first time demonstrated for propagating
+high dimensional kinetic uncertainty in turbulent
+combustion simulations; specifically, it is used to
+propagate the uncertainties in 21 rate constants to
+the liftoff height in the Cabra H2 /N2 jet flame [14].
+In the following, we shall first introduce the active
+subspace method, and then apply it to the Cabra
+flame simulations.
+2. Kinetic uncertainty and active subspace
+Following previous works [7,11], the rate constants are presumed to be independent lognormal
+distributions, and are centered and normalized as
+xj , which follows the standard normal distribution,
+ln k j /k j0
+xj = 1
+∼ N (0, 1 ), j = 1, . . . , d,
+ln UF j
+3
+
+(1)
+
+where kj is the jth reaction rate coefficient, kj0 and
+UFj are its nominal value and uncertainty factor.
+The number of elemental reactions is denoted as
+d, which is also the number of input parameters.
+The simulation inputs are then represented as a
+
+Please cite this article as: W. Ji et al., Quantifying kinetic uncertainty in turbulent combustion simulations using active subspaces, Proceedings of the Combustion Institute (2018),
+https://doi.org/10.1016/j.proci.2018.06.206
+
+ARTICLE IN PRESS
+
+JID: PROCI
+
+[m;July 9, 2018;10:32]
+
+W. Ji et al. / Proceedings of the Combustion Institute 000 (2018) 1–8
+
+d-dimensional random vector x = [x1 , . . . , xd ]T .
+We denote the distribution of x as π x . The deterministic forward combustion model map the
+inputs to the QoIs, and the map to a specific QoI
+is denoted as a function f(x).
+The active subspace methodology is detailed
+in [10] with algorithms, a rigorous error analysis,
+and demonstrations. Here we simply state the basic
+concepts. The AS method seeks an r-dimensional
+subspace in the d-dimensional parameter space
+that describes most of the variation of f. The idea
+is to find a low-dimensional approximation of f as
+f (x ) ≈ g(xr ), xr = S T x,
+
+(2)
+
+where g is a function of the r-dimensional input xr
+with r < d, and S is an orthogonal matrix of size
+d × r. The active subspace is defined as span{S}.
+One way to identify the active subspace is to perform an eigenvalue decomposition of the matrix
+C, defined as the expectation of the outer product
+of the gradient ∇f with itself, i.e.,
+C = ∫ ∇ f (x )∇ f (x )T πx (x )dx = W W T .
+
+(3)
+
+Note that C is symmetric, positive semi-definite,
+and of size d × d. The unitary matrix W consists
+of the d eigenvectors w1 , . . . , wd and  is a diagonal matrix whose components are the eigenvalues
+λ1 . . . λd , sorted in descending order. If there is a
+gap in the eigenvalues, meaning λr >> λr+1 , then
+the function f varies mostly along the first r eigenvectors and is almost constant along the rest of the
+eigenvectors. The first r eigenvectors are selected
+as active directions, i.e., S ≡ [w1 , . . . , wr ]; and its
+complement span{wr+1 , . . . , wd } is identified as the
+inactive subspace. Then one can build a response
+surface, RS(xr ), with xr as input, and it is chosen
+as the function g, i.e., f (x ) ≈ g(xr ) = RS(xr ).
+The matrix C can be approximated by MC simulations [10]. The number of runs M of the forward
+model required depends on how the gradient of f
+is evaluated, as discussed next.
+(I) In the first scenario, f and its gradient
+are evaluated simultaneously. Constantine
+et al. [10] have shown that M increases
+logarithmically with d, i.e., M = αβlog(d ).
+The constant α is the over-sampling factor
+and is recommended to be between 2 and
+10, and β is the largest dimension of the
+subspace allowed in the subsequent building
+of the response surface.
+(II) In the second scenario, since derivatives
+with respect to the kinetic parameters are
+often not available in legacy combustion
+codes, the gradients are estimated via finite
+difference methods and the evaluation of
+gradients in general takes d runs of the forward model. Thus M will scale with dlog(d),
+i.e., M = αβd log(d ).
+(III) In the third scenario, f is approximately
+linear with the inputs over the entire input
+
+3
+
+space, e.g., the integrated exit pressure with
+respect to the seven inputs in the scramjet
+simulation [12]. Then, the function has a
+one-dimensional active subspace, which can
+be estimated by global linear fitting through
+ordinary least square (OLS) [10], i.e.,
+f (x ) = bT x + b0 .
+
+(4)
+
+The active direction is given by w1 = b /b2 .
+For such a case, M linearly increases with d, i.e.,
+M = αd.
+In all scenarios, the error in the estimated eigenvalues and eigenvectors due to insufficient number
+of runs can be estimated with bootstrapping [12],
+in which M samples are resampled with replacement for hundreds of times from the runs already
+evaluated. Then eigen-decomposition is performed
+for each time of the resampling. The lower and upper bounds of the active subspace provide a good
+approximation to the error bounds in the computed active subspace. Once the active subspace
+is identified, various response techniques, such as
+polynomial fitting, Polynomial Chaos Expansion
+(PCE) [7] and High Dimensional Model Representation (HDMR) [8], can be readily applied to the
+low-dimensional active subspace. Depending on
+the degree of nonlinearity and coupling, PCE and
+HDMR are suitable for moderate dimensions of
+the input parameter space.
+The entire workflow for propagating the kinetic
+uncertainty to the QoI in turbulent combustion
+simulation will be: (1) Estimate the active subspace
+based on a small number, M, of samples drawn
+from π x . The function f and its gradient for each
+sample are evaluated by performing expensive
+simulations. (2) Build the response surface RS(xr )
+to the low-dimensional variable xr . (3) Estimate the
+distribution of the QoI by evaluating a large number, N, of the samples drawn from π x . The function
+f is acquired via the cheap response surface RS(xr ).
+It is worth noting that other dimension reduction methods, such as the basis adaptation method
+[15], could also be applied, especially if the distribution π x is non-Gaussian and sampling from it
+is difficult. A review of the relationship between
+the active subspace method and other subspace
+methods is given in [10]. Comparisons among
+different methods in the context of combustion
+simulations merit further studies.
+As a byproduct, the active subspace also reveals
+the global sensitivity of the QoI to the inputs [16],
+i.e., large components of the active direction correspond to the influential parameters. In addition,
+the active direction provides information on how
+the kinetic parameters are coupled with each other.
+T
+
+3. TPDF simulations of turbulent lifted jet flames
+The Cabra flame [14], which is a turbulent jet
+flame of H2 /N2 issued into a hot co-flow of lean
+
+Please cite this article as: W. Ji et al., Quantifying kinetic uncertainty in turbulent combustion simulations using active subspaces, Proceedings of the Combustion Institute (2018),
+https://doi.org/10.1016/j.proci.2018.06.206
+
+ARTICLE IN PRESS
+
+JID: PROCI
+
+4
+
+[m;July 9, 2018;10:32]
+
+W. Ji et al. / Proceedings of the Combustion Institute 000 (2018) 1–8
+Table 1
+The uncertainty factor for each elementary reaction in the Li mechanism.
+No.
+
+Reaction
+
+UF
+
+No.
+
+Reaction
+
+UF
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+
+H + O2 [=] O + OH
+O + H2 [=] H + OH
+H2 + OH [=] H2 O + H
+O + H2 O [=] OH + OH
+H2 + M [=] H + H + M
+O + O + M [=] O2 + M
+O + H + M [=] OH + M
+H + OH + M [=] H2 O + M
+H + O2 (+ M) [=] HO2 (+ M)
+HO2 + H [=] H2 + O2
+HO2 + H [=] OH + OH
+
+1.5
+1.3
+2
+1.5
+2
+2
+3
+2
+1.2
+2
+3
+
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+
+HO2 + O [=] O2 + OH
+HO2 + OH [=] H2 O + O2
+HO2 + HO2 [=] H2 O2 + O2
+HO2 + HO2 [=] H2 O2 + O2
+H2 O2 (+ M) [=] OH + OH (+ M)
+H2 O2 + H [=] H2 O + OH
+H2 O2 + H [=] HO2 + H2
+H2 O2 + O [=] OH + HO2
+H2 O2 + OH [=] HO2 + H2 O
+H2 O2 + OH [=] HO2 + H2 O
+
+1.2
+3
+2.5
+1.4
+2.5
+3
+2
+3
+2
+2
+
+combustion products, is employed to demonstrate
+the propagation of kinetic uncertainty through
+active subspace. Comprehensive investigations of
+this flame, such as the detailed comparison between calculations and measurement and the flame
+stabilization mechanism, etc., have been conducted
+in [17–19]. In addition, sensitivities to the coflow
+temperature and chemistry, etc. have been reported by using either divided difference [17–19] or
+particle-level sensitivity analysis [20]. However,
+these studies are limited to either the sensitivity
+with respect to different mechanisms or local sensitivities to individual reactions without accounting
+for the coupling between the kinetic parameters.
+The focus of this study is on the propagation
+of the kinetic uncertainty to the predicted liftoff
+height H using active subspace, and the global sensitivities with respect to the kinetic parameters. The
+flame is simulated using the transported probability
+density function method (TPDF) in conjunction
+with the standard k-ε model and enhanced wall
+treatment in Fluent. The constant C1 ε is adjusted
+from 1.44 to 1.6 for better jet spreading rate
+prediction. The Interaction-by-Exchange-withthe-Mean (IEM) model with Cϕ = 2.0 is employed
+for micromixing. The In Situ Adaptive Tabulation
+(ISAT) tolerance is εtol = 6.25 × 10−6 , which is
+sufficiently small for ensuring numerical accuracy
+according to the study in [17]. The coflow temperature is 1045 K if not otherwise specified. The
+rest of the solver settings and the computational
+domain are identical to those in [17]. A grid of 22k
+cells with 50 particles per cell is employed, which
+ensures grid independence as shown in Fig. 1b.
+The Li mechanism consisting of 21 elementary
+reactions [21] is employed with the temperature independent uncertainty factors being adopted from
+Konnov [22], as listed in Table 1. The predicted OH
+contour and mixture fraction profile are shown
+in Fig. 1, which demonstrates good agreement in
+the mixture fraction between the experimental and
+numerical results. As in [14], the liftoff height H
+is defined as the first axial location normalized by
+the diameter of the fuel jet, z/D, at which the Favre
+mean mass fraction of OH reaches a value of
+
+Fig. 1. (a) Contour plot of YOH from the base case. (b)
+Profiles of mixture fraction along the axial line from both
+simulation and experiment.
+
+2 × 10−4 . It is noted that the definition of lift-off
+height does not affect the conclusions drawn herein.
+Each TPDF run costs about 2000 CPU-hours using 48 Xeon-E5 processors. It is computationally
+infeasible to build a 21-dimensional response
+surface due to the large number of runs needed.
+Previous budget analysis [18] and sensitivity analysis [23] suggest that flame stabilization is mainly
+attributed to the auto-ignition process. Hence we
+first study the active subspace of the ignition delay
+(IDT) in 0-D autoignition processes at representative conditions of the Cabra flame. These 0-D tests
+can explore the level of linearity for H in the kinetic
+parameters space and thereafter the dimension of
+the active subspace for H in Cabra flame since they
+share the same dominant physical processes.
+
+4. Results
+4.1. Autoignition tests
+Wang and Pope [24] have shown that the composition of particles originating from the fuel
+jet evolves along the mixing line between the jet
+and coflow compositions before ignition, and the
+
+Please cite this article as: W. Ji et al., Quantifying kinetic uncertainty in turbulent combustion simulations using active subspaces, Proceedings of the Combustion Institute (2018),
+https://doi.org/10.1016/j.proci.2018.06.206
+
+JID: PROCI
+
+ARTICLE IN PRESS
+W. Ji et al. / Proceedings of the Combustion Institute 000 (2018) 1–8
+
+a
+
+b
+
+c
+
+Fig. 2. (a) The eigenvalues, (b) summary plot using 670
+samples (670 = 10 × 22 × log(d )) with gradient information, and (c) the pdf distribution of IDT[s] using
+N = 50,000 samples.
+
+ignition first occurs near mixture fraction ξ = 0.04.
+Consequently, the composition of ξ = 0.04 from
+the mixing line is chosen as the initial condition for
+the adiabatic, isobaric autoignition tests. The corresponding temperature is 1015.4 K and the mass
+fractions are YH2 = 9.9049 × 10−4 , YO2 = 0.1642,
+YH2 O = 0.0620 and YN2 = 0.7728. The gradient
+of the IDT to the rate constant is computed using
+finite difference. The IDT in log scale, instead of
+linear scale, is chosen as the QoI as it tends to be
+more linearly dependent on variations of the rate
+constants.
+The corresponding eigenvalues estimated using 670 samples are shown in Fig. 2a. It is seen
+that the first eigenvalue is larger than the second
+one by two orders of magnitude, implying the
+existence of a one-dimensional active subspace.
+This is further confirmed by the summary plot of
+
+[m;July 9, 2018;10:32]
+
+5
+
+Fig. 2b, showing the distribution of IDTs along
+the active variable, which is the projection of the
+vector of 21-dimensional input variables onto the
+one-dimensional active subspace, i.e., wT1 x. The
+IDTs lie close to a one-dimensional curve and the
+scattering in the direction orthogonal to the active
+direction is small. A one-dimensional response
+surface based on a 3rd order polynomial fitting can
+be built and is shown as the solid line in Fig. 2b.
+Then N = 50,000 samples are drawn and evaluated
+using the response surface. The resulting probability distribution function (pdf) of IDT, termed as
+MC + RS and shown in Fig. 2c, agrees very well
+with the one from directly evaluating each sample
+through autoignition integration with Cantera,
+termed as MC. The differences in the mean and
+standard deviation of IDT from the response of
+the two approaches are within 2%. This demonstrates the accuracy of the one-dimensional active
+subspace in propagating the kinetic uncertainty.
+The components of the active direction, i.e.,
+the first eigenvector, are shown in Fig. 3. The
+magnitude of each component provides a global
+sensitivity score for the individual reaction. As
+shown, the most sensitive reaction is R1, which
+is the major chain branching reaction for hydrogen/air ignition. Other important reactions are
+those related to HO2 , i.e., R9 and R11. Note that
+R9 is a chain termination reaction that inhibits
+ignition, while R11 is a chain branching reaction
+that promotes ignition. As such, the components
+of R1 and R11 have the opposite sign as that of
+R9. It is found that the active direction almost does
+not change for the most reactive mixtures of ξ between 0.02 and 0.06, indicating that it is invariant
+for the reactive mixtures of interest (not shown).
+Since it is computationally intractable to evaluate the gradient of the liftoff height H in the Cabra
+flame, global linear fitting with OLS is employed
+to identify the active direction. The adequacy of
+this approach is first investigated for the IDT. The
+estimated active direction and its error by using
+different numbers of samples are studied by bootstrapping. It is found that M = 4d = 84 samples
+are adequate for estimating the active direction.
+As shown in Fig. 3, the relative errors for the large
+components in magnitude are small, even though
+the fitting with OLS introduces certain errors
+(small in magnitude) for insignificant reactions
+due to the limited samples. Overall, the estimated
+active direction is very close to the accurate one
+from Eq. (3) using function gradients with an inner
+product of 0.99.
+4.2. The Cabra flame
+Based on the autoignition tests, the lift-off
+length in log-scale for the Cabra flame is expected
+to have a one-dimensional active subspace. The
+log(H) is assumed to be nearly linearly dependent
+
+Please cite this article as: W. Ji et al., Quantifying kinetic uncertainty in turbulent combustion simulations using active subspaces, Proceedings of the Combustion Institute (2018),
+https://doi.org/10.1016/j.proci.2018.06.206
+
+JID: PROCI
+
+6
+
+ARTICLE IN PRESS
+
+[m;July 9, 2018;10:32]
+
+W. Ji et al. / Proceedings of the Combustion Institute 000 (2018) 1–8
+
+Fig. 3. Components of the first eigenvector for the autoignition tests computed with gradient and OLS. Also shown are
+the components of the active direction for the liftoff height H in the Cabra flame.
+
+a
+
+b
+
+Fig. 4. (a) Summary plot and (b) pdf distribution of log(H). Blue square symbols in (a) are from three additional runs of
+the simulation collected to improve the performance of the response surface at the boundary of the parameter space.
+
+on the change of the rate constants, and the active
+direction is computed using OLS with 84 samples
+(M = 4d). The summary plot is shown in Fig. 4a.
+The identified one-dimensional active subspace
+captures most of the variations of H. Similar
+to the case of IDT, the small variation in other
+directions results from the error in the estimated
+active subspace due to insufficient number of
+samples. The response surface, based on secondorder polynomial fitting is also shown in Fig. 4a.
+The R-square value of the fitting is 0.97, which
+suggests that the fitting error is sufficiently small
+for the present application. Then 50,000 samples
+are drawn and evaluated using the second-order
+polynomial fitting. The resulting pdf of log (H) is
+shown in Fig. 4b. The mean of log(H) is 0.67 or
+H = 4.6. The 95% confidence interval of H is [1.1,
+28.3], which covers the measured 10D.
+
+The components of the active direction in
+Cabra flame are shown in Fig. 3. Compared to
+the ones of IDT, the sensitivities to the reactions
+R11 and R13 are promoted while R1 is relatively
+weakened in the Cabra flame. Both reactions R11
+and R13 are the major consumption reactions of
+HO2 . According to the budget analysis in [18], the
+diffusion term leads to the presence of high concentration HO2 ahead of the flame stabilization zone,
+which accounts for the promoted sensitivity of the
+HO2 consumption reactions. It can also explain
+the promoted sensitivity of R3. However, given the
+uncertainty associated, the conclusion is weak, as
+the change is less significant than R11 and R13.
+Nevertheless, the top sensitive reactions, e.g., R1,
+R9, and R11 remain the same, and the active directions between H and IDT are quite similar to each
+other, with an inner product of 0.91. This therefore
+
+Please cite this article as: W. Ji et al., Quantifying kinetic uncertainty in turbulent combustion simulations using active subspaces, Proceedings of the Combustion Institute (2018),
+https://doi.org/10.1016/j.proci.2018.06.206
+
+JID: PROCI
+
+ARTICLE IN PRESS
+W. Ji et al. / Proceedings of the Combustion Institute 000 (2018) 1–8
+
+suggests that one can first study the cheap test cases
+to estimate the dimension and large components
+of the active subspace for the expensive turbulent
+flame simulations, if the test cases and the turbulent flame simulations share the same dominant
+physics. The similarity in dominant physical processes can be analyzed via various computational
+diagnostic tools such as budget analysis [18] and
+Lagrangian tracking [24] referred to above. The
+number of required runs of the model to accurately
+estimate the active subspace can also be estimated
+in the test cases. In addition, one can identify the
+unimportant parameters based on the test cases,
+and exclude them when identifying the active
+subspace for the expensive model. This will result
+in fewer samples needed for the expensive model,
+as M is at least linearly increases with the number
+of parameters. However, as shown in Fig. 3, the
+insensitive reactions for IDT can be promoted by
+the diffusion process in the Cabra flame. To be
+conservative, a sufficiently small threshold should
+be chosen to determine the insensitive reactions.
+Since the number of parameters for the hydrogen
+mechanism is relatively small, determination of the
+threshold is unnecessary for the present work; and
+is subject to future study for larger mechanisms.
+Previous studies [19,20] have also shown that
+H is very sensitive to the co-flow temperature Tc ,
+such that a decrease of 10 K in Tc can double
+H. The change of Tc can lead to the change of
+reaction rates ahead of the flame zone. It can also
+change the maximum temperature in the flame
+zone as well as the relevant characteristics of the
+flame, such as the flame speed. To study how Tc
+affects H, a simulation under Tc = 1031 K is
+performed. The Tc of 1031 K is chosen as the
+predicted H = 9.75 is very close to the measured
+10D. Then the effect of different Tc on the rate
+constant under ξ = 0.04 is scaled to the changes
+of the pre-factor A, and is further scaled to the
+input parameter x. Specifically, the rate constants
+are evaluated at the temperatures corresponding
+to the mixture fraction of 0.04 from the mixing
+line, i.e., 1015.4 K for Tc = 1045 K and 1002 K
+for Tc = 1031 K, respectively. Previous Lagrangian
+analysis [24] shows that the composition state is
+attained to the mixing line before ignition, thus
+this characteristic temperature can represent the
+global influence of the co-flow temperature on the
+flame. The corresponding centered and normalized
+x and H, shown in Fig. 4a, demonstrate excellent
+consistency with the active subspace for the rate
+constants. This suggests that the effect of Tc is
+mainly through changing the rate constant ahead
+of the flame zone. It also questions the common
+approaches to match H by adjusting Tc . To make
+further judgment about the major uncertainty
+source, one can conduct the inverse problem mentioned in the introduction to reduce the uncertainty
+in the mechanism. As the active directions for H
+
+[m;July 9, 2018;10:32]
+
+7
+
+Fig. 5. Summary plot of temperature and YH2 O against
+the active direction of log(H).
+
+and IDT are similar, a small number of experimental datasets of IDT can significantly reduce the
+uncertainty in the predicted IDT as well as H.
+It is also interesting to study the active subspace
+of the temperature and species profiles. However,
+these profiles tend to be extremely nonlinear and
+the OLS is not suitable here. While it is infeasible
+to compute their active subspace with the collected
+samples above, we can easily check whether the
+active subspace for the liftoff height can explain
+the variations of these profiles. The summary plot
+of temperature T and major product of H2 O from
+the location z/D = 10, r/D = 1 against the active
+direction of H is presented in Fig. 5. It is seen that
+the active subspace of H can capture the major
+trend of T and YH2 O . Compared to the variation
+of H in Fig. 4a, T and YH2 O only change when
+z/D = 10, r/D = 1 is close to the flame stabilization
+zone, i.e., H is close to 10. Therefore, the species
+profiles and liftoff height H are most likely to share
+the same active subspace and be correlated in terms
+of the response to the kinetic parameters. Such
+similarity can be used to estimate the uncertainty
+of the species profiles.
+
+5. Conclusions
+The active subspace approach is applied to
+propagate 21 kinetic parameters to the liftoff height
+H in the TPDF simulation of the Cabra H2 /N2
+lifted flame. We first identified a one-dimensional
+active subspace based on 84 runs of the simulation.
+Then a one-dimension response surface is built.
+Finally, the distribution of H is characterized
+by evaluating 50,000 samples using the response
+surface, showing that kinetic uncertainty alone
+is large enough to account for the discrepancies
+between the measurements and simulations.
+
+Please cite this article as: W. Ji et al., Quantifying kinetic uncertainty in turbulent combustion simulations using active subspaces, Proceedings of the Combustion Institute (2018),
+https://doi.org/10.1016/j.proci.2018.06.206
+
+JID: PROCI
+
+8
+
+ARTICLE IN PRESS
+
+[m;July 9, 2018;10:32]
+
+W. Ji et al. / Proceedings of the Combustion Institute 000 (2018) 1–8
+
+The present work demonstrates the capability
+of active subspace in revealing the effect of flowchemistry in turbulent combustion simulations.
+The identified active subspace for H is compared
+with that for the ignition delay under flame conditions, and they are generally similar to each other
+with the most sensitive reactions being the same.
+The difference reveals that the sensitivity of the
+HO2 consumption reactions is promoted due to
+the diffusion process in the Cabra flame. As the
+results indicate that the diffusion process alters the
+sensitivities of the HO2 consumption reactions,
+future work might include transport parameters
+as an additional uncertainty source to investigate
+the effect of flow-chemistry interaction more
+conclusively.
+Compared to previous work on the uncertainties of the operating conditions [12], the kinetic uncertainty has higher dimensions and is more challenging. In addition, the simple zero/one-D simulations share the same kinetic uncertainty inputs with
+the turbulent combustion simulations, and as such
+are used to estimate the active subspace in turbulent
+flames. The identification of active subspaces via
+inexpensive surrogate models is a potential effective
+solution for expensive turbulent combustion simulations with large mechanisms or strongly nonlinear response. The approach is open to other types
+of flame and various turbulent combustion models.
+Acknowledgments
+This work was supported by the National Natural Science Foundation of China Nos. 91441202
+and 51476087.
+References
+[1] M. Frenklach, H. Wang, M.J. Rabinowitz, Prog. Energy Combust. Sci. 18 (1992) 47–73.
+
+[2] H. Wang, D.A. Sheen, Prog. Energy Combust. Sci. 47
+(2015) 1–31.
+[3] K. Braman, T.A. Oliver, V. Raman, Combust. Theory
+Model. 17 (2013) 858–887.
+[4] B.D. Phenix, J.L. Dinaro, M.A. Tatang, et al., Combust. Flame 112 (1998) 132–146.
+[5] M.T. Reagan, H.N. Najm, R.G. Ghanem,
+O.M. Knio, Combust. Flame 132 (2003) 545–555.
+[6] I.G. Zsély, J. Zádor, T. Turányi, Proc. Combust. Inst.
+30 (2005) 1273–1281.
+[7] D.A. Sheen, X. You, H. Wang, T. Løvås, Proc. Combust. Inst. 32 (2009) 535–542.
+[8] M.J. Davis, R.T. Skodje, A.S. Tomlin, J. Phys. Chem.
+A 115 (2011) 1556–1578.
+[9] G. Esposito, B. Sarnacki, H. Chelliah, Combust. Theory Model. 16 (2012) 1029–1052.
+[10] P.G. Constantine, E. Dow, Q. Wang, SIAM J. Sci.
+Comput. 36 (2014) A1500–A1524.
+[11] W. Ji, J. Wang, O. Zahm, et al., Combust. Flame 190
+(2018) 146–157.
+[12] P.G. Constantine, M. Emory, J. Larsson, G. Iaccarino, J. Comput. Phys. 302 (2015) 1–20.
+[13] M.E. Mueller, G. Iaccarino, H. Pitsch, Proc. Combust. Inst. 34 (2013) 1299–1306.
+[14] R. Cabra, T. Myhrvold, J.Y. Chen, R.W. Dibble,
+A.N. Karpetis, R.S. Barlow, Proc. Combust. Inst. 29
+(2002) 1881–1888.
+[15] R. Tipireddy, R. Ghanem, J. Comput. Phys. 259
+(2014) 304–317.
+[16] P.G. Constantine, P. Diaz, Reliab. Eng. Syst. Saf. 162
+(2017) 1–13.
+[17] A. Masri, R. Cao, S. Pope, G. Goldin, Combust.
+Theor. Model. 8 (2004) 1–22.
+[18] R.L. Gordon, A.R. Masri, S.B. Pope, G.M. Goldin,
+Combust. Theory Model. 11 (2007) 351–376.
+[19] R.R. Cao, S.B. Pope, A.R. Masri, Combust. Flame
+142 (2005) 438–453.
+[20] Z. Ren, S.B. Pope, Proc. Combust. Inst. 32 (2009)
+1629–1637.
+[21] J. Li, Z. Zhao, A. Kazakov, F.L. Dryer, Int. J. Chem.
+Kinet. 36 (2004) 566–575.
+[22] A.A. Konnov, Combust. Flame 152 (2008) 507–528.
+[23] S.M. Mir Najafizadeh, M.T. Sadeghi, R. Sotudeh-Gharebagh, D.J.E.M. Roekaerts, Combust. Flame
+160 (2013) 2928–2940.
+[24] H. Wang, S.B. Pope, Combust. Theory Model. 12
+(2008) 857–882.
+
+Please cite this article as: W. Ji et al., Quantifying kinetic uncertainty in turbulent combustion simulations using active subspaces, Proceedings of the Combustion Institute (2018),
+https://doi.org/10.1016/j.proci.2018.06.206
+View publication stats
+
+

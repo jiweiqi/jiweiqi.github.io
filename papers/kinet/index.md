@@ -1,0 +1,47 @@
+# KiNet: A Deep Neural Network Representation of Chemical Kinetics
+
+Weiqi Ji, Sili Deng
+
+arXiv, 2021. Preprint.
+
+DOI: https://doi.org/10.48550/arxiv.2108.00455
+
+Canonical page: https://jiweiqi.github.io/papers/kinet/
+
+## Abstract
+
+Deep learning is a potential approach to automatically develop kinetic models from experimental data. We propose a deep neural network model of KiNet to represent chemical kinetics. KiNet takes the current composition states and predicts the evolution of the states after a fixed time step. The long-period evolution of the states and their gradients to model parameters can be efficiently obtained by recursively applying the KiNet model multiple times. To address the challenges of the high-dimensional composition space and error accumulation in long-period prediction, the architecture of KiNet incorporates the residual network model (ResNet), and the training employs backpropagation through time (BPTT) approach to minimize multi-step prediction error. In addition, an approach for efficiently computing the gradient of the ignition delay time (IDT) to KiNet model parameters is proposed to train the KiNet against the rich database of IDT from literature, which could address the scarcity of time-resolved species measurements. The KiNet is first trained and compared with the simulated species profiles during the auto-ignition of H2/air mixtures. The obtained KiNet model can accurately predict the auto-ignition processes for various initial conditions that cover a wide range of pressures, temperatures, and equivalence ratios. Then, we show that the gradient of IDT to KiNet model parameters is parallel to the gradient of the temperature at the ignition point. This correlation enables efficient computation of the gradient of IDT via backpropagation and is demonstrated as a feasible approach for fine-tuning the KiNet against IDT. These demonstrations shall open up the possibility of building data-driven kinetic models autonomously. Finally, the trained KiNet could be potentially applied to kinetic model reduction and chemistry acceleration in turbulent combustion simulations.
+
+## Research summary
+
+Represents time-stepping chemical kinetics with a residual neural network and multi-step training, with ignition-delay gradients for model refinement.
+
+使用残差网络与多步训练表示化学动力学演化，并利用点火延迟梯度改进模型。
+
+Keywords: KiNet, neural surrogates, BPTT, ignition delay
+
+## Resources
+
+- [PDF](https://jiweiqi.github.io/papers/kinet/paper.pdf)
+- [Extracted full text](https://jiweiqi.github.io/papers/kinet/fulltext.txt)
+- [BibTeX](https://jiweiqi.github.io/papers/kinet/citation.bib)
+
+## Sources
+
+- https://doi.org/10.48550/arxiv.2108.00455
+- https://arxiv.org/abs/2108.00455
+
+## Citation
+
+```bibtex
+@misc{kinet2021,
+  title = {{KiNet: A Deep Neural Network Representation of Chemical Kinetics}},
+  author = {Weiqi Ji and Sili Deng},
+  year = {2021},
+  howpublished = {arXiv},
+  doi = {10.48550/arxiv.2108.00455},
+  eprint = {2108.00455},
+  archivePrefix = {arXiv},
+  url = {https://jiweiqi.github.io/papers/kinet/}
+}
+```

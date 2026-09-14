@@ -1,0 +1,1214 @@
+Combustion and Flame 227 (2021) 135–146
+
+Contents lists available at ScienceDirect
+
+Combustion and Flame
+journal homepage: www.elsevier.com/locate/combustflame
+
+Uncertainty analysis in mechanism reduction via active subspace and
+transition state analyses
+Xingyu Su a, Weiqi Ji a, Zhuyin Ren a,b,∗
+a
+b
+
+Center for Combustion Energy, Tsinghua University, Beijing 100084, China
+Institute for Aero Engine, Tsinghua University, Beijing 100084, China
+
+a r t i c l e
+
+i n f o
+
+Article history:
+Received 19 March 2020
+Revised 24 December 2020
+Accepted 29 December 2020
+
+Keywords:
+Mechanism reduction
+Uncertainty quantiﬁcation
+Active subspace
+Transition state
+
+a b s t r a c t
+A systematic approach is formulated for the uncertainty analysis of kinetic parameters on combustion
+characteristics during skeletal reduction. The active subspace method together with sensitivity analysis
+is ﬁrst employed to identify extreme low-dimensional active subspace of input parameter space and
+to facilitate the construction of response surfaces with small size of samples. An intermediate transition state during reduction is then deﬁned such that the uncertainty change arising from uncertainty
+parameter truncation and reaction coupling during reduction can be decoupled and quantiﬁed. The approach is demonstrated in the reduction of a 55-species, 290-reaction dimethyl ether (DME) mechanism,
+with the rate constants characterized by independent lognormal distribution. Three representative skeletal mechanisms are identiﬁed for the uncertainty analysis, with each of the subsequent reduction yielding
+signiﬁcant errors in the single-stage and/or two-stage DME-air auto-ignition process. Results show that
+sensitivity analysis can reduce the number of kinetic parameters from 290 down to 32, and the active
+subspace method can further identify a dominant active direction within this 32-dimensional subspace,
+which greatly facilitates the polynomial ﬁtting for constructing the response surface of the ignition delay
+times. The uncertainty analysis with the polynomial chaos expansion method shows that the reduction
+from DME42 with 42 species to DME40 with 40 species has inﬂuential effect on the high-temperature
+reaction pathway; while the reduction from DME55 to DME42 and from DME40 to DME30 mainly affects
+the low-temperature pathway. In addition, the uncertainty change associated with parameter truncation
+is shown to be proportional to the change in the most active direction, which could further accelerate
+uncertainty analysis.
+© 2021 The Combustion Institute. Published by Elsevier Inc. All rights reserved.
+
+1. Introduction
+Predictive reacting ﬂow simulations often require well-designed
+chemical kinetics models as a foundation. Over the past several
+decades, substantial advance of detailed chemical mechanisms
+for hydrocarbon fuels has been made, and the number of species
+and chemical reactions involved has dramatically increased with
+the corresponding increase in the complexity of fuel molecules
+considered [1]. Accuracy of such kinetic models can be assured,
+in principle, by systematic studies of individual rate coeﬃcients.
+However, many sources embedded with experimental uncertainties in the rate parameters inevitably bring uncertainties into the
+kinetics models. The uncertainty quantiﬁcation (UQ) of chemical
+kinetics on the prediction of quantities of interests (QoIs) such as
+∗
+Corresponding author at: Center for Combustion Energy, Tsinghua University,
+Beijing 10 0 084, China.
+E-mail address: zhuyinren@tsinghua.edu.cn (Z. Ren).
+
+ignition delay times (IDTs) and laminar ﬂame speeds in simple
+reactors and ﬂames have been systematically studied [2]. Response surface methods such as those in high dimensional model
+representation (HDMR) [3,4] and polynomial chaos expansion
+(PCE) [5,6] have been employed to accelerate the uncertainty
+quantiﬁcation (UQ) process.
+The propagation of kinetic uncertainty in mechanism reduction
+and the subsequent turbulent combustion simulations has been
+gaining increasing attention [7,8]. The presence of a large number of species and a wide range of chemical time scales makes
+it expensive to directly apply detailed mechanisms in multidimensional simulations. Skeletal mechanisms for hydrocarbon
+fuels, which consist of a small subset of species and reactions from
+detailed ones to capture the dominant reaction pathways, can now
+be systematically obtained through the methods of directed relation graph (DRG) [9], computational singular perturbation (CSP)
+[10], sensitivity analysis [11,12], etc. Over the past years, much
+attention has been drawn on the accuracy comparison for the
+
+https://doi.org/10.1016/j.combustﬂame.2020.12.053
+0010-2180/© 2021 The Combustion Institute. Published by Elsevier Inc. All rights reserved.
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+QoIs, between the detailed and skeletal ones with ﬁxed kinetic
+parameters.
+In view of the above considerations, it is of both scientiﬁc and
+practical interests to investigate the dependence of uncertainty in
+the prediction of QoIs on the elimination of species and reactions
+during the reduction process; in other words, the dependence of
+uncertainty on the size of skeletal mechanisms. Xin et al. [8] ﬁrst
+studied this dependence by analyzing the uncertainty change in
+the skeletal reduction of n-butane and i-butane mechanisms, in
+which sensitivity analysis is employed to identify the important
+reactions and thus reduce the number of kinetic parameters for
+propagating uncertainty. It is revealed that the uncertainty decreases monotonically with the model size only when the coupling
+among reactions is weak. Note that sensitivity analysis alone in
+[8] can only reduce the number of important kinetic parameters to
+10–30, which is still computationally intractable as the computational models for QoIs are expensive. Moreover, the analysis with
+PCE coeﬃcients employed cannot decouple the uncertainty sources
+from parameter truncation and reaction coupling explicitly.
+In this study, the methods of active subspace and transition
+state analysis are proposed for the eﬃcient and quantitative
+uncertainty analysis in mechanism reduction. The active subspace
+method together with sensitivity analysis is employed to identify
+low-dimensional active subspace of the input parameter space
+and to construct the response surface with suﬃciently small size
+of samples. To quantify the uncertainty change during skeletal
+reduction, an intermediate “transition state” during reduction is
+deﬁned, in which the truncated reactions are maintained but with
+their uncertainties in kinetic parameters being neglected, such
+that the uncertainty change is decoupled into contributions from
+parameter truncation and reaction coupling, respectively. That is,
+the transition state has the same set of species and reactions as
+the detailed one, but the kinetic parameters for the truncated
+reactions during reduction are ﬁxed at the nominal values without
+accounting for uncertainties. The uncertainty analysis will be
+demonstrated in the skeletal reduction of a 55-species dimethyl
+ether (DME) mechanism [13].
+
+DRG method are employed for the convenience of demonstration, and the proposed approach is applicable to other detailed
+mechanisms and skeletal reduction methods. The DRG eliminates
+unimportant species through reaction ﬂux analysis. For a given
+thermochemical state, the pair-wise correlation coeﬃcient rA,B is
+calculated to quantify the inﬂuence of eliminating species B on
+the reaction rate of species A,
+
+rAB ≡
+
+max |νA,i ωi δB,i |
+max |νA,i ωi |
+
+
+
+δB,i =
+
+1
+0
+
+(1)
+
+ith reaction involves B
+otherwise
+
+where ωi is the net reaction rate of the ith reaction and νA,i is the
+stoichiometric coeﬃcient of species A in the ith reaction. Species B
+is regarded as important to species A if rAB > εDRG and cannot be
+eliminated if species A is important. Species strongly coupled, to
+the user-speciﬁed search initiating or starting species, directly or
+indirectly, are retained in the skeletal mechanism. More algorithm
+details are given in [9].
+Note that model uncertainty and model reduction are inherently coupled with each other if one also considers the
+uncertainties in kinetic parameters during mechanism reduction,
+as detailed in [14]. One possible approach for considering parameter uncertainties during DRG reduction is to generate samples
+in the parameter space and obtain a weighted rAB with a proper
+ﬁlter. Then skeletal reduction can be performed based on the
+weighted rAB . Recall that the focus of this study is not to formulate
+a reduction method that accounts for parameter uncertainty and
+mechanism reduction is currently performed at nominal kinetic
+parameters without accounting for their uncertainties.
+The DRG method uses representative thermochemical data
+for reaction ﬂux analysis, which may draw from solutions of
+auto-ignition, perfectly stirred reactors and laminar premixed
+ﬂames etc., under relevant conditions [9]. In this study, the sample
+compositions for DRG reduction are obtained from the autoignition of DME/air mixtures with the DME55 mechanism covering
+the conditions of 650K≤ T0 ≤1200 K, 1 atm ≤ p ≤ 20 atm, and
+0.5 ≤ φ ≤ 1.5. With a given reduction threshold εDRG , a skeletal
+mechanism consists of all the retained species and reactions from
+individual sample compositions. In the reduction process, the
+QoI considered is the ignition delay time (IDT) that has practical
+importance especially in internal combustion engines. DME is one
+of the simplest hydrocarbons exhibiting the negative temperature
+coeﬃcient behavior [15-17]. It is employed for demonstrating the
+uncertainty propagation in the reduction of hydrocarbon mechanisms with complex dynamics. Note that even though the sample
+data from autoignition processes are employed for DRG reduction,
+the skeletal mechanisms obtained are also validated with laminar
+premixed ﬂames in Section 3. The uncertainty analysis approach
+is general and could be applied to other reduction methods with
+different representative sample thermochemical data.
+
+2. Methodology
+In this section, the four major components for uncertainty
+propagation in mechanism reduction are described. Skeletal reduction with DRG is ﬁrst brieﬂy reviewed for the generation of a
+series of skeletal mechanisms for uncertainty analysis, followed by
+the description of uncertainty characterization of kinetic parameters. The kinetic parameter reduction via active subspace method
+is then introduced to accelerate the uncertainty propagation from
+the parameter space to the QoI space. With uncertainties of the
+detailed and skeletal models acquired, the uncertainty analysis via
+transition state is elaborated in Section 2.4.
+2.1. Skeletal mechanism reduction
+The 55-species, 290-reaction dimethyl ether (DME) mechanism
+of Zhao et al. [13] is used as an example to illustrate the uncertainty analysis in mechanism reduction. In this study, mechanism
+reduction is performed at the nominal kinetic parameters, then
+the uncertainty propagations for the QoIs are analyzed among
+the mechanisms with different levels of details. That is, model
+reduction and model uncertainty analysis are decoupled for the
+convenience of analysis. It is also worth mentioning that this study
+is of practical interest for the mechanism reduction methods that
+account for model uncertainties since it is necessary to analyze
+uncertainty changes during the reduction process.
+The DRG method [9] is employed to generate representative
+skeletal mechanisms of different sizes. Note that DME55 and the
+
+2.2. Uncertainty characterization of kinetic parameters
+For homogeneous adiabatic, isochoric autoignition, the set of
+governing ordinary differential equations (ODEs) can be rewritten
+in a compact form as
+
+dϕ
+= F (ϕ ; k )
+dt
+
+(2)
+
+where ϕ (t ), of dimension Ns + 1, is the composition vector consisting of species molar concentrations and temperature, and k, of dimension d, is the vector of forward reaction rate constants of the d
+elementary reactions involved in a mechanism. See Appendix A for
+more details. Eq. (2) is integrated with a stiff ODE solver in Cantera
+136
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+[18] with a given chemical mechanism. The IDT, τ , is deﬁned as the
+time instance when the temperature gradient reaches maximum.
+With a given distribution for the rate constants k, the PDF distribution of the QoI can be obtained and it is very often characterized
+by the mean value and its uncertainty, i.e., root mean square value.
+Uncertainties in Arrhenius parameters A, b and Ea are systematically studied in [19,20] and the uncertainties of rate coeﬃcient
+k from the pre-exponential factor and activation energy are in the
+same order and correlate well to each other. Thus, in this study
+only the uncertainty in A factor is considered and modeled by
+the uncertainty factor UF for the demonstration of uncertainty
+propagation in mechanism reduction. Furthermore, the method
+developed can be applied to the uncertainties in temperature
+exponent and activation energy if needed.
+Following [6,21], the rate constants in this study are assumed
+to be independent log-normal distributions. Once centered and
+normalized as xi , they follow the standard normal distributions,
+
+where S f ull is the full sensitivity vector and Simp only consists of
+the components corresponding to the important reactions. In this
+study, for a given mechanism, a minimum set of most sensitive
+reactions are ﬁrst obtained for each thermochemical condition,
+which maintains the magnitude of the selected sensitivity vector
+being no smaller than 99% of that for the full one. The ﬁnal
+set of important reactions for a given mechanism is the union
+of all the sensitive reactions for itself and its derived skeletal
+mechanisms under all thermochemical conditions. Therefore, the
+important reactions identiﬁed have accounted for the wide range
+of thermochemical conditions. At the meantime the truncation
+error S is kept smaller than 1% for each mechanism under all
+tested thermochemical conditions. With sensitivity analysis, for the
+DME55 mechanism, only 32 out of the 290 reactions are identiﬁed
+as important (see Appendix B), which signiﬁcantly reduces the
+cost for subsequent active subspace analysis.
+
+ln k /k
+xi = 1 i i0 ∼ N (0, 1 ), i = 1, . . . , d
+ln UFi
+3
+
+2.3.1. Active subspace and Monte Carlo sampling
+The active subspace method, as detailed in [22,25], seeks an
+r-dimensional subspace that describes most of the variation of
+function f . The idea is to ﬁnd a low-dimensional approximation of
+f as
+
+(3)
+
+where ki is the ith reaction rate coeﬃcient, ki0 and UFi are its
+nominal value and uncertainty factor, d is the number of elementary reactions and is also the dimension of the original input
+parameter space. The simulation inputs are then represented as a
+d-dimensional random vector x = [x1 , . . . , xd ]T . Denote the distribution of x as πx , which follows the multi-dimensional normal
+distribution. The deterministic forward combustion model maps
+the input parameters to the QoIs, and the map to a speciﬁc QoI is
+denoted as a function f (x ). For the autoignition study, the forward
+combustion model is Eq. (2) and the QoI is the IDT.
+In general, uncertainty of the QoI can be quantiﬁed by Monte
+Carlo (MC) methods, where each sample in the parameter space
+corresponds to a response in QoI. With suﬃcient samples, the
+distribution of f (x ) can be obtained. However, due to the slow
+convergence of the MC method, a large number of samples are often required, particularly when the number of kinetic parameters
+is large.
+
+f (x ) ≈ η(xr ), xr = S T x,
+
+where η is a function of the r-dimensional input xr with r < d, and
+S is a semi-orthogonal matrix of size d × r. The active subspace
+is deﬁned as span(S ). One way to identify the active subspace is
+to perform an eigenvalue decomposition of the matrix C, deﬁned
+as the expectation of the outer product of the gradient ∇ f with
+itself, i.e.,
+
+
+
+C=
+
+(∇ f )(∇ f )T πx dx = W W T
+
+(6)
+
+Note that C is symmetric, positive semi-deﬁnite, and of size
+d × d. The unitary matrix W consists of the d eigenvectors
+w1 , . . . , wd and  is a diagonal matrix whose components are
+the eigenvalues λ1 , . . . , λd , sorted in descending order. If there is
+a gap in the eigenvalues, meaning λr  λr+1 , then the function f
+varies mostly along the ﬁrst r eigenvectors. The ﬁrst r eigenvectors
+are selected to span the active subspace S = [w1 , . . . , wr ]. The active subspace can be interpreted as the average gradient of the QoI
+over the uncertain parameter space. Then one can build a response
+surface, RS(xr ) with the active variables xr = S T x as inputs. Denoting it by the function η, one has f (x ) ≈ η (xr ) = RS(xr ). In practice,
+the integral of the gradients’ outer product in the parameter space
+is obtained by Monte Carlo sampling with M ≈ d × ln d samples
+and the error in the estimated eigenvalues and eigenvectors due to
+insuﬃcient number of runs can be estimated with bootstrapping
+method [22]. Various response surface techniques can be applied
+to the low-dimensional active subspace once it is identiﬁed. In this
+study, polynomial ﬁtting is employed to construct the response
+surface of the IDTs.
+
+2.3. Kinetic parameter reduction via active subspace method
+Various response surface techniques have been adopted in conjunction with MC, in which one uses a few carefully selected runs
+of the expensive model to construct a cheaper response surface
+that is subsequently sampled for MC. However, building response
+surfaces requires a large number of runs of the expensive model
+when the number of input parameters is large. In this study, an
+integrated use of sensitivity analysis and active subspace (AS)
+[22,23] is proposed for the kinetic parameter reduction, in which
+sensitivity analysis is ﬁrst employed to identify the important
+reactions and construct the reduced parameter subspace, and AS
+is then used to identify the important directions in the reduced
+subspace. Note that unlike sensitivity analysis that identiﬁes the
+important individual input parameters, the AS approach identiﬁes
+the important directions, i.e., linear combinations in the input
+parameter space, and can lead to further dimension reduction and
+requires much fewer runs of the expensive model.
+k
+For sensitivity analysis, the sensitivity of IDT, Sτ ,i = τi ∂∂τk , is
+
+2.4. Uncertainty analysis in mechanism reduction via transition state
+2.4.1. Uncertainty quantiﬁcation for individual mechanisms
+In this study, the PCE method [6,21] is employed for the uncertainty quantiﬁcation of individual mechanisms. PCE can explicitly
+yield the uncertainty of a polynomial equation with the probability
+distribution function (PDF) of inputs known as a prerequisite and,
+compared to MC, it does not incur any statistical error caused by
+sampling. Using PCE in conjunction with polynomial ﬁtting for
+the response surface, a model prediction y as a function of xr is
+expressed in terms of the Taylor series
+
+i
+
+obtained with the brute-force ﬁnite difference approach. The
+accuracy of the sensitivity vector can be validated against those
+obtained from analytical adjoint method by inner product of the
+two vectors [24]. A subset of important reactions is then obtained
+according to the sensitivity magnitudes of individual reactions. The
+elimination of unimportant reactions will incur truncation error in
+the sensitivity vector, which is deﬁned as
+T
+S = 1 − Simp S f ull
+
+(5)
+
+y = η(xr ) = y0 + gT xr + xTr Hxr + h.o.t,
+
+(4)
+137
+
+(7)
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+Fig. 1. Illustration of uncertainties for detailed model, transition state and skeletal
+model, where the one for transition state is obtained by ﬁxing rate coeﬃcients of
+eliminated reactions.
+
+where g = ∇ y is the gradient of y, H = 12 J (∇ y ) is the Hessian
+matrix, J is the Jacobian operator, and h.o.t represents higher
+order terms. Noted that g and H in the polynomial expansion
+show the effects of ﬁrst- and second-order sensitivities and can
+be obtained by sensitivity analysis, as detailed in [2]. In this work,
+the polynomial expansion η (xr ) is trained by ordinary least square
+ln k /ki0
+
+regression. For kinetic uncertainty, xi = 1 i
+3
+
+ln UFi
+
+Fig. 2. The dependence of the number of retained species Ns and the maximum
+incurred error in IDTs on the reduction threshold εDRG . Also marked are the three
+representative mechanisms for uncertainty analysis.
+
+With the transition state, the uncertainty change due to reaction coupling, i.e., the effect of the eliminated species/reactions on
+the retained species and reactions, can be straightforwardly obtained as σr,t − σr,s . The relative inﬂuence of parameter truncation
+and reaction coupling can be measured by the ratio
+
+∼ N (0, 1 ) and the
+
+active subspace S is orthogonal, which indicates xr = S T x still
+follows multi-dimensional normal distribution. Thus, when xr = 0
+(a null vector), y = y0 . The uncertainty of the response surface, i.e.,
+σr , is related to the uncertainty in xr and is given by
+
+ 
+σr2 = E yyT − E2 [y] = gT g + 2tr (HH )
+
+rt =
+
+(8)
+
+where the ﬁrst and second terms respectively represent the uncertainty from the ﬁrst- and second-order parts of the response
+surface.
+
+(9)
+
+ 
+
+σr,s = σ ηr,s SsT xs
+
+(10)
+
+3. Results
+Skeletal mechanisms of different sizes have been obtained
+using DRG implemented in PyMars [26-28], covering initial temperature of 650 K ≤ T0 ≤ 1200 K, pressure of 1 atm ≤ P ≤ 20 atm,
+and equivalence ratio of 0.5 ≤ φ ≤ 1.5. The starting species for
+DRG are the fuel species CH3 OCH3 and the oxidizer species O2 .
+The inert species N2 is also retained in the skeletal mechanisms.
+At each threshold, a subset of reactions will be eliminated and the
+remained reactions constitute an intermediate skeletal mechanism.
+The maximum error of the QoI between the skeletal mechanism
+and detailed mechanism under all reference thermochemical
+conditions is denoted as er rmax .
+Figure 2 shows the dependence of the number of retained
+species Ns on the reduction threshold εDRG , together with the
+maximum incurred error er rmax in IDTs from the corresponding
+mechanisms. Note that with about ten species eliminated, the
+maximum error reaches up to 1%, which implies DME55 is a relative compact mechanism and contains few non-essential species.
+The jumps in the number of species at certain thresholds are due
+to the elimination of strong coupled species, thus the threshold
+for a skeletal mechanism is often selected either before or after
+such jumps, as detailed in [9].
+As shown in Fig. 2, three representative skeletal mechanisms
+along the curve of maximum error are chosen for the analysis of
+their uncertainty propagation. The information is summarized in
+Table 1 with the eliminated species from the preceding mechanism being listed. Note that signiﬁcant increase in the error
+for IDTs has been observed when species C2 H5 and C2 H6 are
+further removed from DME42 and Ns is reduced from 42 to 40
+in DME40. In contrast, no noticeable increase in the maximum
+error is observed when ten additional species: CH2 , CH2 (S), C2 H2 ,
+C2 H3 , C2 H4 , HCCO, OCHO, CH3 OCHO, CH3 OCH2 O, CH3 OCH2 O2 H,
+are removed from DME40 and the number of species is reduced
+from 40 down to 30 in DME30.
+
+where Sd and Ss span the active subspaces of the detailed and
+skeletal mechanisms, respectively.
+The uncertainty propagation during mechanism reduction is
+attributed to parameter truncation and reaction coupling. To decouple these two effects, as illustrated in Fig. 1, a transition state
+is deﬁned such that the input parameter xt is still d-dimensional,
+but only the rate parameters of the retained reactions follows the
+same normal distributions as the ones in the detailed mechanism.
+The rate parameters of the eliminated reactions are kept as nominal values for eliminating uncertainty. Then the input parameter
+for the transition state is given by xt = P xd , where the components
+of the d × d diagonal transformation matrix P is one for the corresponding retained reactions and zero for the eliminated reactions.
+The uncertainty in the transition state is denoted as σr, t , which is
+obtained with xt as the response surface input for the autoignition
+model with the detailed mechanism. The uncertainty change from
+the detailed mechanism to the transition state is therefore due to
+the truncation of uncertainty for the eliminated reactions.
+With the truncated active subspace being deﬁned as P Sd , the
+uncertainty of the transition state can be represented as
+
+ 
+
+σr,t = σ ηr,d (P Sd )T (P xd ) .
+
+(12)
+
+A large rt means that the uncertainty change mainly arises from
+uncertainty parameter truncation, otherwise reaction coupling is
+dominant for uncertainty change during the reduction process.
+
+2.4.2. Uncertainty propagation in skeletal reduction: truncation and
+coupling
+Assume that the number of elementary reactions has been
+reduced from d in the detailed mechanism to s in the skeletal
+mechanism. The input parameters of the detailed and skeletal
+mechanisms are xd of dimension d, and xs of dimension s, respectively, with each rate parameter following a standard normal
+distribution. In conjunction with the active subspace method,
+the uncertainty of response surfaces for the detailed and skeletal
+models can be written as
+
+ 
+
+σr,d = σ ηr,d SdT xd
+
+σr,d − σr,t
+σr,d − σr,t + σr,t − σr,s
+
+(11)
+138
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+Table 1
+Three representative skeletal mechanisms obtained by DRG.
+
+DME42
+DME40
+DME30
+
+NS
+
+NR
+
+errmax
+
+Species eliminated from the preceding one
+
+42
+40
+30
+
+208
+192
+123
+
+4.4%
+56.8%
+56.8%
+
+C2 H, CH2 CO, HCCOH, CH2 HCO, CH3 CO, CH3 CHOH, C2 H4 OH, CH3 CH2 O, C2 H5 OH, CH3 OCH2 OH, HOC2 H4 O2 , AR, HE
+C2 H5 , C2 H6
+CH2 , CH2 (S), C2 H2 , C2 H3 , C2 H4 , HCCO, OCHO, CH3 OCHO, CH3 OCH2 O, CH3 OCH2 O2 H
+
+Fig. 3. The dependence of IDTs on initial temperature, equivalence ratio and pressure of DME/air mixtures.
+
+the computed laminar speeds over a wide range of pressures and
+equivalence ratios for the unburned DME/air mixtures of 300 K.
+The computed ﬂame speeds from DME42 agree well with those
+from DME55, but noticeable differences between DME 40, DME30
+and DME55 are observed, particularly under low-pressure and
+fuel-rich conditions. Nevertheless, even only IDTs are considered
+as QoIs during the reduction processes, the incurred relative errors
+in laminar ﬂame speeds are less than 10% for all the tests shown
+in Fig. 4. The observations are consistent with the ones in Ref [2].
+Hence only IDTs being selected as target for reduction is suﬃcient
+for current study.
+To further examine the difference among the mechanisms,
+Figure 5 shows the computed temperature proﬁles for representative one-stage and two-stage DME-air auto-ignition process, under
+two representative conditions. As shown in Fig. 5a, the reduction
+from DME42 to DME40 yields signiﬁcant error in the prediction for high-temperature auto-ignition, which indicates that the
+species C2 H5 along with C2 H6 and related reactions are crucial for
+high-temperature chemistry. The eliminated reactions from DME42
+to DME40 are listed in Table 2 and show that the methyl radical
+branching reaction R52, which is important in high-temperature
+chemistry, is removed. And most of C2 H5 -containing reactions in
+Table 2 are related to C2 H6 . Once C2 H6 is removed, C2 H5 that
+strongly coupled with C2 H6 will be removed automatically. In
+contrast, as shown in Fig. 5b, the reductions from DME55 to
+DME42 and from DME40 to DME30 lead to noticeable error in
+the ﬁrst-stage ignition process, implying that the removed species
+and reactions have inﬂuential effects on low-temperature chem-
+
+Fig. 4. Laminar ﬂame speeds of premixed DME/air mixtures calculated with the
+detailed and skeletal mechanisms. The temperature of unburnt mixtures is 300 K.
+
+Figure 3 demonstrates the accuracy of the skeletal mechanisms
+by showing the computed IDTs. As shown, signiﬁcant errors are
+observed in general for the autoignition process under relatively
+high initial temperatures when reducing DME42 further down to
+DME40. The skeletal mechanisms are also validated against the
+detailed one by comparing the computed laminar ﬂame speeds,
+which are not included in QoIs during reduction. Figure 4 shows
+139
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+Fig. 6. The sensitivities of IDTs from the brutal force and the adjoint methods for
+DME55 under {φ , P, T0 } = {1.0, 1atm, 10 0 0K}. The perturbation factor is 5 × 10−3
+for the brutal force method.
+
+are obtained. Note that R52 is related to C2 H6 and no reaction
+related to C2 H5 is identiﬁed to be important, which is consistent
+with the analysis in the reduction process from DME42 to DME40.
+The accuracy of sensitivity vectors obtained with ﬁnite difference is validated with those from the adjoint method. As shown
+in Fig. 6, the inner product of the two unit sensitivity vectors is no
+smaller than 0.99 for almost all the tests considered. This veriﬁes
+the accuracy in the ﬁnite difference approach for computing
+sensitivity vectors.
+Considering that the sensitivity vector may vary with different
+kinetic parameters, further analysis is performed for more random
+samples in the uncertainty space. It conﬁrms that the 32 selected
+parameters maintain important and suﬃcient, since for almost all
+samples the length of sensitivity vector in the 32 dimensions is
+larger than 99% of the full sensitivity vector. In the following, the
+active subspace is constructed within the parameter space only for
+the important reactions identiﬁed by sensitivity analysis.
+With the identiﬁed 32 important kinetic parameters, for each
+thermochemical condition {φ , P, T0 }, the analysis of active subspace
+has been performed. The uncertainty factors UF = 5 are employed
+for all the kinetic parameters for demonstration. Note that if the
+uncertainties for certain reactions have been well investigated
+and have more appropriate uncertainty factors, one can directly
+incorporate this information without any diﬃculty. For the autoignition of stoichiometric DME/air mixture with P = 10atm and
+T0 = 10 0 0K, the corresponding eigenvalues of matrix C estimated
+using M = 400 samples are shown in Fig. 7a. It is seen that the
+ﬁrst eigenvalue is much larger than the second one, implying the
+existence of a one-dimensional active subspace. This is further
+conﬁrmed by the summary plot of Fig. 7b, which shows the distribution of IDTs along the ﬁrst active variable, i.e.,w1T x. The IDTs lie
+close to a one-dimensional curve and the scattering in the direction orthogonal to the active direction is small. The components of
+the active direction, i.e., the ﬁrst eigenvector, are shown in Fig. 7c.
+The corresponding values are plotted against the original reaction
+index instead of the order in the 32 important reactions. The
+most sensitive reactions are three CH3 -related reactions, i.e., 2CH3
+(+M) = C2 H6 + M (R52), CH3 OCH2 = CH2 O + CH3 (R248) and
+CH3 + CH3 OCH3 = CH3 OCH2 + CH4 (R242). Note that the largest
+positive value in R52 corresponds to the recombination of methyl
+radical, which is consistent with the major importance of methyl
+radical branching reactions in the DME kinetics [26,27]. Thus, the
+removal of C2 H6 and C2 H5 in DME40 results in signiﬁcant error. In
+addition, R242 is the most important H-abstraction reaction, and
+R248 is an important β -scission process to form formaldehyde
+and the methyl radical.
+
+Fig. 5. The temperature proﬁles from stoichiometric DME-air auto-ignition with
+different mechanisms. Symbols represent the ignition point. (a) is under P = 1atm
+and T0 = 1200K, of which the high-temperature pathway is dominant, and (b) is
+low-temperature pathway controlled with P = 10atm and T0 = 650K.
+
+Table 2
+The eliminated reactions from DME42 to DME40.
+Index
+
+Reaction
+
+R52
+R94
+R103
+R104
+R105
+R106
+R107
+R108
+R109
+R110
+R111
+R112
+R113
+R114
+R115
+R117
+
+2CH3 (+M) [=] C2 H6 (+M)
+2CH3 [=] C2 H5 + H
+C 2 H 6 + H [=] C 2 H 5 + H 2
+C2 H6 + O [=] C2 H5 + OH
+C2 H6 + OH [=] C2 H5 + H2 O
+C2 H6 + O2 [=] C2 H5 + HO2
+C2 H6 + HO2 [=] C2 H5 + H2 O2
+C2 H6 + CH3 [=] C2 H5 + CH4
+C2 H5 + H (+M) [=] C2 H6 (+M)
+C 2 H 5 + H [=] C 2 H 4 + H 2
+C2 H5 + O [=] CH2 O + CH3
+C2 H5 + O2 [=] C2 H4 + HO2
+2C2 H5 [=] C2 H4 + C2 H6
+C2 H5 + HCO [=] C2 H6 + CO
+C2 H5 + O [=] CH3 HCO + H
+C2 H4 + H (+M) [=] C2 H5 (+M)
+
+istry pathway. Recalling that the main focus of this study is to
+investigate the uncertainty propagation in skeletal reduction using
+representative mechanisms, instead of developing accurate skeletal
+mechanisms for combustion simulations. Thus, the three skeletal
+mechanisms, with noticeable errors either in high-temperature
+pathway or low temperature pathway, are generated and used to
+demonstrate the uncertainty analysis.
+
+3.1. Dimension reduction of kinetic parameters
+Over the range of equivalence ratio, pressure and initial temperature considered, for the DME55 mechanism, with sensitivity analysis, only 32 of the 290 reactions are identiﬁed as important and
+the corresponding kinetic parameters are identiﬁed important (See
+Appendix A for the list of all the important reactions). The important reactions are compared and examined with previous sensitivity analysis in [29–32], and good consistence in the key reactions
+140
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+Fig. 7. (a) The eigenvalues of the corresponding matrix C; (b) the summary plot
+of the IDT being plotted against the active variable; (c) the individual component
+(with magnitude being greater than 0.05) of the ﬁrst active direction.
+
+3.2. Uncertainty propagation in mechanism reduction
+For conservative consideration, the ﬁrst three active directions
+are chosen to span the active subspace. Then a three-dimensional
+response surface based on second-order polynomial ﬁtting is built
+for individual mechanisms under each thermochemical condition
+{φ , P, T0 }. With half of the data for training and the other half for
+validation, the accuracy of response surface is validated as shown
+in Fig. 8a, with the prediction of response surface versus the real
+data lies close to the linear relationship line. Figure 8b shows the
+distribution of IDTs along with w1T x, in which the black dots are
+50,0 0 0 samples for the MC method to obtain the statistics of IDTs.
+Note that all samples lie close to the one-dimensional curve of
+training data, which substantiates the accuracy and effectiveness
+of the response surface. The PDF of IDTs are shown in Fig. 8c.
+There is good agreement between PDFs of the training data and
+the predictions, which demonstrates the suﬃcient accuracy of
+the three-dimensional active subspace in propagating the kinetic
+uncertainty. To further conﬁrm the accuracy of active subspace
+and response surface method, 10,0 0 0 individual Monte Carlo
+samples in the kinetic parameter space are solved by Cantera and
+then compared with Monte Carlo samples propagated by response
+surface. As shown in Fig. 8d, the relative error for the uncertainty
+σ is smaller than 1%, and the relative error for the mean value is
+smaller than 0.1%.
+Note that the active subspace is constructed within the parameter space only for the important reactions identiﬁed by sensitivity
+analysis. The threshold value for keeping important reactions after
+sensitivity index may have impact on the active subspace and
+subsequent analysis. Here the dependence of uncertainty analysis
+on the truncation error of the sensitivity vector is investigated.
+k
+To achieve so, sensitivity analyses Sτ ,i = τi ∂∂τk are ﬁrst performed
+
+Fig. 8. The training and validation progress, (a) the training and validation; (b) the
+w1 projection of 50,0 0 0 samples of response surface; (c) PDF plot of samples, under
+{φ , P, T0 } = {1.0, 10atm, 10 0 0K }; (d) comparison between PDF plots of MC samples propagated by response surface and MC samples integrated by an ODE solver.
+
+at nominal parameters for all the thermochemical conditions
+considered, and reactions are then sorted by their corresponding
+sensitivities in magnitude, i.e., sensitivity index. Then the dependence analysis can be performed for individual thermochemical
+condition.
+For demonstration, Fig. 9a shows the incurred errors in the
+active direction w1 , the mean μr and r.m.s σr of log10 (IDT) against
+the truncation error in sensitivity vector for the condition of φ =1,
+P = 1atm and T0 = 1200K. This is obtained by ﬁrst simulating 6400
+independent random auto-ignition samples in kinetic parameter
+space with full sensitivities under this particular thermochemical
+condition. A series of sensitivity vectors are then obtained by
+sequentially removing the unimportant reactions according to
+their sensitivity indexes. For each individual sensitivity vector, the
+truncation error S can be computed accordingly with Eq. (4). And
+the active subspace and response surface can be built with 400
+random samples. The errors in the ﬁrst active direction w1 , mean
+value μr and r.m.s σr of the response surface can be obtained
+by comparing against those built from all 6400 samples with full
+
+i
+
+141
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+Fig. 10. The evolution of PDFs for IDTs (centering around the mean values) during
+the reduction from DME42 to DME40. For high-temperature pathway in (a), the
+uncertainty decrease from detailed model σr,d = 0.1534 to transition state σr,t =
+0.1422 and to skeletal model σr,s = 0.1343; and for low-temperature pathway in
+(b), the uncertainty change is insigniﬁcant with σr,d = 0.1473, σr,t = 0.1478 and
+σr,s = 0.1454.
+
+Fig. 9. (a) The incurred errors in the active direction w1 (black square), the mean
+μr (red circle) and r.m.s σr (blue triangle) of log10 (IDT ), against the truncation error
+S in sensitivities, (b) the PDF distribution of the sensitivity truncation errors in
+kinetic parameter space, under the condition of φ =1, P = 1atm and T0 = 1200K.
+(For interpretation of the references to color in this ﬁgure legend, the reader is
+referred to the web version of this article.)
+
+sensitivity vector. For each sensitivity vector, the validation process
+is repeated ten times independently to avoid the potential bias
+from random samples. It is clear from Fig. 9a that the error in w1
+correlate well with the truncation error S and it can be neglected
+when truncation error is smaller than 1%. The predicted mean
+value μr with 400 samples is generally accurate with errors being
+smaller than 0.1% for almost all tests. The error in σr comes from
+
+two contributions. As shown in Fig. 9a, when the sensitivity vector
+is suﬃciently accurate (i.e., with S being less than 5%), the error
+in σr results from a ﬁnite number of Monte Carlo samples for
+constructing response surface and it is conﬁrmed to be less than
+2.5% (as indicated by the black dashed line). Noted that the mean
+prediction error of σr is around 1%, among repeated sampling tests
+in the parameter space. When the sensitivity truncation error is
+
+Fig. 11. Uncertainties in IDTs (in log10) for DME42, DME40 and the transition state from DME42 to DME40, for DME-air autoignition. σr,d (black line), σr,t (black dashed
+line), σr,s (red line) represent the uncertainties in IDTs for DME42, transition state from DME42 to DME40, and DME 40, respectively, under each thermochemical condition.
+rt (the red line with symbol) represents the relative contribution of parameter truncation for uncertainty change. (For interpretation of the references to color in this ﬁgure
+legend, the reader is referred to the web version of this article.)
+142
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+signiﬁcant, the error in σr will grow with the sensitivity error, and
+moreover grow in line with the error in active subspace.
+Figure 9b shows the PDF of the sensitivity truncation errors of
+random samples in the parameter space. It shows the maximum
+error is less than 1% and this will incur less than 2.5% error
+in uncertainty analysis as shown in Fig. 9a. This conﬁrms that
+the ﬁrst layer of parameter reduction by sensitivity analysis in
+this study is adequate. Similar observations are made for other
+conditions.
+Figure 10 shows the evolution of the PDFs of IDTs during the
+reduction from DME42 to DME40, which are obtained by 50,0 0 0
+Monte Carlo samples in the kinetic parameter spaces. As shown
+in Fig. 10a, the uncertainty decreases as implied by the narrower
+PDFs for the autoignition process at high temperature, T0 = 1200K.
+And both the truncation and reaction coupling contribute to the
+uncertainty reduction as implied by the PDF of the transition
+state staying in between. In contrast, for the autoignition process
+at low temperature, T0 = 650K, the uncertainty in IDTs remains
+almost unchanged since the three PDFs remain the same, in
+Fig. 10b.
+With the uncertainties of the mechanisms and the corresponding transition state being computed by solving the expectation of
+response surface in Eq. (8), the effects of parameter truncation and
+reaction coupling on uncertainty propagation are further quantiﬁed. Figure 11 shows the uncertainty propagation in the reduction
+from DME42 to DME40. Recall that species C2 H5 and C2 H6 are
+removed during the reduction, which results in signiﬁcant error in
+the IDTs for high temperature autoignition (see Fig. 3). Under each
+individual pressure, the relative contribution of reaction coupling
+on uncertainty propagation decreases with temperature. For high
+temperature ignition, e.g., T0 > 800K, with pressure increases
+from 1atm to 20atm, reaction coupling becomes more important
+for uncertainty change, as implied by the observation that the
+uncertainty curve for the transition state gradually approaches
+toward the one for DME42. Also shown is the evolution of
+σ −σ
+rt = σ −σ r,d + σr,t −σ , representing the contribution of paramr,d
+
+r,t
+
+r,t
+
+Fig. 12. The linear correlation between uncertainty change σr,t /σr,d with the change
+in the most active direction P wd,1 .
+
+4. Conclusions
+Eﬃcient and quantitative uncertainty analysis in mechanism
+reduction via the methods of active subspace and transition state
+analysis has been formulated and demonstrated in the reduction
+process of a 55-species, 290-reaction DME mechanism. Results
+show that sensitivity analysis can reduce the number of kinetic
+parameters from 290 down to 32 and an active subspace of very
+few dimensions e.g., 1–3 can be further identiﬁed within this 32dimensional subspace for constructing the response surface of the
+IDTs. The cost for constructing a second order polynomial response
+surface is proportional to the square of input parameter dimension
+size. Consequently, uncertainty quantiﬁcation can be performed
+with samples that are at least two orders of magnitude less.
+With the PCE method being employed for the uncertainty
+quantiﬁcation of individual mechanisms, the proposed transition
+state analysis decouples and quantiﬁes the uncertainty change
+arising from uncertainty parameter truncation and reaction coupling during reduction. For the three representative skeletal
+mechanisms, the reduction process from DME42 to DME40 has
+inﬂuential effect on high-temperature reaction pathway, and the
+other two reduction processes, i.e., from DME55 to DME42 and
+from DME40 to DME30, mainly affects the low-temperature pathway. The reaction coupling effect is found to be signiﬁcant for
+uncertainty changes at low temperature regime, in general, while
+parameter truncation is dominant at high temperatures. In addition, the uncertainty change associated with parameter truncation
+is proportional to the change in the most active direction.
+
+r,s
+
+eter truncation on uncertainty propagation. Parameter truncation
+in general has signiﬁcant impact for high-temperature ignition of
+DME/air mixtures under relatively low pressures. Similar observations are made for each equivalence ratio during the reduction
+from DME42 to DME40. The uncertainty propagation in the reduction from DME55 to DME42 and from DME40 to DME30 are
+also analyzed and shown in Appendix B. The uncertainty changes
+in the two propagations are slightly relevant, which means that
+these reductions do not lead to signiﬁcant change in both the
+mean and the uncertainty of IDTs, under selected thermochemical
+conditions.
+Since the truncation in the ﬁrst active direction P wd,1 has the
+largest inﬂuence on the uncertainty change, the uncertainty of
+detailed model and transition state can be approximated by:
+
+
+
+ T 
+
+σr,d = σ ηr,d Sd xd
+
+
+
+ T
+
+≈ σ ηr,d wd,1 xd
+
+
+
+,
+
+
+ 
+
+T
+
+σr,t = σ ηr,d (PSd )T (Pxd ) ≈ σ ηr,d Pwd,1 xd
+
+Declaration of Competing Interest
+The authors declare that they have no known competing ﬁnancial interests or personal relationships that could have appeared to
+inﬂuence the work reported in this paper.
+
+(13)
+
+.
+
+Acknowledgments
+
+(14)
+
+The work is supported by the National Natural Science Foundation of China No. 91841302, No. 52025062 and the National
+Science and Technology Major Project (2017-I-0 0 04-0 0 05).
+
+With the mapping from kinetic parameters to the QoI being
+almost linear as shown in Fig. 7(b), the uncertainty change from
+the detailed mechanism to the transition state can be approximated by σr,t /σr,d ≈ P wd,1 / wd,1 = P wd,1 . This has been
+conﬁrmed in Fig. 12. The uncertainty change resulting from
+the uncertainty parameter truncation is almost linear with the
+change in the most active direction. Thus, the transition state
+analysis can be performed by considering only the truncation
+in active subspace, which can further reduce the computational
+cost.
+
+Appendix A. Governing equations for the adiabatic, isochoric
+autoignition process
+The governing equations for adiabatic, isochoric autoignition, a
+process widely applied in internal combustion engines, are
+
+d ci
+= νi j ω j
+dt
+143
+
+(R.1)
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+dT
+= −(hi − RT )νi j ω j /ς ,
+dt
+
+Appendix B. The list of important reactions identiﬁed by
+sensitivity analysis
+
+(R.2)
+
+where ci is the molar concentration of species i, T is mixture
+temperature, νi j is the stoichiometric coeﬃcient of species i in
+reaction j, hi is the total molar enthalpy of the ith species, ς
+is the molar weighted constant volume speciﬁc heat given by
+ς = ciCv,i with Cv,i being the constant volume speciﬁc heat of
+species i, and ω j is the net reaction rate of reaction j. Note that
+Einstein summation convention applies over the Ns species and
+d elementary reactions in the ideal gas mixture. The net reaction
+rate of reaction j is given by
+
+ω j = k j, f
+
+Ns
+
+νi j
+
+ci
+
+− Kc,−1j
+
+i=1
+
+Ns
+
+
+
+νi j
+
+ci
+
+,
+
+(R.3)
+
+i=1
+
+where νi j and νi j are the forward and reverse stoichiometric
+coeﬃcients, respectively, and Kc, j is the equilibrium constant of
+reaction j, k j, f is the forward rate constant given by the Arrhenius
+function
+
+
+
+k j, f = A j T b j exp −
+
+Ea, j
+RT
+
+
+
+,
+
+(R.4)
+
+where A j is the pre-exponential factor, b j is the temperature exponent, Ea, j is the activation energy of the jth elementary reaction.
+Let ϕ (t ), of dimension Ns + 1, consist of the molar concentrations ci and temperature T , the governing ODE could be written in
+the following compact form
+
+dϕ
+= F (ϕ; k ),
+dt
+
+(R.5)
+
+where k, of dimension d, is the forward reaction rate constants
+of the d elementary reactions, i.e., k = [k1, f , k1, f , . . . , kd, f ]. In
+this study, the uncertainty in the jth elementary reaction is
+represented by the uncertainty of the rate constant k j, f , which
+essentially represents the uncertainty lays in the pre-exponential
+factor A j .
+
+Index
+
+Reaction
+
+R1
+R13
+R15
+R17
+R18
+R20
+R42
+R44
+R46
+R47
+R49
+R50
+R51
+R52
+R57
+R71
+R239
+R240
+R241
+R242
+R244
+R245
+R247
+R248
+R264
+R266
+R271
+R272
+R273
+R274
+R275
+R277
+
+H + O2 [=] O + OH
+H + O2 (+M) [=] HO2 (+M)
+H + HO2 [=] 2OH
+HO2 + OH [=] H2 O + O2
+2HO2 [=] H2 O2 + O2
+H2 O2 (+M) [=] 2OH (+M)
+CH2 O + H [=] H2 + HCO
+CH2 O + OH [=] H2 O + HCO
+CH2 O + HO2 [=] H2 O2 + HCO
+CH2 O + CH3 [=] CH4 + HCO
+CH3 + O2 [=] CH3 O + O
+CH3 + O2 [=] CH2 O + OH
+CH3 + HO2 [=] CH3 O + OH
+2CH3 (+M) [=] C2 H6 (+M)
+CH3 + HO2 [=] CH4 + O2
+CH3 O + M [=] CH2 O + H + M
+CH3 OCH3 [=] CH3 + CH3 O
+CH3 OCH3 + OH [=] CH3 OCH2 + H2 O
+CH3 OCH3 + H [=] CH3 OCH2 + H2
+CH3 + CH3 OCH3 [=] CH3 OCH2 + CH4
+CH3 OCH3 + HO2 [=] CH3 OCH2 + H2 O2
+CH3 OCH3 + O2 [=] CH3 OCH2 + HO2
+CH3 OCH2 O2 + CH3 OCH3 [=] CH3 OCH2 + CH3 OCH2 O2 H
+CH3 OCH2 [=] CH2 O + CH3
+CH3 OCH2 + O2 [=] CH3 OCH2 O2
+2CH3 OCH2 O2 [=] 2CH3 OCH2 O + O2
+CH3 OCH2 O2 [=] CH2 OCH2 O2 H
+CH2 OCH2 O2 H [=] 2CH2 O + OH
+CH2 OCH2 O2 H + O2 [=] O2 CH2 OCH2 O2 H
+O2 CH2 OCH2 O2 H [=] HO2 CH2 OCHO + OH
+HO2 CH2 OCHO [=] OCH2 OCHO + OH
+HOCH2 OCO [=] CO + HOCH2 O
+
+Appendix C. Uncertainty analysis of the other two reduction
+processes
+The reduction processes from DME55 to DME42 and from
+DME40 to DME30 are also analysed. As shown in Fig. A1, the
+
+Fig. A1. Uncertainty in IDTs (in log10) for DME40, DME30 and the transition state from DME40 to DME30, for DME-air autoignition. Lines and dashed lines are uncertainty
+in IDTs under each thermochemical condition. Almost all the dashed lines overlap with the black lines, indicating that the effect of truncation in parameter space is weak.
+144
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+Fig. A2. Uncertainty in IDTs (in log10) for DME55, DME42 and the transition state from DME55 to DME42, for DME-air autoignition. Lines and dashed lines are uncertainties
+in IDTs under each thermochemical condition. Almost all the dashed lines overlap with the black lines, indicating that the effect of truncation in parameter space is weak.
+
+Fig. A3. The linear correlation between uncertainty change σr,t /σr,d with the change in the most active direction P wd,1 , (a) the reduction from DME40 to DME30, (b) the
+reduction from DME55 to DME42.
+
+reduction process from DME40 to DME30 shows no signiﬁcant uncertainty change under most thermochemical conditions, especially
+at high temperature range. And the uncertainties of transition
+state overlap well with those of the detailed model DME40, which
+means that the truncation is weak during this reduction process.
+The results of the reduction process from DME55 to DME42 also
+show slightly uncertainty change only at low temperature and the
+truncation in uncertainty is negligible, as shown in Fig. A2.
+In addition, the linear correlation between uncertainty change
+σr,t /σr,d with the change in the most active direction P wd,1 is
+conﬁrmed in Fig. A3. The good linearity of the two reduction processes show consistence with the linear correlation approximation
+as stated in Section 3.2.
+
+[2] H. Wang, D.A. Sheen, Combustion kinetic model uncertainty quantiﬁcation, propagation and minimization, Prog. Energy Combust. Sci. 47 (2015)
+1–31.
+[3] A.S. Tomlin, E. Agbro, V. Nevrlý, J. Dlabka, M. Vašinek, Evaluation of combustion mechanisms using global uncertainty and sensitivity analyses: a case
+study for low-temperature dimethyl ether oxidation, Int. J. Chem. Kinet. 46
+(2014) 662–682.
+[4] H. Rabitz, Ö.F. Aliş, J. Shorter, K. Shim, Eﬃcient input—output model representations, Comput. Phys. Commun. 117 (1999) 11–20.
+[5] H.N. Najm, B.J. Debusschere, Y.M. Marzouk, S. Widmer, O.P. Le Maître, Uncertainty quantiﬁcation in chemical systems, Int. J. Numer. Methods Eng. 80
+(2009) 789–814.
+[6] D.A. Sheen, H. Wang, The method of uncertainty quantiﬁcation and minimization using polynomial chaos expansions, Combust. Flame 158 (2011)
+2358–2374.
+[7] W. Ji, Z. Ren, Y. Marzouk, C.K. Law, Quantifying kinetic uncertainty in turbulent
+combustion simulations using active subspaces, Proc. Combust. Inst. 37 (2019)
+2175–2182.
+[8] Y. Xin, D.A. Sheen, H. Wang, C.K. Law, Skeletal reaction model generation, uncertainty quantiﬁcation and minimization: combustion of butane, Combust.
+Flame 161 (2014) 3031–3039.
+[9] T. Lu, C.K. Law, A directed relation graph method for mechanism reduction,
+Proc. Combust. Inst. 30 (2005) 1333–1341.
+
+References
+[1] T. Lu, C.K. Law, Toward accommodating realistic fuel chemistry in large-scale
+computations, Prog. Energy Combust. Sci. 35 (2009) 192–215.
+145
+
+X. Su, W. Ji and Z. Ren
+
+Combustion and Flame 227 (2021) 135–146
+
+[10] S.H. Lam, D.A. Goussis, Understanding complex chemical kinetics with computational singular perturbation, Proc. Combust. Inst. 22 (1989) 931–941.
+[11] T. Turányi, Applications of sensitivity analysis to combustion chemistry, Reliab.
+Eng. Syst. Saf. 57 (1997) 41–48.
+[12] S. Vajda, P. Valko, T. Turányi, Principal component analysis of kinetic models,
+Int. J. Chem. Kinet. 17 (1985) 55–81.
+[13] Z. Zhao, M. Chaos, A. Kazakov, F.L. Dryer, Thermal decomposition reaction and
+a comprehensive kinetic model of dimethyl ether, Int. J. Chem. Kinet. 40 (2008)
+1–18.
+[14] R.M. Galassi, M. Valorani, H.N. Najm, C. Safta, M. Khalil, P.P. Ciottoli, Chemical
+model reduction under uncertainty, Combust. Flame 179 (2017) 242–252.
+[15] S. Deng, P. Zhao, D. Zhu, C.K. Law, NTC-affected ignition and low-temperature ﬂames in nonpremixed DME/air counterﬂow, Combust. Flame 161 (2014)
+1993–1997.
+[16] W. Ji, P. Zhao, T. He, X. He, A. Farooq, C.K. Law, On the controlling mechanism
+of the upper turnover states in the NTC regime, Combust. Flame 164 (2016)
+294–302.
+[17] P. Zhao, C.K. Law, The role of global and detailed kinetics in the ﬁrst-stage ignition delay in NTC-affected phenomena, Combust. Flame 160 (2013) 2352–2358.
+[18] D.G. Goodwin, R.L. Speth, H.K. Moffat, B.W. Weber, Cantera: an object-oriented
+software toolkit for chemical kinetics, thermodynamics, and transport processes. https://www.cantera.org, doi:10.5281/zenodo.1174508.
+[19] T. Nagy, T. Turányi, Uncertainty of Arrhenius parameters, Int. J. Chem. Kinet. 43
+(2011) 359–378.
+[20] Y. Tao, H. Wang, Joint probability distribution of Arrhenius parameters in reaction model optimization and uncertainty minimization, Proc. Combust. Inst.
+37 (2019) 817–824.
+[21] D.A. Sheen, X. You, H. Wang, T. Løvås, Spectral uncertainty quantiﬁcation, propagation and optimization of a detailed kinetic model for ethylene combustion,
+Proc. Combust. Inst. 32 (2009) 535–542.
+
+[22] P.G. Constantine, E. Dow, Q. Wang, Active subspace methods in theory and
+practice: applications to Kriging surfaces, SIAM J. Sci. Comput. 36 (2014)
+A1500–A1524.
+[23] P.G. Constantine, M. Emory, J. Larsson, G. Iaccarino, Exploiting active subspaces
+to quantify uncertainty in the numerical simulation of the HyShot II scramjet,
+J. Comput. Phys. 302 (2015) 1–20.
+[24] W. Ji, Z. Ren, C.K. Law, Evolution of sensitivity directions during autoignition,
+Proc. Combust. Inst. 37 (2019) 807–815.
+[25] W. Ji, J. Wang, O. Zahm, Y.M. Marzouk, B. Yang, Z. Ren, C.K. Law, Shared low-dimensional subspaces for propagating kinetic uncertainty to multiple outputs,
+Combust. Flame 190 (2018) 146–157.
+[26] K.E. Niemeyer, C.-.J. Sung, M.P. Raju, Skeletal mechanism generation for surrogate fuels using directed relation graph with error propagation and sensitivity
+analysis, Combust. Flame 157 (2010) 1760–1770.
+[27] P.O. Mestas, P. Clayton, K.E. Niemeyer, {pyMARS} v1.1.0. doi:10.5281/zenodo.
+3401549.
+[28] K.E. Niemeyer, C.-.J. Sung, On the importance of graph search algorithms
+for DRGEP-based mechanism reduction methods, Combust. Flame 158 (2011)
+1439–1443.
+[29] S.L. Fischer, F.L. Dryer, H.J. Curran, The reaction kinetics of dimethyl ether. I:
+high-temperature pyrolysis and oxidation in ﬂow reactors, Int. J. Chem. Kinet.
+32 (20 0 0) 713–740.
+[30] H.J. Curran, S.L. Fischer, F.L. Dryer, The reaction kinetics of dimethyl ether.
+II: low-temperature oxidation in ﬂow reactors, Int. J. Chem. Kinet. 32 (20 0 0)
+741–759.
+[31] E.A. Tingas, D.C. Kyritsis, D.A. Goussis, Comparative investigation of homogeneous autoignition of DME/air and EtOH/air mixtures at low initial temperatures, Combust. Theory Modell. 21 (2017) 93–119.
+[32] E.A. Tingas, D.C. Kyritsis, D.A. Goussis, Autoignition dynamics of DME/air and
+EtOH/air homogeneous mixtures, Combust. Flame 162 (2015) 3263–3276.
+
+146
+
+
