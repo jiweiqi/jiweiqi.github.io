@@ -652,7 +652,15 @@
       "https://collaborate.princeton.edu/en/publications/evolution-of-sensitivity-directions-during-autoignition/"
     ],
     "code_url": "https://github.com/jiweiqi/IgnSens",
-    "arxiv_id": null
+    "arxiv_id": null,
+    "pdf": {
+      "url": "https://jiweiqi.github.io/papers/ignition-sensitivity/paper.pdf",
+      "source_url": "https://doi.org/10.1016/j.proci.2018.07.005",
+      "version": "Published version",
+      "sha256": "d5fa307e302f459e5bc0cce1d44333d1109b04a53af251dffa99b1092159becb",
+      "bytes": 1276074
+    },
+    "fulltext_url": "https://jiweiqi.github.io/papers/ignition-sensitivity/fulltext.txt"
   },
   {
     "id": "turbulent-uq",

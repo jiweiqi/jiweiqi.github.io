@@ -20,6 +20,8 @@ Keywords: sensitivity analysis, ignition delay, chemical kinetics
 
 ## Resources
 
+- [PDF](https://jiweiqi.github.io/papers/ignition-sensitivity/paper.pdf)
+- [Extracted full text](https://jiweiqi.github.io/papers/ignition-sensitivity/fulltext.txt)
 - [GitHub](https://github.com/jiweiqi/IgnSens)
 - [BibTeX](https://jiweiqi.github.io/papers/ignition-sensitivity/citation.bib)
 

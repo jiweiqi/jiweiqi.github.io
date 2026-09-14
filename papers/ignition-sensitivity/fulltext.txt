@@ -1,0 +1,477 @@
+                                     Available online at www.sciencedirect.com
+
+
+
+
+                               Proceedings of the Combustion Institute 37 (2019) 807–815
+                                                                                             www.elsevier.com/locate/proci
+
+
+
+
+  Evolution of sensitivity directions during autoignition
+                         Weiqi Ji a, Zhuyin Ren a,∗, Chung K. Law a,b
+                       a Center for Combustion Energy, Tsinghua University, Beijing 100084, China
+        b Department of Mechanical and Aerospace Engineering, Princeton University, Princeton, NJ 08544, USA
+
+
+                                     Received 1 December 2017; accepted 3 July 2018
+                                              Available online 17 July 2018
+
+
+
+Abstract
+
+   Sensitivity analysis of the ignition delay time and species profiles to kinetic parameters has been widely
+used to identify the rate-limiting steps during the autoignition process, providing insights for the optimization
+of the reaction mechanism. This work studies the time evolution of the sensitivity directions of the temper-
+ature and species concentration during autoignition. The direction is represented by a unit vector along the
+gradient of the simulation output to the kinetic parameters, and the alignment between the two directions are
+measured by the inner product between the corresponding unit vectors. We use evolution of the sensitivity
+directions to reveal changes in the rate-limiting steps and the correlation among species at different phases
+of the ignition delay period. It is found that the sensitivity directions of temperature and the concentrations
+of the major intermediate species are similar to each other during the entire ignition delay period. In partic-
+ular, they converge to the same direction when approaching the ignition state, and the direction is the same
+as the one for the ignition delay time. The correlation is validated for various fuels across a wide range of
+pressures and temperatures, and works for both single-stage ignition and two-stage ignition. Consequently
+the sensitivity of the ignition delay time can be efficiently evaluated based on the temperature sensitivity at
+the ignition point, for which a single run of the simulation can produce the sensitivity to all parameters, as
+otherwise the sensitivity of the ignition delay time has to be evaluated through finite difference, in which the
+number of runs equals to the number of parameters. It can also significantly reduce the computation cost of
+gradient-based algorithms for the purpose of mechanism optimization and uncertainty quantification.
+© 2018 The Combustion Institute. Published by Elsevier Inc. All rights reserved.
+
+
+Keywords: Ignition delay time; Sensitivity analysis; Sensitivity direction; Similarity; Gradient
+
+
+
+
+1. Introduction                                                  ment and validation of kinetics mechanisms. The
+                                                                 ignition delay time (IDT), which is the time for the
+   Autoignition of hydrocarbon fuels has been ex-                induction period before rapid heat release, is of pri-
+tensively studied for engine design and the develop-             mary importance and is readily measurable using
+                                                                 rapid compression machines and shock tubes. It
+                                                                 has also been routinely simulated with detailed re-
+ ∗ Corresponding author.                                         action mechanisms, in which the kinetic parame-
+                                                                 ters could have pronounced effect on the predicted
+   E-mail address: zhuyinren@mail.tsinghua.edu.cn (Z.
+                                                                 IDT. The sensitivity of IDT to the rate constants
+Ren).
+
+https://doi.org/10.1016/j.proci.2018.07.005
+1540-7489 © 2018 The Combustion Institute. Published by Elsevier Inc. All rights reserved.
+808                       W. Ji et al. / Proceedings of the Combustion Institute 37 (2019) 807–815
+
+can reveal the rate-limiting steps controlling the               Sin (t)/Sim (t) does not change with t within the inter-
+ignition process and provide valuable insights into              val (t1 , t2 ). Similar patterns were also observed in
+the mechanism optimization.                                      laminar flames and in models of biological prob-
+    While sensitivity analysis of IDT has become                 lems [8].
+a standard procedure for mechanism development,                      This work also focuses on the patterns among
+insufficient attention has been directed to the evolu-           the sensitivity vectors during auto-ignition. While
+tion of the sensitivities of composition (e.g., species          previous work has studied the similarity for hy-
+concentrations and temperature) with respect to ki-              drogen and methane with single-stage ignition, this
+netic parameters during autoignition. In this work,              work shall extend the study to large hydrocarbon
+we study the sensitivities to the pre-exponential                fuels with two-stage ignition. More importantly,
+“A-factors” in the Arrhenius reaction rate expres-               while the correlation between the sensitivity vector
+sions. The governing ordinary differential equa-                 of laminar flame speed and that of the local com-
+tions (ODEs) for composition evolution during the                position sensitivity has been studied in [3–7], it is
+auto-ignition process are of the general form                    unclear how the sensitivity vector of the IDT is re-
+dϕ                                                               lated to the local composition sensitivity. Here, we
+    = F (ϕ, t; k ),                              (1)             shall show that the sensitivity vector of IDT and
+ dt                                                              the local temperature sensitivity at the instance of
+where ϕ(t) is the composition vector consisting of               ignition are parallel, which provides the possibil-
+species mass fractions and temperature, and k is the             ity to evaluate the sensitivity of IDT based on the
+vector of reaction rate constants. The first-order               composition sensitivity. The composition sensitiv-
+sensitivity coefficients are defined as                          ities are usually obtained by solving the govern-
+         ∂ ϕi                                                    ing equations for the sensitivity matrix during the
+Si j =        ,                                         (2)      autoignition integration. They can be computed
+         ∂kj
+                                                                 via very efficient methods [7], such as Decoupled
+with the evolution equations being                               Direct Method (DDM) which is implemented in
+                                                                 Chemkin [9]. DDM requires very little additional
+dSij   ∂Fi       ∂Fi                                             computational cost for the calculation of the local
+     =     Slj +      ,                                 (3)
+ dt    ∂ϕi       ∂k j                                            sensitivity vectors after the solution of Eq. (1). In
+                                                                 addition, the computational cost might be further
+      The corresponding sensitivity matrix S(t), of              reduced via the adjoint method [10]. Then the sen-
+sizes nc × nr , evolves with time and depends on the             sitivity of any other quantities defined as the inte-
+local composition, with nc being the dimension of                gral of the solution variables can be readily com-
+the composition and nr the number of kinetic pa-                 puted by matrix manipulation. However, since IDT
+rameters. The kinetic parameters here refer to the               is defined as the time instant when the temperature
+pre-exponential “A-factors” of the nr elementary                 profile reaches its inflection point, its sensitivity is
+reactions, and the ith row of S(t) represents the                usually evaluated through brute force finite differ-
+sensitivity vector of the ith composition variable in            ence approach, for which the kinetic parameters are
+the nr -dimensional parameter space, with its mag-               perturbed one by one. Consequently the number of
+nitude and direction evolving with time. The rel-                autoignition integrations required is equal to nr and
+ative importance of the kinetic parameters is re-                the computational cost becomes very expensive for
+vealed by the individual components of the sensi-                large hydrocarbon fuel with thousands to tens of
+tivity vector.                                                   thousands of reactions.
+      Various interpretations of the time-evolving                   To alleviate the computational cost, we propose
+sensitivity vectors have been proposed, such as                  an efficient approach for computing the sensitiv-
+measuring the averaged sensitivity over a certain                ity of IDT by exploiting the correlations between
+time range [1, 2]. For example, Vajda et al. [2] em-             the sensitivities of IDT and composition. By do-
+ployed principal component analysis (PCA) on S(t)                ing so, the computation of the sensitivity of IDT
+over a time interval, i.e., eigen decomposition of               only requires two runs, and the cost can be com-
+∫tt21 S T S dt, to reveal the sensitive reactions and the        parable to that for the autoignition integration us-
+coupling between the reactions. The principal com-               ing the adjoint method [10]. Then the computa-
+ponents, referred to the eigenvectors with large                 tional cost for statistical calibration of the reaction
+eigenvalues, are linear combinations of the kinetic              mechanism [11,12], construction of the response
+parameters, along which the predicted composition                surface for the kinetic parameters [11,13], and
+profiles mostly change.                                          global sensitivity analysis [14] can be significantly
+      Turányi and co-workers [3–7] have systemati-               reduced by taking advantage of various gradient-
+cally studied three types of similarity among the                based algorithms, such as those of steepest de-
+sensitivity vectors during autoignition, i.e., (i) Lo-           scent method, active subspace [13,15,16] and so on.
+cal similarity: the ratio Sim /Sjm is the same for any           For example, in [13], with the sensitivities of IDT,
+parameter km . (ii) Scaling relation: the ratio Sim /Sjm         the active subspace method is employed to iden-
+                     ∂ϕ
+is equal to ∂∂tϕi / ∂tj . (iii) Global similarity: the ratio     tify one-dimensional active subspaces in the 33 and
+                               W. Ji et al. / Proceedings of the Combustion Institute 37 (2019) 807–815                            809
+
+                   Table 1
+                   Chemical mechanisms and conditions for the autoignition processes.
+                                                No.               No.
+                      Fuel/mech                 species           reactions      φ             p [atm]    T [K]
+                      Methane (CH4 )            53                325            0.5, 1, 2     1, 20      1000–1500
+                      [18]
+                      DME                       55                290            0.5, 1, 2     1, 20      1000–1500
+                      (CH3 OCH3 ) [19]
+                      n-heptane                 88                729            0.5, 1, 2     1, 20      600–1500
+                      (n-C7 H16 ) [20]
+                      iso-octane                143               1178           0.5, 1, 2     1, 20      600–1500
+                      (i-C8 H18 ) [21]
+
+
+217-dimensional uncertain kinetic parameter space                             Fig. 1. Time is normalized by the ignition delay
+for the IDT of hydrogen/air and methane/air mix-                              time and is denoted as NT. As expected, the magni-
+tures, respectively. Then the cost of subsequent                              tude of the temperature sensitivity vector changes
+construction of response surface and global sensi-                            simultaneously with the rate-of-change of temper-
+tivity analysis is reduced by several orders. With the                        ature, which remains relatively small and increases
+above efficient approach for computing the gradi-                             dramatically near the ignition point.
+ent of IDT, the total cost will be further reduced                                Figure 2 shows evolution of the sensitivity di-
+and the speed up factor is proportional to the num-                           rections of temperature and several major inter-
+ber of reactions.                                                             mediate species for methane and DME. The pro-
+    In the following, we shall first investigate the                          files for n-heptane and iso-octane with two-stage
+similarity in the evolution of the sensitivity direc-                         ignition are similar to DME and are provided in
+tions in both single-stage ignition and two-stage ig-                         the supplemental material. To facilitate the com-
+nition. We then show that the sensitivity vector of                           parison, the inner product ui (t), uT, ign , first sug-
+IDT is parallel to the composition sensitivity vector                         gested in [4], is employed to represent the angle
+at the instant of ignition. Finally, an efficient ap-                         between the directions of the composition sensi-
+proach for computing the sensitivity of IDT based                             tivities and that of temperature sensitivity at the
+on the correlation is proposed and validated.                                 ignition point, with ui (t), uT,ign  = ±1 represent-
+                                                                              ing perfect alignment. Discussions on the switch-
+                                                                              ing between positive and negative correlations can
+2. Evolution of composition sensitivity                                       be found in [4]. For methane with single-stage ig-
+                                                                              nition, it is shown that the temperature sensitivity
+    Equations (1) and (3) are integrated together                             direction quickly aligns with uT, ign , with an inner
+using Cantera [17] to obtain the evolution of                                 product of 0.90 at NT = 0.5, and 0.99 at NT = 0.9.
+both composition and sensitivities. The normalized                            For DME with two-stage ignition, two-stage align-
+                                                          kj ∂ ϕi            ments of the temperature sensitivity vector are ob-
+composition sensitivity is given by S               i j = ϕ ∂ k . For
+                                                             i   j            served, corresponding to the first and second stage
+the sensitivity vector of the ith composition vari-                           ignition. It quickly aligns with uT, ign with an inner
+                  
+            i ≡ [S
+able, e.g., S                          T
+                    i1 , . . . . . . , Sinr ] , its direction is the          product of 0.95 at NT = 0.7, and 0.99 at NT = 0.9.
+same as that of the unit vector ui ≡ S            i /||Si ||2 and its       Therefore, the global similarity defined in [3] is ob-
+magnitude is given by λ ≡ ||Si ||2 .                                         served where approaching ignition for both the first
+    In this study, the ignition state is defined as the                       and second stage ignition.
+time instant of the maximum heat release rate. The                                It is also shown that the sensitivity directions
+mechanisms employed are summarized in Table 1.                                of the fuel, the final products CO2 , H2 O and the
+While the methane mechanism involves only high-                               major intermediate species CO, OH change simul-
+temperature chemistry and single-stage ignition,                              taneously along the temperature sensitivity direc-
+the other three fuels involve low-temperature chem-                           tion, which corresponds to the local similarity de-
+istry and may result in two-stage ignition. Detailed                          fined in [3]. Furthermore, the directions of species
+mechanisms are used for methane and DME, while                                sensitivities and temperature sensitivity are largely
+skeletal mechanisms are used for n-heptane and                                correlated with each other, although deviations are
+iso-octane to reduce the computation cost of finite                           observed for the species CH2 O, H2 O2 and OH in
+difference approach. The autoignition simulation is                           the DME case. Note that the absolute value of the
+performed under constant volume; constant pres-                               inner product is presented in Fig. 2, and the sign
+sure simulation leads to the same conclusion and                              for the inner product between OH sensitivity and
+hence is not shown here.                                                      the reference direction changes due to its negative
+    Representative evolution profiles of the magni-                           net production rate during the transition from the
+tude of the temperature sensitivity vector as well                            first stage to the second stage ignition. Typical evo-
+as the rate-of-change of temperature are shown in                             lution of the OH profile during the transition can
+810                     W. Ji et al. / Proceedings of the Combustion Institute 37 (2019) 807–815
+
+
+ a                                                          b
+
+
+
+
+Fig. 1. Evolution of temperature, its rate of change, and the magnitude of its sensitivity vector to kinetic parameters
+against the normalized time. The unit of dT/dt is K/s. The IDT is 38.4 ms in (a) and 0.7 ms in (b).
+
+
+a                                                             b
+
+
+
+
+ Fig. 2. Evolutions of the inner product (absolute value) between the sensitivity directions of composition and uT, ign .
+
+
+be found in [22]. During the later phases of the sec-             trajectory to rate constants only has a component
+ond stage ignition, the sign is reversed to be posi-              parallel to the attracting manifold when approach-
+tive as the OH concentration increases again. The                 ing equilibrium. At the ignition state, if the at-
+same reason accounts for the behavior of H2 O2 and                tracting manifold is one-dimensional and its sen-
+CH2 O near the second stage ignition. Neverthe-                   sitivity vector to rate constants is predominantly
+less, all the composition sensitivity vectors evolve              in the tangential direction of the manifold, then
+toward aligning with uT, ign when approaching the                 the responses of different composition components
+ignition state.                                                   to the rate constants are also parallel with each
+    Zsely et al. [3] have shown that the similar-                 other and this explains the alignment of the species
+ity of sensitivity functions is related to the exis-              sensitivity directions. As shown in Fig. 1(a), the
+tence of low-dimensional manifolds in chemical ki-                temperature sensitivity remains relatively small
+netic systems; they are briefed here for the later                throughout the induction period and then increases
+discussion on the correlation between the ignition                dramatically near the ignition point. It is antic-
+delay time and local temperature sensitivity. In                  ipated that when approaching the ignition state,
+the composition space, the one-dimensional trajec-                temperature is insensitive to those sensitive reac-
+tory from autoignition quickly approaches the at-                 tions for the induction period and its evolution
+tracting manifold. König and Maas [23] showed                     and sensitivity (including direction and magnitude)
+that the sensitivity of the attracting manifold to                is dominated by the local kinetics around the ig-
+rate constants vanishes and the sensitivity of a                  nition state. This explains why the direction of
+                      W. Ji et al. / Proceedings of the Combustion Institute 37 (2019) 807–815                  811
+
+
+ a
+
+
+
+
+ b
+
+
+
+
+                     Fig. 3. The most sensitive reactions for temperature at the ignition point.
+
+
+temperature sensitivity reaches a plateau when ap-            CH2 OCH2 O2 H + O2 = O2 CH2 OCH2 O2 H (R273)
+proaching ignition.                                           and CH3 OCH2 = CH2 O + CH3 (R248). The iso-
+    Next, we shall investigate evolution of                   merization reaction R271 and the second oxygen
+the sensitive reactions as revealed by the                    addition reaction R273 are the key steps leading to
+components of uT, ign . Figure 3(a) shows                     low-temperature chain branching reactions. Reac-
+the most sensitive reactions for temperature                  tions R272 and R248 are the β-scission reactions
+at the ignition point for the stoichiometric                  competing with the low-temperature chain branch-
+methane/air mixture at 20 atm and 1000 K.                     ing reactions. Their evolutions in Fig. 4 show that
+The reactions of CH3 + HO2 = CH3 O + OH                       R271 is dominant during the initial stage of the
+(R119), CH2 O + O2 = HCO + HO2 (R32)                          induction period. With increasing concentration
+and CH3 + O2 = HCO + HO2 (R156) are                           of CH3 OCH2 O2 and CH2 OCH2 O2 H, the relative
+the most sensitive chain branching reactions                  sensitivities of R272 and R273 gradually increase
+while 2CH3 (+M) = C2 H6 (+M) (R158) and                       and approach a plateau when approaching the
+2HO2 = H2 O2 + O2 (R116) are the most sen-                    first stage ignition point. After the temperature in-
+sitive chain termination reactions. Evolution of              creases during the first stage ignition, β-scission of
+the corresponding components is then shown in                 the fuel radical, R248, and the subsequent reaction
+Fig. 4(a). It is seen that during the initial stage,          R51, which are well known to be important in the
+the major competition occurs between R156 and                 intermediate-to-high temperature regime [25, 26],
+R158 in consuming the CH3 radical, which is                   start to be important. Interestingly, the relative
+consistent to the rate of production analysis (ROP)           sensitivity of R271 is significantly reduced, while
+in [24]. Then the sensitivity of R156 gradually               the sensitivity of the other key low-temperature
+decreases relative to R119, which is attributed               reactions, R272 and R273, are promoted. This is
+to the shift of equilibrium due to the increasing             possibly a consequence of R271 reaching partial
+CH2 O concentration [24].                                     equilibrium and the net reaction rate is then deter-
+    Regarding the case of DME with two-stage                  mined by the subsequent rate-limiting steps, such
+ignition as shown in Fig. 3(b), the most sen-                 as R272 and R273.
+sitive reactions for temperature at the igni-                     In short, we have demonstrated that evolution
+tion point are CH3 OCH2 O2 = CH2 OCH2 O2 H                    of the composition sensitivity can help analyze the
+(R271), CH2 OCH2 O2 H = 2CH2 O + OH (R272),                   corresponding evolution of the rate-limiting steps
+812                      W. Ji et al. / Proceedings of the Combustion Institute 37 (2019) 807–815
+
+                                                                ence approach with a perturbation factor, e.g., δ =
+                                                                5%, i.e.,
+                                                                       ln τ ( (1 + δ)ki ) − ln τ (ki )
+                                                                S
+                                                                 τ,i ≈                                               (5)
+                                                                                 ln (1 + δ)
+                                                                    The perturbation factor is chosen to be large
+                                                                enough to avoid numerical noise (discretization er-
+                                                                ror) in computing IDT, and small enough to avoid
+                                                                nonlinear effects.
+                                                                    It is found that the direction of sensitivity for
+                                                                IDT and temperature sensitivity at ignition are al-
+                                                                most the same, i.e., uτ aligns with uT, ign . uT, ign is
+                                                                the sensitivity vector of temperature at the ignition
+                                                                point with respect to the kinetic parameters. The
+                                                                level of alignment is also assessed by the inner prod-
+                                                                uct between the two sensitivity directions, which is
+                                                                larger than 0.999. The largest 25 components (in
+                                                                magnitude) of the unit vector uτ for the stoichio-
+                                                                metric mixture of methane/air under the pressure
+                                                                of 20 atm and initial temperature of 1000 K are
+                                                                shown in Fig. 5. Also shown are the component-
+                                                                wise relative difference between uτ and uT, ign , de-
+                                                                fined as i ≡ (uτ,i − uT,ign,i )/uτ,i for the ith compo-
+                                                                nent.
+                                                                    As shown, the relative errors are within 5% for
+                                                                the top 16 reactions, and become larger for the
+                                                                small components as the numerical error for the
+                                                                insensitive reactions using the finite difference ap-
+                                                                proach is larger. Such numerical error can be re-
+                                                                duced by using an adaptive perturbation factor for
+                                                                those insensitive reactions in the finite difference
+                                                                approach. However, since most of the sensitivity
+Fig. 4. Evolution of the most sensitive reactions for tem-      analysis is focusing on the sensitive reactions, we
+perature.                                                       did not further refine the perturbation factor.
+                                                                    Such excellent alignment can be explained by
+                                                                Fig. 6, in which the rate constant for R119, the most
+during the ignition delay period. The similarity                sensitive reaction for IDT, is increased by 0.005%
+among the sensitivity vectors observed in previ-                and leads to a shorter IDT. According to the trian-
+ous work [3] have been extended to both the first               gle in Fig. 6, we have
+and second stage ignition, i.e., (I) the sensitivity for
+temperatures and most of the species concentra-                 ∂τ     ∂τ ∂T            τ    T
+                                                                     =         =                                     (6)
+tions are largely correlated with each other. (II) The          ∂ ki   ∂T ∂ ki          T    ki
+sensitivity directions for the major intermediate
+                                                                    Equation (6) implicitly assumes that the changes
+species concentration and temperature align with                    ∂τ
+                                                                of ∂T  at the ignition state is insignificant compared
+each other when approaching the ignition state.
+Next, we shall study the correlations between the               to the change of temperature, ∂∂Tki . The term ∂T
+                                                                                                                ∂τ
+                                                                                                                   is in-
+sensitive directions of composition and the ignition            versely proportional to the rate-of-change of tem-
+delay time.                                                     perature and thereafter the heat release rate at the
+                                                                ignition state. The term ∂∂Tki is attributed to the ac-
+                                                                cumulated sensitivity during the entire ignition de-
+3. Efficient approach for computing the sensitivity             lay period. The assumption for Eq. (6) is justified
+of IDT                                                          by the analysis in Section 2, in that the evolving of
+                                                                the autoignition trajectory near the ignition state is
+     The normalized sensitivity of the ignition delay           not sensitive to those rate-limiting steps for the in-
+time τ is defined as                                            duction period. Note that the correlation between
+        ki ∂τ    ∂ ln τ                                         the normalized sensitivity vectors can be readily de-
+Sτ,i =        =                                  (4)           rived from Eq. (6).
+        τ ∂ ki   ∂ ln ki
+                                                                    The correlation of Eq. (6) is further validated
+    Similarly, the sensitivity direction for IDT is the         against the results from the finite difference ap-
+same as the unit vector uτ ≡ Sτ /||Sτ ||2 . The sensi-        proach for the autoignition process of various fuels,
+tivity of IDT can be evaluated via the finite differ-           covering both fuel-lean and fuel-rich conditions,
+                         W. Ji et al. / Proceedings of the Combustion Institute 37 (2019) 807–815                       813
+
+
+
+
+Fig. 5. Components of the sensitivity direction for IDT and the component-wise relative differences between uτ and uT, ign .
+
+                                                                 Specifically, the engine speed is 1000 rpm; compres-
+                                                                 sion ratio (CR) is 16.5; piston diameter and stroke
+                                                                 length are 12.065 cm and 14.005 cm, respectively;
+                                                                 ratio of the length of the engine connecting rod
+                                                                 to the crank radius (LOLR) is 3.71; and the in-
+                                                                 let valve close crank angle (IVC) is 142° BTDC.
+                                                                 The initial mixture is natural gas in air; the com-
+                                                                 position by volume are CH4 :0.0350, C2 H6 :0.0018,
+                                                                 C3 H8 :0.0012, O2 :0.1824, CO2 :0.0326, H2 O:0.0609,
+                                                                 N2 :0.6861; and the initial temperature and pres-
+                                                                 sure at IVC are 447 K and 1.065 atm, respectively.
+                                                                 The mechanism employed is GRI3.0 [18]. The in-
+                                                                 ner product between the sensitivity direction for the
+                                                                 ignition delay time (crank angle) and the tempera-
+                                                                 ture sensitivity at ignition is larger than 0.999. The
+                                                                 components of the sensitivity directions and the
+                                                                 component-wise difference between uτ and uT, ign
+Fig. 6. Relations between changes of the ignition delay          are further shown in Fig. 7. Similar to the case of
+τ and temperature at ignition due to perturbation of the         methane in Fig. 5, the relative differences are within
+rate constant.
+                                                                 5% for the top ten components.
+                                                                     Based on the correlation of Eq. (6), we can
+across a wide range of pressures and temperatures                determine the sensitivity of IDT from the tem-
+as listed in Table 1. Typical results for DME, n-                perature sensitivity at ignition. However, it is
+heptane and iso-octane are provided in the supple-               challenging to accurately determine the propor-
+mental material. The inner product between the di-               tionality constant via the temporal derivative of
+rections of the sensitivity for IDT and the tempera-             temperature as it changes sharply at ignition.
+ture sensitivity at ignition is always larger than 0.99          Instead, we propose the following procedure: first
+for all of the cases listed in Table 1. It is worth men-         calculate the local temperature sensitivity at igni-
+tioning that the correlation is also valid for the first         tion with one run of autoignition integration, and
+stage ignition delay time, as long as the two-stage              then calculate the sensitivity of IDT to the highest
+ignition behavior can be clearly identified. Other-              sensitive reaction in uT, ign using the finite difference
+wise, it might show large difference due to the large            approach, denoted as ∂∂lnlnkτj . Then the sensitivity of
+uncertainty in determining the ignition state for the            IDT to the rest of reactions is given by
+first stage ignition.                                             ∂ ln τ ∂ ln τ      ∂ ln T ∂ ln T
+    In addition to the constant volume simulation,                      /         =          /                         (7)
+the correlation is also validated in a simplified                ∂ ln ki ∂ ln k j    ∂ ln ki ∂ ln k j
+zero-D HCCI simulation with the configurations                       The finite difference approach on the most sen-
+based on the experiments and simulations in [27].                sitive reaction kj is used to estimate the ratio
+814                     W. Ji et al. / Proceedings of the Combustion Institute 37 (2019) 807–815
+
+
+
+
+Fig. 7. Components of the sensitivity direction for IDT in the HCCI case and the component-wise relative differences
+between uτ and uT, ign .
+
+
+between the sensitivity of IDT and the temperature             between the sensitivity direction of the ignition de-
+sensitivity. The most sensitive reaction is chosen to          lay time and the temperature sensitivity direction
+avoid the discretization error when a small pertur-            at the ignition state is always larger than 0.99 un-
+bation factor is used. If only the relative sensitivity        der all the test cases. We then proposed an effi-
+is desired, the sensitivity direction is sufficient and        cient approach to compute the sensitivity of the ig-
+the estimation of the ratio can be omitted.                    nition delay time from the temperature sensitivity.
+                                                               The approach only requires two auto-ignition inte-
+                                                               grations while the number of runs required by the
+4. Conclusions                                                 conventional finite difference approach is propor-
+                                                               tional to the number of parameters. This approach
+    We have studied the time evolution of the com-             suggests extensive opportunities for efficiently op-
+position sensitivity during autoignition. The simi-            timizing large reaction mechanism using gradient-
+larity among the sensitivity vectors studied in [3] is         based algorithms.
+extended to the two-stage ignition, i.e., the sensi-               Recognizing that the similar behavior has been
+tivity directions of temperature and most of the               studied in the laminar freely propagated premixed
+intermediate species concentration are similar to              flames in the suggested works [3], i.e., the similar-
+each other during the ignition delay period, and               ity between the sensitivity vectors of the composi-
+consequently converge to the same direction when               tions and the laminar flame speed, the current work
+approaching ignition during both the first-stage               found analogous behavior in the auto-ignition sys-
+and second-stage ignition. An explanation based                tem, and will help build a more comprehensive pic-
+on the attracting manifold and its sensitivity is pre-         ture of the similarity in homogenous auto-ignition
+sented. Specifically, the sensitivity of the attracting        and one-d flame system.
+manifold vanishes when approaching equilibrium,
+and the sensitivity of the autoignition trajectory is
+parallel to the intrinsic low-dimensional manifold             Acknowledgments
+(ILDM) when approaching ignition.
+    Furthermore, it is found that the sensitivity of              This work was supported by the National
+the ignition delay time is proportional to the tem-            Natural Science Foundation of China No.
+perature (and species concentrations) sensitivity.             91441202 and 51476087.
+The correlation is validated using various fuels, in-
+cluding methane, DME, n-heptane, and iso-octane,
+under both fuel-lean and fuel-rich conditions, cov-            Supplementary materials
+ering both single-stage and two-stage ignition. In
+addition to the constant volume and constant pres-                Supplementary material associated with this
+sure simulations, the correlation is also validated            article can be found, in the online version, at
+in zero-D HCCI simulation. The inner product                   doi:10.1016/j.proci.2018.07.005.
+                          W. Ji et al. / Proceedings of the Combustion Institute 37 (2019) 807–815                      815
+
+References                                                       [15] P.G. Constantine, E. Dow, Q. Wang, SIAM J. Sci.
+                                                                      Comput. 36 (2014) A1500–A1524.
+ [1] T. Turányi, Reliab. Eng. Syst. Safe 57 (1997) 41–48.        [16] T.M. Russi, Uncertainty Quantification with Experi-
+ [2] S. Vajda, P. Valko, T. Turanyi, Int. J. Chem. Kinet. 17          mental Data and Complex System Models, UC Berke-
+     (1985) 55–81.                                                    ley, California, USA, 2010 PhD Thesis.
+ [3] I.G. Zsely, J. Zador, T. Turanyi, J. Phys. Chem. A 107      [17] D.G. Goodwin, H.K. Moffat, R.L. Speth, Cantera:
+     (2003) 2216–2238.                                                An Object-Oriented Software Toolkit for Chemi-
+ [4] J. Zádor, I.G. Zsély, T. Turányi, Int. J. Chem. Kinet.           cal Kinetics, Thermodynamics, and transport pro-
+     36 (2004) 238–252.                                               cesses, 2017, Version 2.3.0, available at <http://www.
+ [5] I.G. Zsély, T. Turányi, Phys. Chem. Chem. Phys. 5                cantera.org>.
+     (2003) 3622–3631.                                           [18] G. P. Smith, D. M. Golden, M. Frenklach, et al.,
+ [6] I.G. Zsély, J. Zádor, T. Turányi, Combust. Theor.                GRI-Mech 3.0, 1999, available at <http://www.me.
+     Model 9 (2005) 721–738.                                          berkeley.edu/gri_mech/>.
+ [7] T. Turányi, A.S. Tomlin, Analysis of Kinetic Reac-          [19] Z. Zhao, M. Chaos, A. Kazakov, F.L. Dryer, Int. J.
+     tion Mechanisms, Springer, Berlin, Heidelberg, 2014,             Chem. Kinet. 40 (2008) 1–18.
+     pp. 313–335.                                                [20] C.S. Yoo, T. Lu, J.H. Chen, C.K. Law, Combust.
+ [8] A. Lovrics, I.G. Zsély, A. Csikász-Nagy, J. Zádor,               Flame 158 (2011) 1727–1741.
+     T. Turányi, B. Novák, Int. J. Chem. Kinet. 40 (2008)        [21] C.S. Yoo, Z. Luo, T. Lu, H. Kim, J.H. Chen, Proc.
+     710–720.                                                         Combust. Inst. 34 (2013) 2985–2993.
+ [9] A.E. Lutz, R.J. Kee, J.A. Miller, SENKIN: A FOR-            [22] S.S. Merchant, C.F. Goldsmith, A.G. Vandeputte,
+     TRAN Program for Predicting Homogeneous Gas                      M.P. Burke, S.J. Klippenstein, W.H. Green, Combust.
+     Phase Chemical Kinetics with Sensitivity Analysis,               Flame 162 (2015) 3658–3673.
+     Sandia National Labs, Livermore, CAUSA, 1988 Re-            [23] K. König, U. Maas, Proc. Combust. Inst. 30 (2005)
+     port No. SAND-87-8248.                                           1317–1323.
+[10] K. Braman, T.A. Oliver, V. Raman, Combust. Theor.           [24] J. Huang, P. Hill, W. Bushe, S. Munshi, Combust.
+     Model. 19 (2015) 29–56.                                          Flame 136 (2004) 25–42.
+[11] H. Wang, D.A. Sheen, Prog. Energy Combust. Sci. 47          [25] W. Ji, P. Zhao, P. Zhang, Z. Ren, X. He, C.K. Law,
+     (2015) 1–31.                                                     Proc. Combust. Inst. 36 (2016) 343–353.
+[12] M. Frenklach, H. Wang, M.J. Rabinowitz, Prog. En-           [26] N. Peters, G. Paczko, R. Seiser, K. Seshadri, Com-
+     ergy Combust. Sci. 18 (1992) 47–73.                              bust. Flame 128 (2002) 38–59.
+[13] W. Ji, J. Wang, O. Zahm, et al., Combust. Flame 190         [27] M. Christensen, B. Johansson, P. Amnéus, F. Mauss,
+     (2018) 146–157.                                                  Supercharged Homogeneous Charge Compression Ig-
+[14] É. Hébrard, A.S. Tomlin, R. Bounaceur, F. Bat-                   nition, SAE International, 1998.
+     tin-Leclerc, Proc. Combust. Inst. 35 (2015) 607–616.
+
