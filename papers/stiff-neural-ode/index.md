@@ -10,21 +10,7 @@ Canonical page: https://jiweiqi.github.io/papers/stiff-neural-ode/
 
 ## Abstract
 
-Neural Ordinary Differential Equations (ODE) are a promising approach to
-learn dynamic models from time-series data in science and engineering
-applications. This work aims at learning Neural ODE for stiff systems, which
-are usually raised from chemical kinetic modeling in chemical and biological
-systems. We first show the challenges of learning neural ODE in the classical
-stiff ODE systems of Robertson's problem and propose techniques to mitigate the
-challenges associated with scale separations in stiff systems. We then present
-successful demonstrations in stiff systems of Robertson's problem and an air
-pollution problem. The demonstrations show that the usage of deep networks with
-rectified activations, proper scaling of the network outputs as well as loss
-functions, and stabilized gradient calculations are the key techniques enabling
-the learning of stiff neural ODE. The success of learning stiff neural ODE
-opens up possibilities of using neural ODEs in applications with widely varying
-time-scales, like chemical dynamics in energy conversion, environmental
-engineering, and the life sciences.
+Neural Ordinary Differential Equations (ODE) are a promising approach to learn dynamic models from time-series data in science and engineering applications. This work aims at learning Neural ODE for stiff systems, which are usually raised from chemical kinetic modeling in chemical and biological systems. We first show the challenges of learning neural ODE in the classical stiff ODE systems of Robertson's problem and propose techniques to mitigate the challenges associated with scale separations in stiff systems. We then present successful demonstrations in stiff systems of Robertson's problem and an air pollution problem. The demonstrations show that the usage of deep networks with rectified activations, proper scaling of the network outputs as well as loss functions, and stabilized gradient calculations are the key techniques enabling the learning of stiff neural ODE. The success of learning stiff neural ODE opens up possibilities of using neural ODEs in applications with widely varying time-scales, like chemical dynamics in energy conversion, environmental engineering, and the life sciences.
 
 ## Research summary
 
