@@ -1,6 +1,6 @@
 # Weiqi Ji (季维奇)
 
-I am an Associate Professor and PhD supervisor in the School of Engineering Science at the University of Chinese Academy of Sciences. Previously, I was a Senior Research Scientist at Bosch and Apple, following postdoctoral research at MIT. I received my PhD from Tsinghua University.
+Founder of SVD Lab. Previously, I was a Senior Research Scientist at Bosch and Apple, following postdoctoral research at MIT. I received my PhD from Tsinghua University.
 
 My research focuses on scientific machine learning and uncertainty quantification, with an emphasis on learning physical dynamics, differentiable simulation and sensitivity analysis.
 
